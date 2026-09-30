@@ -369,6 +369,8 @@
     var seen=false;new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting&&!seen){seen=true;if(!reduce&&!timer)timer=setInterval(function(){show((cur+1)%SC.length)},6500)}})},{threshold:.4}).observe(stage);
   })();
 
+  (function(){var v=$("rv");if(!v||reduce)return;new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){var p=v.play();if(p&&p.catch)p.catch(function(){})}else v.pause()})},{threshold:.35}).observe(v)})();
+
   /* ---------- Carrer: Dots que passegen i activitat en directe ---------- */
   (function(){
     var st=$("street"),feed=$("feed");if(!st||!feed)return;
