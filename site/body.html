@@ -1129,7 +1129,7 @@ var dotSprite = __sprite.dotSprite, spriteParts = __sprite.spriteParts, spriteLa
       return d;
     }
     function photoPerson(prefix){
-      var d=document.createElement("div");d.className="person";var img=new Image();img.alt="";img.style.height=PH+"px";img.style.display="block";d.appendChild(img);d.frames=[];var loaded=0;
+      var d=document.createElement("div");d.className="person";var img=new Image();img.alt="";img.style.height=PH+"px";img.style.display="block";var sh=document.createElement("div");sh.style.cssText="position:absolute;left:8%;right:8%;bottom:-3px;height:12px;background:radial-gradient(closest-side,rgba(0,0,0,.28),transparent);z-index:-1";d.appendChild(sh);d.appendChild(img);d.frames=[];var loaded=0;
       for(var i=0;i<4;i++)(function(i){var im=new Image();im.onload=function(){d.frames[i]=im.src;loaded++;if(loaded===4){d.ready=true;img.src=d.frames[0]}};im.onerror=function(){};im.src="people/"+prefix+i+".png"})(i);
       d.upd=function(ph){if(!d.ready)return;var f=Math.floor(((ph/(Math.PI*2))%1+1)%1*4);img.src=d.frames[f]};d.glow=function(){};
       return d;
@@ -1138,8 +1138,8 @@ var dotSprite = __sprite.dotSprite, spriteParts = __sprite.spriteParts, spriteLa
       var p=svgPerson(c);st.appendChild(p);
       var probe=new Image();probe.onload=function(){var ph=photoPerson(prefix);st.replaceChild(ph,p);P[prefix==="a"?0:1].el=ph};probe.src="people/"+prefix+"0.png";return p;
     }
-    var P=[{el:person("a",{sk:"#e2b895",hair:"#2a1c15",top:"#f0e4d2",topD:"#d8c9b3",pants:"#3d64a3",pantsD:"#2f4f85",shoes:"#f6f6f6",long:true}),v:60,x0:0,ph:0},
-           {el:person("b",{sk:"#c98f6b",hair:"#3f2a1e",top:"#66753f",topD:"#546131",pants:"#2c2e34",pantsD:"#202228",shoes:"#8b9098",beard:true}),v:60,x0:96,ph:1.7}];
+    var P=[{el:person("a",{sk:"#e2b895",hair:"#2a1c15",top:"#f0e4d2",topD:"#d8c9b3",pants:"#3d64a3",pantsD:"#2f4f85",shoes:"#f6f6f6",long:true}),v:96,x0:0,ph:0},
+           {el:person("b",{sk:"#c98f6b",hair:"#3f2a1e",top:"#66753f",topD:"#546131",pants:"#2c2e34",pantsD:"#202228",shoes:"#8b9098",beard:true}),v:96,x0:110,ph:1.7}];
     var CAST=[
       [{body:"blob",tone:"orange",hat:"hardhat",accessory:"mustache"},"Fontaner"],
       [{body:"cube",tone:"pink",glasses:"shades",accessory:"tie"},"Metge"],
@@ -1179,10 +1179,10 @@ var dotSprite = __sprite.dotSprite, spriteParts = __sprite.spriteParts, spriteLa
     function step(now){
       var t=(now-t0)/1000,dt=Math.min(.05,(now-last)/1000);last=now;
       P.forEach(function(p,i){
-        var base=reduce?W*.3:(((t*p.v)+W*.28+M)%SP)-M,x=base+p.x0,ph=t*6.2+p.ph,run=reduce?0:1;
+        var base=reduce?W*.3:(((t*p.v)+W*.28+M)%SP)-M,x=base+p.x0,ph=t*7+p.ph,run=reduce?0:1;
         p.x=x;p.base=base;
         p.el.upd&&p.el.upd(ph,run);
-        p.el.style.transform="translate("+(x-PH*.25)+"px,"+(-Math.abs(Math.sin(ph))*3*run)+"px)";
+        p.el.style.transform="translate("+(x-(p.el.offsetWidth||PH*.5)/2)+"px,"+(-Math.abs(Math.sin(ph))*3*run)+"px)";
         p.el.style.zIndex=i?2:4;
         PB[i].style.transform="translate("+(x-30)+"px,"+(-PH-12)+"px)";
       });
