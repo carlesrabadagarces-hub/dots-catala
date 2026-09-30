@@ -1,13 +1,111 @@
 [
- {"q":"Què és un superDOTat?","a":"Un agent d'IA amb nom, caràcter i instruccions pròpies que respon pel WhatsApp. En tens per a cada ofici: metge, fontaner, mestra, assessor fiscal i molts més.","look":{"body":"blob","tone":"blue","hat":"party"}},
- {"q":"Quants Dots hi ha al catàleg?","a":"Ara n'hi ha 88, repartits en 10 sectors: educació, salut, legal i fiscal, oficis i llar, negoci, hostaleria, tecnologia, vida quotidiana, servei públic i indústria. Cadascun té el seu prompt, els seus límits i la seva manera de derivar-te a un professional.","look":{"body":"arch","tone":"yellow","hat":"graduation"}},
- {"q":"Necessito saber programar?","a":"No. Tries un Dot del catàleg o en crees un dient què vols que faci, i el connectes al teu número. El servidor només s'instal·la una vegada.","look":{"body":"cube","tone":"green","hat":"antenna"}},
- {"q":"Com el connecto al meu WhatsApp?","a":"Amb l'API oficial de Meta (WhatsApp Cloud API). Enganxes el teu token i el teu número, i tu decideixes quins contactes hi poden parlar.","look":{"body":"arch","tone":"teal","hat":"chef"}},
- {"q":"Quant costa?","a":"El projecte és de codi obert (llicència MIT) i no té preu. Només pagues on l'allotges i el model d'IA que triïs, i tu controles el consum.","look":{"body":"blob","tone":"yellow","hat":"crown"}},
- {"q":"Són segures les meves dades?","a":"Les credencials es guarden xifrades al teu servidor, cada missatge de Meta es verifica amb signatura i cada persona té el seu fil de conversa separat. Només guarda el que la persona diu, i pot veure-ho i esborrar-ho quan vulgui.","look":{"body":"cube","tone":"slate","accessory":"tie"}},
- {"q":"Puc crear els meus propis Dots?","a":"Sí. Dins del teu perfil pots crear-ne tants com vulguis i personalitzar-los: color, forma, barret, ulleres i complements. També els pots generar descrivint què has de resoldre.","look":{"body":"arch","tone":"pink","hat":"flower"}},
- {"q":"Pot substituir un metge o un advocat?","a":"No. Orienta i explica de manera general, i quan el tema el supera o és urgent, et diu a qui has d'anar (per exemple, el 112 davant d'una urgència). No fa diagnòstics ni dona assessorament jurídic personalitzat.","look":{"body":"blob","tone":"orange","hat":"hardhat","accessory":"mustache"}},
- {"q":"En quins idiomes respon?","a":"Per defecte en català, i canvia a l'idioma en què li escrius, com el castellà o l'anglès.","look":{"body":"cube","tone":"pink","glasses":"shades"}},
- {"q":"Com sap quin Dot ha de respondre?","a":"En mode automàtic, tria el Dot segons el que preguntis (una fuita, la renda, una recepta…) i s'hi queda mentre parleu del mateix tema. També pots triar-ne un tu amb l'ordre /tria.","look":{"body":"blob","tone":"teal","hat":"wizard"}},
- {"q":"Envia imatges o stickers?","a":"De moment respon amb text. Estem preparant els Dots que fan stickers i busquen imatges perquè arribin també pel WhatsApp.","look":{"body":"cube","tone":"violet","hat":"wizard"}}
+ {
+  "q": "Què és un superDOTat?",
+  "a": "És un ajudant intel·ligent que et respon al mòbil, en català. Cada Dot sap d'una cosa: n'hi ha de fontaners, de mestres, de metges, d'assessors fiscals i molts més.",
+  "look": {
+   "body": "blob",
+   "tone": "blue",
+   "hat": "party"
+  }
+ },
+ {
+  "q": "Quants Dots hi ha?",
+  "a": "Ara en tenim 88, en 10 àmbits: educació, salut, lleis i impostos, oficis i llar, negoci, restauració, tecnologia, dia a dia, tràmits i camp i indústria. Si no trobes el que necessites, te'n podem crear un a mida.",
+  "look": {
+   "body": "arch",
+   "tone": "yellow",
+   "hat": "graduation"
+  }
+ },
+ {
+  "q": "Necessito saber d'informàtica?",
+  "a": "No. Tries un Dot i li escrius com a un amic. Ho hem pensat perquè sigui fàcil per a tothom.",
+  "look": {
+   "body": "cube",
+   "tone": "green",
+   "hat": "antenna"
+  }
+ },
+ {
+  "q": "Com hi parlo?",
+  "a": "Per missatge, des del mòbil, com quan xerres amb algú. Li expliques què et passa i et respon amb frases curtes i clares.",
+  "look": {
+   "body": "arch",
+   "tone": "teal",
+   "hat": "chef"
+  }
+ },
+ {
+  "q": "Quant costa?",
+  "a": "Volem que l'ús del dia a dia sigui gratuït. Quan s'obri al públic t'explicarem clarament què inclou cada opció, sense sorpreses.",
+  "look": {
+   "body": "blob",
+   "tone": "yellow",
+   "hat": "crown"
+  }
+ },
+ {
+  "q": "Són segures les meves dades?",
+  "a": "Ens ho prenem seriosament. Cada conversa és apart, només responen a les persones que tu autoritzes, els accessos es guarden xifrats i cada missatge es comprova abans de fer-ne cas. A més, tu decideixes què recorda el Dot de tu.",
+  "look": {
+   "body": "cube",
+   "tone": "slate",
+   "accessory": "tie"
+  }
+ },
+ {
+  "q": "Què recorda de mi?",
+  "a": "Coses senzilles que li expliques, com el teu nom o on vius, per no haver de repetir-les. Escrius /memoria per veure-ho i /oblida per esborrar-ho tot. Pel seu compte, mai guarda dades delicades com la salut, els diners o els documents d'identitat.",
+  "look": {
+   "body": "blob",
+   "tone": "pink",
+   "hat": "tophat"
+  }
+ },
+ {
+  "q": "Puc tenir un Dot només meu?",
+  "a": "Sí. Li pots posar nom, color, barret, ulleres i complements, i explicar-li què ha de saber fer. També te'l podem crear a partir d'una descripció.",
+  "look": {
+   "body": "arch",
+   "tone": "pink",
+   "hat": "flower"
+  }
+ },
+ {
+  "q": "Pot substituir un metge o un advocat?",
+  "a": "No, i és millor que ho sàpigues. T'orienta i t'explica les coses de manera senzilla, però no fa diagnòstics ni fa de professional. Si el tema és seriós o urgent, et diu a qui has d'anar. En una urgència, truca al 112.",
+  "look": {
+   "body": "blob",
+   "tone": "orange",
+   "hat": "hardhat",
+   "accessory": "mustache"
+  }
+ },
+ {
+  "q": "En quins idiomes respon?",
+  "a": "En català per defecte. Si li escrius en castellà o en anglès, et respon en aquest idioma.",
+  "look": {
+   "body": "cube",
+   "tone": "pink",
+   "glasses": "shades"
+  }
+ },
+ {
+  "q": "Com sap quin Dot ha de respondre?",
+  "a": "Si no tries, ho fa ell: llegeix el que preguntes (una fuita, la renda, una recepta…) i et posa amb el Dot adequat. També en pots triar un tu escrivint /tria.",
+  "look": {
+   "body": "blob",
+   "tone": "teal",
+   "hat": "wizard"
+  }
+ },
+ {
+  "q": "Envia fotos o stickers?",
+  "a": "De moment només respon amb text. Estem preparant els Dots que fan stickers i que busquen imatges.",
+  "look": {
+   "body": "cube",
+   "tone": "violet",
+   "hat": "wizard"
+  }
+ }
 ]

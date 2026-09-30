@@ -10,7 +10,7 @@ html = f"""<html><body style="margin:0;width:1200px;height:630px;position:relati
 <img src="{(here/'dots'/'logo.png').as_uri()}" style="position:absolute;left:64px;top:56px;width:64px;height:64px">
 <div style="position:absolute;left:64px;bottom:64px;color:#fff;max-width:1000px">
 <div style="font-size:92px;font-weight:700;letter-spacing:-4px;line-height:1">superDOTats</div>
-<div style="font-size:34px;margin-top:14px;opacity:.92;line-height:1.25">Agents d'IA al teu WhatsApp, en català.</div></div></body></html>"""
+<div style="font-size:34px;margin-top:14px;opacity:.92;line-height:1.25">Un Dot per a cada dubte. En català.</div></div></body></html>"""
 with sync_playwright() as p:
     b = p.chromium.launch(executable_path=(glob.glob("/opt/pw-browsers/chromium*/chrome-linux*/chrome") or [None])[0])
     pg = b.new_page(viewport={"width": 1200, "height": 630})

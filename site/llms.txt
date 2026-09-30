@@ -1,13 +1,12 @@
 # superDOTats
 
-> superDOTats és una plataforma de codi obert (llicència MIT) per crear agents d'IA, anomenats Dots, i connectar-los al WhatsApp amb l'API oficial de Meta. Inclou un catàleg de 88 Dots especialitzats en català (metge, fontaner, assessor fiscal, mestra, cuiner…), memòria per persona i un panell d'administració. Dona informació general i educativa; no substitueix professionals.
+> superDOTats és una colla de 88 assistents intel·ligents, anomenats Dots, que responen al mòbil en català: metge, fontaner, assessor fiscal, mestra, cuiner… Està pensat per ser fàcil, privat i segur. Dona informació general; no substitueix professionals.
 
 ## Fets clau
 - Nom: superDOTats (escrit amb majúscules a DOT).
 - Web: https://superdotats.cat/
-- Codi: https://github.com/carlesrabadagarces-hub/dots-catala
-- Llicència: MIT. Idioma per defecte: català (respon també en castellà i anglès).
-- Canal principal: WhatsApp Cloud API de Meta.
+- Idioma per defecte: català (respon també en castellà i anglès).
+- Privacitat: cada persona té la seva conversa apart, només responen les persones autoritzades i es pot veure i esborrar el que el Dot recorda.
 
 ## Pàgines principals
 - [Inici](https://superdotats.cat/): què és i com funciona

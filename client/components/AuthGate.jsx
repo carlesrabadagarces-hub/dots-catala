@@ -85,9 +85,9 @@ function Login({ providers, error }) {
       <div className="relative z-10 flex h-full flex-col items-center justify-center px-6 text-center">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src="/logo.png" alt="" width="92" height="92" className="mb-3" />
-        <div className="font-mono text-xs uppercase tracking-[0.12em] text-neutral-500">Codi obert · WhatsApp</div>
+        <div className="font-mono text-xs uppercase tracking-[0.12em] text-neutral-500">Privat · Segur · Fàcil</div>
         <h1 className="mt-4 text-5xl font-semibold tracking-[-0.045em] sm:text-7xl">super<span className="font-bold">DOT</span>ats</h1>
-        <p className="mt-4 max-w-md text-lg text-neutral-500">Crea els teus Dots i connecta&apos;ls al teu WhatsApp. Entra per començar.</p>
+        <p className="mt-4 max-w-md text-lg text-neutral-500">Un Dot per a cada dubte. Entra i comença.</p>
 
         <div className="mt-8 flex w-full max-w-xs flex-col gap-3">
           <a

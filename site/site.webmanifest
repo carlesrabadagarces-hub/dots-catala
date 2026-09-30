@@ -1,7 +1,7 @@
 {
   "name": "superDOTats",
   "short_name": "superDOTats",
-  "description": "superDOTats és una plataforma de codi obert per crear agents d'IA (Dots) i connectar-los al teu WhatsApp. 88 Dots especialitzats en català: metge, fontaner, assessor fiscal, mestra i molts més.",
+  "description": "88 ajudants intel·ligents que et responen al mòbil, en català: fontaner, metge, assessor fiscal, mestra i molts més. Privat, segur i fàcil.",
   "lang": "ca",
   "start_url": "/",
   "display": "standalone",

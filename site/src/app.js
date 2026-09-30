@@ -59,7 +59,7 @@
     [[5,"Reinicia el router i em dius."],[1,"Fet. Ja va més ràpid."]],
     [[4,"Repassem les fraccions?"],[2,"Endavant, 1/2 + 1/4?"]]
   ];
-  var SOLO=["Hola!","Què necessites?","Sóc aquí.","Escriu-me per WhatsApp.","Tinc idees."];
+  var SOLO=["Hola!","Què necessites?","Sóc aquí.","Escriu-me quan vulguis.","Tinc idees."];
   function zone(r){return{x:W/2,y:H/2-6,w:Math.min(W*.5,340)+r,h:(W<560?235:215)+r}}
   function free(R,top){var x,y,n=0,z;do{x=R+Math.random()*(W-2*R);y=(top||R)+Math.random()*(H-2*R-(top||0));z=zone(R);n++}while(n<60&&Math.abs(x-z.x)<z.w&&Math.abs(y-z.y)<z.h);return[x,y]}
   function pick(a){return a[Math.floor(Math.random()*a.length)]}
@@ -315,7 +315,7 @@
     var host=$("cdot"),bub=$("cbubble");if(!host||!bub)return;
     var looks=[{body:"blob",tone:"blue",hat:"tophat"},{body:"arch",tone:"yellow",hat:"hardhat"},{body:"cube",tone:"violet",hat:"wizard"},{body:"blob",tone:"teal",hat:"chef",accessory:"mustache"},{body:"arch",tone:"pink",hat:"crown",accessory:"bowtie"}];
     host.innerHTML=av(pick(looks),96,"Dot company");
-    var talk=["Hola! Sóc un superDOTat.","Vols crear-ne un de teu?","Tinc un Dot per a cada ofici.","Fes-me un toc, que m'agrada.","Sempre al teu WhatsApp.","Mira el catàleg: en tenim 88."],hide=null,ti=0;
+    var talk=["Hola! Sóc un superDOTat.","Et puc ajudar amb alguna cosa?","Tinc un Dot per a cada ofici.","Fes-me un toc, que m'agrada.","Sempre a mà, al mòbil.","Mira quants Dots hi ha: en tenim 88."],hide=null,ti=0;
     function say(t){bub.textContent=t;bub.classList.add("on");clearTimeout(hide);hide=setTimeout(function(){bub.classList.remove("on")},3400)}
     attachLife(host,{onPoke:function(){say(talk[ti++%talk.length])}});
     setTimeout(function(){say(talk[0])},2600);
@@ -331,7 +331,7 @@
       {id:"metro",em:"🚇",t:"Al metro",d:"Ruta i horaris",q:"Quina línia agafo per anar a Sants?",a:"L3 fins a Espanya i canvia a la L1. Uns 25 minuts."},
       {id:"cuina",em:"🍳",t:"A la cuina",d:"Receptes amb el que tens",q:"Tinc ous, pebrots i patates. Què cuino?",a:"Truita amb pebrots i patata al forn. T'ho explico pas a pas."},
       {id:"deures",em:"✏️",t:"Els deures",d:"Explica, no fa la feina",q:"No entenc les fraccions.",a:"Imagina una pizza en 4 trossos: en menges 1, i això és 1/4. Ho provem?"},
-      {id:"oficina",em:"💼",t:"A l'oficina",d:"Papers i gestions",q:"Com presento el model 303?",a:"Es fa a la Seu de l'Agència Tributària. Et deixo la llista de dades que necessites."},
+      {id:"oficina",em:"💼",t:"A l'oficina",d:"Papers i gestions",q:"Com presento la declaració trimestral?",a:"Es fa a la seu electrònica d'Hisenda. Et deixo la llista del que necessites tenir a mà."},
       {id:"metge",em:"🩺",t:"Salut",d:"Orienta i deriva",q:"Em fa mal el cap des d'ahir.",a:"Beu aigua i descansa. Si empitjora o tens febre alta, truca al 061."},
       {id:"boqueria",em:"🍊",t:"Al mercat",d:"Llista de la compra",q:"Què compro per a 6 persones?",a:"Et preparo una llista amb quantitats i preus aproximats."},
       {id:"parkguell",em:"🌇",t:"De passeig",d:"Guia de la ciutat",q:"On veig la posta de sol?",a:"Al Park Güell, cap a les 19:30. Arriba 20 minuts abans."},
@@ -371,7 +371,7 @@
       [{body:"blob",tone:"yellow",hat:"flower"},"Mestra","Fem els deures junts?"],
       [{body:"arch",tone:"teal",hat:"chef",accessory:"mustache"},"Cuiner","Què tens a la nevera?"],
       [{body:"cube",tone:"yellow",hat:"graduation"},"Professor","Pas a pas, ho veus?"],
-      [{body:"blob",tone:"slate",accessory:"tie"},"Assessor","Ho miro amb el model 303."],
+      [{body:"blob",tone:"slate",accessory:"tie"},"Assessor","Ho miro i t'ho explico."],
       [{body:"arch",tone:"violet",hat:"wizard"},"Traductor","Ja ho tinc en anglès."],
       [{body:"blob",tone:"blue",hat:"party"},"Recepcionista","Dijous a les 10, confirmat."]
     ];
@@ -401,7 +401,7 @@
     requestAnimationFrame(step);
     setInterval(function(){var o=ws[Math.floor(Math.random()*ws.length)];if(reduce)return;o.bub.textContent=o.c[2];o.bub.classList.add("on");setTimeout(function(){o.bub.classList.remove("on")},2600)},1900);
     /* activitat */
-    var EV=[["Fontaner","ha respost una consulta d'una cisterna","WhatsApp"],["Metge","ha derivat un cas a urgències","WhatsApp"],["Traductor","ha traduït un contracte al francès","WhatsApp"],["Cuiner","ha proposat un sopar amb 4 ingredients","WhatsApp"],["Assessor","ha explicat el model 303","WhatsApp"],["Mestra","ha creat un joc de sumes","WhatsApp"],["Recepcionista","ha confirmat una cita de dijous","WhatsApp"],["Professor","ha resolt una equació pas a pas","WhatsApp"],["Creador d'stickers","ha dissenyat 8 stickers","WhatsApp"]];
+    var EV=[["Fontaner","ha ajudat a arreglar una cisterna que perdia aigua",""],["Metge","ha explicat quan cal anar a urgències",""],["Traductor","ha traduït una carta al francès",""],["Cuiner","ha proposat un sopar amb quatre ingredients",""],["Assessor","ha explicat com fer la declaració",""],["Mestra","ha inventat un joc de sumes",""],["Recepcionista","ha confirmat una cita de dijous",""],["Professor","ha resolt una equació pas a pas",""],["Creador d'stickers","ha dissenyat 8 stickers",""]];
     var n=0;
     function ev(){var e=EV[Math.floor(Math.random()*EV.length)],d=document.createElement("div");d.className="ev";
       d.innerHTML='<i></i><div><b>'+e[0]+'</b> '+e[1]+'</div><span>ara</span>';feed.insertBefore(d,feed.firstChild);

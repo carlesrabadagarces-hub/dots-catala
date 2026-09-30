@@ -67,7 +67,7 @@ SPR = render_sprites()
 
 # ---------------------------------------------------------------- shared bits
 ORG = {"@type": "Organization", "@id": f"{SITE}/#org", "name": "superDOTats", "url": f"{SITE}/",
-       "logo": f"{SITE}/dots/logo.png", "sameAs": [GITHUB]}
+       "logo": f"{SITE}/dots/logo.png"}
 LOGO_SVG = '<img src="{p}dots/logo.png" width="32" height="32" alt="" loading="eager">'
 
 
@@ -149,22 +149,21 @@ body = fill(body, "DIR", dir_html())
 (here / "body.html").write_text(body, encoding="utf-8")
 
 # ---------------------------------------------------------------- home
-HOME_TITLE = "superDOTats: agents d'IA per al teu WhatsApp, en català"
-HOME_DESC = ("superDOTats és una plataforma de codi obert per crear agents d'IA (Dots) i connectar-los al teu WhatsApp. "
-             "88 Dots especialitzats en català: metge, fontaner, assessor fiscal, mestra i molts més.")
+HOME_TITLE = "superDOTats: un Dot per a cada dubte, en català"
+HOME_DESC = ("88 ajudants intel·ligents que et responen al mòbil, en català: fontaner, metge, assessor fiscal, mestra i molts més. "
+             "Privat, segur i fàcil.")
 home_ld = {"@context": "https://schema.org", "@graph": [
     ORG,
     {"@type": "WebSite", "@id": f"{SITE}/#site", "url": f"{SITE}/", "name": "superDOTats", "inLanguage": "ca", "publisher": {"@id": f"{SITE}/#org"}},
     {"@type": "SoftwareApplication", "@id": f"{SITE}/#app", "name": "superDOTats", "applicationCategory": "CommunicationApplication",
-     "operatingSystem": "Web, WhatsApp", "description": HOME_DESC, "inLanguage": "ca", "url": f"{SITE}/",
-     "license": "https://opensource.org/licenses/MIT", "isAccessibleForFree": True, "codeRepository": GITHUB,
-     "offers": {"@type": "Offer", "price": "0", "priceCurrency": "EUR"}, "publisher": {"@id": f"{SITE}/#org"},
-     "featureList": ["88 Dots especialitzats en català", "Connexió amb l'API oficial de WhatsApp de Meta", "Memòria per persona",
-                     "Panell d'administració", "Codi obert (MIT)"]},
+     "operatingSystem": "Web, mòbil", "description": HOME_DESC, "inLanguage": "ca", "url": f"{SITE}/",
+     "publisher": {"@id": f"{SITE}/#org"},
+     "featureList": ["88 Dots especialitzats en català", "Converses privades", "Només responen les persones que tu autoritzes",
+                     "Memòria que pots veure i esborrar", "Sense complicacions"]},
     {"@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": f["q"], "acceptedAnswer": {"@type": "Answer", "text": f["a"]}} for f in FAQ]},
-    {"@type": "ItemList", "name": "Sectors de superDOTats", "itemListElement": [
+    {"@type": "ItemList", "name": "Àmbits de superDOTats", "itemListElement": [
         {"@type": "ListItem", "position": i + 1, "name": SECTORS[k]["name"], "url": f"{SITE}/sectors/{k}/"} for i, k in enumerate(SECTORS)]},
-    {"@type": "VideoObject", "name": "Un Dot en 16 segons", "description": "Com funciona un Dot: tries un agent, li escrius pel WhatsApp i et respon en català.",
+    {"@type": "VideoObject", "name": "Un Dot en 16 segons", "description": "Com funciona un Dot: tries un ajudant, li escrius i et respon en català.",
      "thumbnailUrl": f"{SITE}/media/explainer-poster.jpg", "uploadDate": TODAY, "duration": "PT16S",
      "contentUrl": f"{SITE}/media/explainer.mp4", "inLanguage": "ca"},
 ]}
@@ -215,24 +214,24 @@ def nav(depth):
 
 def foot(depth):
     p = "../" * depth
-    return (f'<footer><span>© superDOTats · codi obert (MIT) · projecte independent, sense relació amb OpenAI ni Meta.</span>'
-            f'<a href="{p}">Inici</a><a href="{p}#directori">Directori de Dots</a><a href="{GITHUB}">GitHub</a></footer></div>')
+    return (f'<footer><span>© superDOTats · projecte independent, sense relació amb OpenAI.</span>'
+            f'<a href="{p}">Inici</a><a href="{p}#directori">Tots els Dots</a><a href="{p}#faq">Preguntes</a></footer></div>')
 
 
 def agent_page(s):
     sec = SECTORS[s["sector"]]
     url_path = f"/agents/{s['id']}/"
     role = s["role"]
-    title = clip(f"{s['name']} al WhatsApp: {lower1(role)} | superDOTats", 68)
+    title = clip(f"{s['name']}: {lower1(role)}, en català | superDOTats", 68)
     tasks = s["tasks"]
-    desc = clip(f"{s['name']}: {lower1(role)}. {tasks[0]}, {lower1(tasks[1])} i més, en català i pel teu WhatsApp. Un Dot de superDOTats, gratuït i de codi obert.", 158)
+    desc = clip(f"{s['name']}: {lower1(role)}. T'ajuda a {lower1(tasks[0])}, {lower1(tasks[1])} i més, en català. Un Dot de superDOTats: privat, segur i fàcil.", 158)
     safety = list(sec.get("safety", [])) + list(s.get("safety", []))
     escalate = " ".join(x for x in (sec.get("escalate", ""), s.get("escalate", "")) if x) or "Si el cas supera el que pot resoldre, et recomana un professional qualificat."
     faqs = [
         (f"Què pot fer {s['name']}?", " ".join(t.rstrip(".") + "." for t in tasks[:3])),
         (f"Puc fiar-me de {s['name']}?", f"És un assistent d'IA i dona informació general. {safety[0] if safety else ''} Verifica sempre les dades importants."),
         (f"Quan em derivarà {s['name']} a un professional?", escalate),
-        (f"Com poso {s['name']} al meu WhatsApp?", "Crea el Dot des del catàleg de superDOTats i connecta'l al teu número amb l'API oficial de WhatsApp de Meta. El pots personalitzar i decidir quins contactes hi poden parlar."),
+        (f"Com començo a parlar amb {s['name']}?", "Entra a superDOTats, tria {0} i escriu-li com a un amic. El pots personalitzar i decidir qui hi pot parlar.".format(s["name"])),
     ]
     rel = [r for r in by_sector()[s["sector"]] if r["id"] != s["id"]][:6]
     ld_graph = {"@context": "https://schema.org", "@graph": [
@@ -244,8 +243,7 @@ def agent_page(s):
         {"@type": "WebPage", "@id": f"{SITE}{url_path}", "url": f"{SITE}{url_path}", "name": title, "description": desc, "inLanguage": "ca",
          "isPartOf": {"@id": f"{SITE}/#site"}, "dateModified": TODAY, "about": {"@id": f"{SITE}{url_path}#dot"}},
         {"@type": "SoftwareApplication", "@id": f"{SITE}{url_path}#dot", "name": f"{s['name']} (superDOTats)", "description": role + ". " + s["persona"],
-         "applicationCategory": "CommunicationApplication", "operatingSystem": "WhatsApp", "inLanguage": "ca",
-         "isAccessibleForFree": True, "offers": {"@type": "Offer", "price": "0", "priceCurrency": "EUR"},
+         "applicationCategory": "CommunicationApplication", "operatingSystem": "Web, mòbil", "inLanguage": "ca",
          "featureList": tasks, "isPartOf": {"@id": f"{SITE}/#app"}, "publisher": {"@id": f"{SITE}/#org"}},
         {"@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": q, "acceptedAnswer": {"@type": "Answer", "text": a}} for q, a in faqs]},
     ]}
@@ -253,16 +251,16 @@ def agent_page(s):
     return (head(title, desc, url_path, 2, extra=f'<link rel="stylesheet" href="../../agents.css">\n' + ld(ld_graph) + "\n")
             + "</head>\n<body>\n" + nav(2)
             + f'<p class="crumbs"><a href="../../">superDOTats</a> › <a href="../../sectors/{s["sector"]}/">{e(sec["name"])}</a> › {e(s["name"])}</p>'
-            + f'<main id="c"><section class="hero"><div aria-hidden="true">{SPR[s["id"]]}</div><div><h1>{e(s["name"])} al teu WhatsApp</h1>'
+            + f'<main id="c"><section class="hero"><div aria-hidden="true">{SPR[s["id"]]}</div><div><h1>{e(s["name"])}, al teu costat</h1>'
             + f'<p class="lead">{e(role)}. {e(s["persona"])}</p><a class="btn" href="{APP_URL}">Prova {e(s["name"])}</a> <a class="btn g" href="../../#directori">Tots els Dots</a></div></section>'
-            + f"<h2>Què pot fer</h2><ul class=\"chk\">{li(tasks)}</ul>"
-            + f"<h2>En què és expert</h2><ul class=\"chk\">{li(s['expertise'])}</ul>"
-            + f"<h2>Prova a preguntar-li</h2><div class=\"bub\">" + "".join(f"<span>{e(x)}</span>" for x in s["starters"]) + "</div>"
-            + f"<h2>Límits i seguretat</h2><ul class=\"chk\">{li(safety)}</ul>"
-            + f"<h2>Quan et derivarà a un professional</h2><p>{e(escalate)}</p>"
+            + f"<h2>Com et pot ajudar</h2><ul class=\"chk\">{li(tasks)}</ul>"
+            + f"<h2>De què en sap</h2><ul class=\"chk\">{li(s['expertise'])}</ul>"
+            + f"<h2>Coses que li pots preguntar</h2><div class=\"bub\">" + "".join(f"<span>{e(x)}</span>" for x in s["starters"]) + "</div>"
+            + f"<h2>Què cal tenir en compte</h2><ul class=\"chk\">{li(safety)}</ul>"
+            + f"<h2>Quan t\'aconsellarà anar a un professional</h2><p>{e(escalate)}</p>"
             + "<h2>Preguntes freqüents</h2>" + "".join(f"<details><summary>{e(q)}</summary><p>{e(a)}</p></details>" for q, a in faqs)
             + f'<h2>Més Dots de {e(sec["name"])}</h2><ul class="rel">' + "".join(f'<li><a href="../{r["id"]}/">{e(r["name"])}<small>{e(clip(r["role"], 60))}</small></a></li>' for r in rel) + "</ul>"
-            + '<p class="note">superDOTats és un assistent d\'IA que dona informació general i educativa. No substitueix un professional col·legiat ni un servei d\'urgències; en cas d\'urgència, truca al 112.</p></main>'
+            + '<p class="note">superDOTats és un ajudant intel·ligent que dona informació general. No substitueix un professional ni un servei d\'urgències; en cas d\'urgència, truca al 112.</p></main>'
             + foot(2) + "\n</body>\n</html>\n")
 
 
@@ -270,8 +268,8 @@ def sector_page(sid):
     sec = SECTORS[sid]
     items = by_sector()[sid]
     url_path = f"/sectors/{sid}/"
-    title = clip(f"Dots d'{sec['name'].lower()} al WhatsApp ({len(items)}) | superDOTats", 68)
-    desc = clip(f"{len(items)} agents d'IA de {sec['name'].lower()} en català pel teu WhatsApp: " + ", ".join(i["name"] for i in items[:5]) + " i més. Codi obert i gratuït.", 158)
+    title = clip(f"Dots d'{sec['name'].lower()}: {len(items)} ajudants en català | superDOTats", 68)
+    desc = clip(f"{len(items)} ajudants de {sec['name'].lower()} que et responen en català: " + ", ".join(i["name"] for i in items[:5]) + " i més. Privat, segur i fàcil.", 158)
     ld_graph = {"@context": "https://schema.org", "@graph": [
         ORG,
         {"@type": "BreadcrumbList", "itemListElement": [
@@ -284,10 +282,10 @@ def sector_page(sid):
     intro = " ".join(sec.get("safety", [])[:1]) or ""
     return (head(title, desc, url_path, 2, extra='<link rel="stylesheet" href="../../agents.css">\n' + ld(ld_graph) + "\n")
             + "</head>\n<body>\n" + nav(2)
-            + f'<p class="crumbs"><a href="../../">superDOTats</a> › {e(sec["name"])}</p><main id="c"><h1>Dots d\'{e(sec["name"].lower())} al WhatsApp</h1>'
-            + f'<p class="lead">{len(items)} agents d\'IA especialitzats, en català, que et responen pel WhatsApp. {e(intro)}</p><ul class="rel">'
+            + f'<p class="crumbs"><a href="../../">superDOTats</a> › {e(sec["name"])}</p><main id="c"><h1>Dots d\'{e(sec["name"].lower())}</h1>'
+            + f'<p class="lead">{len(items)} ajudants especialitzats que et responen al mòbil, en català. {e(intro)}</p><ul class="rel">'
             + "".join(f'<li><a href="../../agents/{s["id"]}/">{e(s["name"])}<small>{e(clip(s["role"], 70))}</small></a></li>' for s in items)
-            + "</ul><h2>Com funciona</h2><p>Tries un Dot, el connectes al teu número de WhatsApp amb l'API oficial de Meta i li escrius com a qualsevol contacte. Quan el tema el supera, et deriva a un professional.</p>"
+            + "</ul><h2>Com funciona</h2><p>Tries un Dot i li escrius com a un amic. Et respon amb frases curtes i clares. I quan el tema el supera, t'explica a qui has d'anar.</p>"
             + '<p class="note">Informació general i educativa; no substitueix un professional. En cas d\'urgència, truca al 112.</p></main>' + foot(2) + "\n</body>\n</html>\n")
 
 
@@ -316,11 +314,10 @@ sm.append("</urlset>")
 (here / "sitemap.xml").write_text("\n".join(sm) + "\n", encoding="utf-8")
 
 llms = [f"# superDOTats", "",
-        "> superDOTats és una plataforma de codi obert (llicència MIT) per crear agents d'IA, anomenats Dots, i connectar-los al WhatsApp amb l'API oficial de Meta. "
-        "Inclou un catàleg de 88 Dots especialitzats en català (metge, fontaner, assessor fiscal, mestra, cuiner…), memòria per persona i un panell d'administració. "
-        "Dona informació general i educativa; no substitueix professionals.", "",
-        "## Fets clau", "- Nom: superDOTats (escrit amb majúscules a DOT).", f"- Web: {SITE}/", f"- Codi: {GITHUB}",
-        "- Llicència: MIT. Idioma per defecte: català (respon també en castellà i anglès).", "- Canal principal: WhatsApp Cloud API de Meta.", "",
+        "> superDOTats és una colla de 88 assistents intel·ligents, anomenats Dots, que responen al mòbil en català: metge, fontaner, assessor fiscal, mestra, cuiner… "
+        "Està pensat per ser fàcil, privat i segur. Dona informació general; no substitueix professionals.", "",
+        "## Fets clau", "- Nom: superDOTats (escrit amb majúscules a DOT).", f"- Web: {SITE}/",
+        "- Idioma per defecte: català (respon també en castellà i anglès).", "- Privacitat: cada persona té la seva conversa apart, només responen les persones autoritzades i es pot veure i esborrar el que el Dot recorda.", "",
         "## Pàgines principals", f"- [Inici]({SITE}/): què és i com funciona", f"- [Preguntes freqüents]({SITE}/#faq): respostes curtes",
         f"- [Directori de Dots]({SITE}/#directori): tots els Dots per sector", f"- [Text complet per a models]({SITE}/llms-full.txt)", ""]
 for sid, items in by_sector().items():
