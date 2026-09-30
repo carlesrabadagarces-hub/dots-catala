@@ -21,6 +21,10 @@ libs = (
     "\nreturn { dotSprite: dotSprite, spriteParts: spriteParts, spriteLayout: spriteLayout, normalizeSpriteLook: normalizeSpriteLook, BODIES: BODIES, TONES: TONES, TONE_COLORS: TONE_COLORS, SPRITE_ITEMS: SPRITE_ITEMS, ensureSpriteStyles: ensureSpriteStyles, randomSpriteLook: randomSpriteLook };\n})();\n"
     "var dotSprite = __sprite.dotSprite, spriteParts = __sprite.spriteParts, spriteLayout = __sprite.spriteLayout, normalizeSpriteLook = __sprite.normalizeSpriteLook, BODIES = __sprite.BODIES, TONES = __sprite.TONES, TONE_COLORS = __sprite.TONE_COLORS, SPRITE_ITEMS = __sprite.SPRITE_ITEMS, ensureSpriteStyles = __sprite.ensureSpriteStyles, randomSpriteLook = __sprite.randomSpriteLook;\n"
 )
+# The rig metadata for the footer walkers travels inside the page: a fetch would not
+# work when the file is opened straight from disk, and it is only a few numbers.
+rig = (here / "people" / "rig.json")
+libs += "var RIG = " + (rig.read_text(encoding="utf-8").strip() if rig.exists() else "{}") + ";\n"
 app = (here / "src" / "app.js").read_text(encoding="utf-8")
 target = here / "body.html"
 html = target.read_text(encoding="utf-8")

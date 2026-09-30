@@ -739,6 +739,48 @@ function randomSpriteLook() {
 return { dotSprite: dotSprite, spriteParts: spriteParts, spriteLayout: spriteLayout, normalizeSpriteLook: normalizeSpriteLook, BODIES: BODIES, TONES: TONES, TONE_COLORS: TONE_COLORS, SPRITE_ITEMS: SPRITE_ITEMS, ensureSpriteStyles: ensureSpriteStyles, randomSpriteLook: randomSpriteLook };
 })();
 var dotSprite = __sprite.dotSprite, spriteParts = __sprite.spriteParts, spriteLayout = __sprite.spriteLayout, normalizeSpriteLook = __sprite.normalizeSpriteLook, BODIES = __sprite.BODIES, TONES = __sprite.TONES, TONE_COLORS = __sprite.TONE_COLORS, SPRITE_ITEMS = __sprite.SPRITE_ITEMS, ensureSpriteStyles = __sprite.ensureSpriteStyles, randomSpriteLook = __sprite.randomSpriteLook;
+var RIG = {
+ "a": {
+  "w": 299,
+  "h": 488,
+  "ground": 450.0,
+  "len": 154.3,
+  "split": 316.0,
+  "hip": [
+   151.5,
+   314.0
+  ],
+  "legs": [
+   {
+    "angle": -31.12
+   },
+   {
+    "angle": 24.71
+   }
+  ],
+  "amplitude": 21.0
+ },
+ "b": {
+  "w": 299,
+  "h": 488,
+  "ground": 450.0,
+  "len": 161.9,
+  "split": 305.0,
+  "hip": [
+   137.4,
+   303.0
+  ],
+  "legs": [
+   {
+    "angle": -24.15
+   },
+   {
+    "angle": 25.34
+   }
+  ],
+  "amplitude": 21.0
+ }
+};
 (function(){
   /* La pàgina sempre carrega des de dalt (no restaura l'scroll d'una visita o recàrrega anterior), tret que l'enllaç porti un #àncora. */
   try{if("scrollRestoration" in history)history.scrollRestoration="manual"}catch(e){}
@@ -1106,40 +1148,88 @@ var dotSprite = __sprite.dotSprite, spriteParts = __sprite.spriteParts, spriteLa
   /* ---------- Carrer: Dots que passegen i activitat en directe ---------- */
   (function(){
     var st=$("street"),feed=$("feed");if(!st||!feed)return;
-    /* Dues persones caminen mirant el mòbil i una colla de Dots els persegueix. Si hi ha fotos a people/ (a0..a3.png, b0..b3.png) s'usen; si no, dibuixem les persones en SVG. */
-    var small=innerWidth<640,PH=small?120:170,M=200,W=0,SP;
+    /* Dues persones caminen mirant el mòbil i una colla de Dots els persegueix.
+       Les persones són fotos retallades en tors i cames (people/, fetes per tools/rig_people.py):
+       les cames giren al maluc i la passa va lligada a la distància recorreguda, així el peu
+       no rellisca mai. Si les imatges no hi són, es dibuixen unes siluetes senzilles. */
+    var small=innerWidth<640,PH=small?128:176,M=220,W=0,SP;
     function size(){W=st.clientWidth;SP=W+2*M}size();addEventListener("resize",size);
-    var ns="http://www.w3.org/2000/svg";
-    function svgPerson(c){
+    var AMP=21,SRC_H=420;
+    function pose(t){                       // angle del maluc, en graus (positiu = cama endavant)
+      t=((t%1)+1)%1;
+      if(t<.62)return AMP*(1-2*(t/.62));    // recolzament: escombrada enrere constant
+      var u=(t-.62)/.38;u=u*u*(3-2*u);      // oscil·lació: torna endavant, més ràpida
+      return AMP*(2*u-1);
+    }
+    function rise(t,L){                     // el cos puja quan una cama passa vertical
+      var s=Math.min(Math.abs(pose(t)),Math.abs(pose(t+.5)));
+      return L*(Math.cos(s*Math.PI/180)-Math.cos(AMP*Math.PI/180));
+    }
+    function fallbackPerson(c){
       var d=document.createElement("div");d.className="person";
       d.innerHTML='<svg viewBox="0 0 100 200" width="'+PH*.5+'" height="'+PH+'" aria-hidden="true">'
         +'<ellipse cx="50" cy="197" rx="27" ry="4" fill="rgba(0,0,0,.22)"/>'
         +'<g class="lf"><rect x="43.5" y="108" width="13" height="82" rx="6.5" fill="'+c.pantsD+'"/><rect x="42" y="187" width="23" height="9" rx="4.5" fill="'+c.shoes+'"/></g>'
-        +'<g class="af"><rect x="45" y="48" width="9" height="48" rx="4.5" fill="'+c.topD+'"/></g>'
         +(c.long?'<rect x="34" y="20" width="16" height="40" rx="8" fill="'+c.hair+'"/>':'')
         +'<rect x="35" y="40" width="30" height="76" rx="13" fill="'+c.top+'"/>'
-        +'<g class="hd"><circle cx="49" cy="23" r="14.5" fill="'+c.hair+'"/><circle cx="53" cy="26" r="12.5" fill="'+c.sk+'"/>'+(c.beard?'<path d="M45 30 q8 14 18 -1 q-2 6 -9 7 q-7 0 -9 -6z" fill="'+c.hair+'"/>':'')+'<path d="M40 19 q12 -12 25 0 q-12 -3 -25 0z" fill="'+c.hair+'"/></g>'
+        +'<g class="hd"><circle cx="49" cy="23" r="14.5" fill="'+c.hair+'"/><circle cx="53" cy="26" r="12.5" fill="'+c.sk+'"/><path d="M40 19 q12 -12 25 0 q-12 -3 -25 0z" fill="'+c.hair+'"/></g>'
         +'<g class="ln"><rect x="43.5" y="108" width="13" height="82" rx="6.5" fill="'+c.pants+'"/><rect x="42" y="187" width="23" height="9" rx="4.5" fill="'+c.shoes+'"/></g>'
         +'<path d="M50 52 L55 80 L71 67" stroke="'+c.top+'" stroke-width="9.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>'
         +'<circle cx="71" cy="67" r="5" fill="'+c.sk+'"/>'
         +'<g transform="rotate(-14 73 60)"><rect x="68" y="50" width="11" height="19" rx="2.4" fill="#0d0d10"/><rect class="scr" x="69.3" y="51.5" width="8.4" height="16" rx="1.6" fill="#8fd0ff"/></g></svg>';
-      var q=function(s){return d.querySelector(s)};
-      d.upd=function(ph,run){var a=Math.sin(ph)*24*run;q(".ln").setAttribute("transform","rotate("+a+" 50 108)");q(".lf").setAttribute("transform","rotate("+(-a)+" 50 108)");q(".af").setAttribute("transform","rotate("+(a*.8)+" 50 50)");q(".hd").setAttribute("transform","rotate(14 50 36)")};
-      d.glow=function(on){q(".scr").setAttribute("fill",on?"#ffffff":"#8fd0ff")};
+      d.stride=PH*.55;d.lift=0;d.anchor=PH*.25;
+      d.step=function(ph){var a=Math.sin(ph*Math.PI*2)*24;
+        d.querySelector(".ln").setAttribute("transform","rotate("+a+" 50 108)");
+        d.querySelector(".lf").setAttribute("transform","rotate("+(-a)+" 50 108)")};
+      d.glow=function(on){d.querySelector(".scr").setAttribute("fill",on?"#fff":"#8fd0ff")};
       return d;
     }
-    function photoPerson(prefix){
-      var d=document.createElement("div");d.className="person";var img=new Image();img.alt="";img.style.height=PH+"px";img.style.display="block";var sh=document.createElement("div");sh.style.cssText="position:absolute;left:8%;right:8%;bottom:-3px;height:12px;background:radial-gradient(closest-side,rgba(0,0,0,.28),transparent);z-index:-1";d.appendChild(sh);d.appendChild(img);d.frames=[];var loaded=0;
-      for(var i=0;i<4;i++)(function(i){var im=new Image();im.onload=function(){d.frames[i]=im.src;loaded++;if(loaded===4){d.ready=true;img.src=d.frames[0]}};im.onerror=function(){};im.src="people/"+prefix+i+".png"})(i);
-      d.upd=function(ph){if(!d.ready)return;var f=Math.floor(((ph/(Math.PI*2))%1+1)%1*4);img.src=d.frames[f]};d.glow=function(){};
+    function rigPerson(key,r){
+      var s=PH/SRC_H,d=document.createElement("div");d.className="person";
+      d.style.width=(r.w*s)+"px";d.style.height=(r.h*s)+"px";
+      var inner=document.createElement("div");
+      inner.style.cssText="position:absolute;left:0;top:0;width:"+r.w+"px;height:"+r.h+"px;transform-origin:0 0;transform:scale("+s+")";
+      var body=document.createElement("div");
+      body.style.cssText="position:absolute;inset:0";
+      var legs=[];
+      function limb(front){
+        var clip=document.createElement("div");
+        clip.style.cssText="position:absolute;left:0;top:"+r.split+"px;width:"+r.w+"px;height:"+(r.h-r.split)+"px;overflow:hidden";
+        var pivot=document.createElement("div");
+        pivot.style.cssText="position:absolute;left:0;top:"+(-r.split)+"px;width:"+r.w+"px;height:"+r.h+"px;transform-origin:"+r.hip[0]+"px "+r.hip[1]+"px";
+        var img=new Image();img.src="people/"+key+"-"+(front?"front":"back")+".webp";img.alt="";
+        img.style.cssText="position:absolute;inset:0;width:100%;height:100%";
+        pivot.appendChild(img);clip.appendChild(pivot);legs.push({el:pivot,a:r.legs[front?1:0].angle});
+        return clip;
+      }
+      var torso=new Image();torso.src="people/"+key+"-torso.webp";torso.alt="";
+      torso.style.cssText="position:absolute;inset:0;width:100%;height:100%";
+      var back=limb(false),front=limb(true);
+      body.appendChild(back);body.appendChild(torso);body.appendChild(front);
+      var shadow=document.createElement("div");
+      shadow.style.cssText="position:absolute;left:"+(r.hip[0]-70)+"px;top:"+(r.ground-8)+"px;width:140px;height:22px;"
+        +"background:radial-gradient(closest-side,rgba(0,0,0,.30),transparent)";
+      inner.appendChild(shadow);inner.appendChild(body);d.appendChild(inner);
+      d.stride=4*r.len*Math.sin(AMP*Math.PI/180)*s;      // avanç per cicle complet
+      d.lift=(r.h-r.ground)*s;   // baixa la figura fins que els peus toquen terra
+      d.anchor=r.hip[0]*s;
+      d.step=function(ph){
+        body.style.transform="translateY("+(-rise(ph,r.len))+"px)";
+        legs[0].el.style.transform="rotate("+(legs[0].a-pose(ph+.5))+"deg)";
+        legs[1].el.style.transform="rotate("+(legs[1].a-pose(ph))+"deg)";
+      };
+      d.glow=function(){};
       return d;
     }
-    function person(prefix,c){
-      var p=svgPerson(c);st.appendChild(p);
-      var probe=new Image();probe.onload=function(){var ph=photoPerson(prefix);st.replaceChild(ph,p);P[prefix==="a"?0:1].el=ph};probe.src="people/"+prefix+"0.png";return p;
-    }
-    var P=[{el:person("a",{sk:"#e2b895",hair:"#2a1c15",top:"#f0e4d2",topD:"#d8c9b3",pants:"#3d64a3",pantsD:"#2f4f85",shoes:"#f6f6f6",long:true}),v:96,x0:0,ph:0},
-           {el:person("b",{sk:"#c98f6b",hair:"#3f2a1e",top:"#66753f",topD:"#546131",pants:"#2c2e34",pantsD:"#202228",shoes:"#8b9098",beard:true}),v:96,x0:110,ph:1.7}];
+    var P=[];
+    [["a",{sk:"#e2b895",hair:"#2a1c15",top:"#f0e4d2",topD:"#d8c9b3",pants:"#3d64a3",pantsD:"#2f4f85",shoes:"#f6f6f6",long:true},0,0],
+     ["b",{sk:"#c98f6b",hair:"#3f2a1e",top:"#66753f",topD:"#546131",pants:"#2c2e34",pantsD:"#202228",shoes:"#8b9098",beard:true},118,.37]].forEach(function(p){
+      var el=fallbackPerson(p[1]);st.appendChild(el);
+      var o={el:el,v:74,x0:p[2],ph0:p[3]};P.push(o);
+      if(typeof RIG!=="undefined"&&RIG[p[0]]){
+        var r=rigPerson(p[0],RIG[p[0]]);st.replaceChild(r,o.el);o.el=r;
+      }
+    });
     var CAST=[
       [{body:"blob",tone:"orange",hat:"hardhat",accessory:"mustache"},"Fontaner"],
       [{body:"cube",tone:"pink",glasses:"shades",accessory:"tie"},"Metge"],
@@ -1179,12 +1269,13 @@ var dotSprite = __sprite.dotSprite, spriteParts = __sprite.spriteParts, spriteLa
     function step(now){
       var t=(now-t0)/1000,dt=Math.min(.05,(now-last)/1000);last=now;
       P.forEach(function(p,i){
-        var base=reduce?W*.3:(((t*p.v)+W*.28+M)%SP)-M,x=base+p.x0,ph=t*7+p.ph,run=reduce?0:1;
+        var travel=reduce?0:t*p.v,base=((travel+W*.28+M)%SP)-M,x=base+p.x0;
         p.x=x;p.base=base;
-        p.el.upd&&p.el.upd(ph,run);
-        p.el.style.transform="translate("+(x-(p.el.offsetWidth||PH*.5)/2)+"px,"+(-Math.abs(Math.sin(ph))*3*run)+"px)";
+        // la fase surt de la distància recorreguda: així el peu que toca terra no rellisca
+        p.el.step&&p.el.step(p.ph0+travel/(p.el.stride||1));
+        p.el.style.transform="translate("+(x-(p.el.anchor||0))+"px,"+(p.el.lift||0)+"px)";
         p.el.style.zIndex=i?2:4;
-        PB[i].style.transform="translate("+(x-30)+"px,"+(-PH-12)+"px)";
+        PB[i].style.transform="translate("+(x-30)+"px,"+(-PH-14)+"px)";
       });
       var L=P[0];
       ws.forEach(function(o){
