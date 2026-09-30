@@ -13,16 +13,16 @@
     {n:"Pau",r:"Cuiner",look:{body:"cube",tone:"yellow",hat:"chef",accessory:"mustache"},p:[
       ["Sopar ràpid amb ous","Truita de patata en 15 minuts: 4 ous, 2 patates fines i ceba opcional. Vols la recepta pas a pas?"],
       ["Sí, sense ceba","Talla les patates ben fines, fregeix-les 8 minuts, barreja-les amb els ous batuts i cuaja 3 minuts per banda."]]},
-    {n:"Laia",r:"Traductora",look:{body:"blob",tone:"blue",hat:"beanie",glasses:"round"},p:[
+    {n:"Laia",r:"Traductora",look:{body:"blob",tone:"blue",hat:"beanie"},p:[
       ["Tradueix: bon profit","Anglès: enjoy your meal. Francès: bon appétit. Alemany: guten Appetit."],
       ["I en italià?","Buon appetito. Igual que en castellà: buen provecho."]]},
-    {n:"Marc",r:"Comptable",look:{body:"cube",tone:"green",glasses:"square",accessory:"tie"},p:[
+    {n:"Marc",r:"Comptable",look:{body:"cube",tone:"green",accessory:"tie"},p:[
       ["Quin IVA porta un llibre?","A Espanya els llibres porten el 4% d'IVA. Confirma-ho amb el teu gestor per a casos especials."],
       ["I un cafè al bar?","La restauració va al 10%."]]},
-    {n:"Núria",r:"Tutora",look:{body:"blob",tone:"violet",hat:"graduation",glasses:"round"},p:[
+    {n:"Núria",r:"Tutora",look:{body:"blob",tone:"violet",hat:"graduation"},p:[
       ["Explica'm les fraccions","Una fracció és una part d'un tot. Si talles una pizza en 4 i te'n menges 1, has menjat 1/4."],
       ["Posa'm un exercici","Quant és 1/2 + 1/4? Pista: converteix-les a quarts."]]},
-    {n:"Jordi",r:"Suport tècnic",look:{body:"arch",tone:"slate",hat:"cap",glasses:"square"},p:[
+    {n:"Jordi",r:"Suport tècnic",look:{body:"arch",tone:"slate",hat:"cap",glasses:"shades"},p:[
       ["El wifi va lent","Reinicia el router 30 segons. Si continua igual, digues-me si va lent a tots els aparells o només a un."],
       ["Només al portàtil","Oblida la xarxa al portàtil i torna-la a connectar. Si no, actualitza el controlador de wifi."]]}
   ];
@@ -145,8 +145,8 @@
   new IntersectionObserver(function(es){es.forEach(function(en){if(en.isIntersecting){var p=hv.play();if(p&&p.catch)p.catch(function(){})}else hv.pause()})},{threshold:.4}).observe(hv);
 
   /* ---------- Builder ---------- */
-  var LBL={body:{blob:"Gota",arch:"Arc",cube:"Cub"},tone:{pink:"Rosa",orange:"Taronja",yellow:"Groc",green:"Verd",teal:"Verd atzur",blue:"Blau",violet:"Violeta",slate:"Pissarra"},hat:{none:"Cap",cap:"Gorra",beanie:"Gorro",tophat:"Barret de copa",crown:"Corona",party:"Festa",cowboy:"Vaquer",wizard:"Mag",chef:"Cuiner",graduation:"Birret",hardhat:"Casc",antenna:"Antena",flower:"Flor"},glasses:{none:"Cap",round:"Rodones",square:"Quadrades",shades:"De sol",monocle:"Monocle"},accessory:{none:"Cap",bowtie:"Pajarita",tie:"Corbata",mustache:"Bigoti",badge:"Insígnia"}};
-  var ROLES={"Recepcionista":{body:"arch",tone:"pink",hat:"cap",accessory:"bowtie"},"Cuiner":{body:"cube",tone:"teal",hat:"chef",accessory:"mustache"},"Traductor":{body:"blob",tone:"blue",glasses:"round",hat:"beanie"},"Comptable":{body:"cube",tone:"slate",accessory:"tie",glasses:"square"},"Tutor":{body:"arch",tone:"yellow",hat:"graduation",glasses:"round"},"Suport tècnic":{body:"blob",tone:"violet",hat:"antenna",glasses:"square"}};
+  var LBL={body:{blob:"Gota",arch:"Arc",cube:"Cub"},tone:{pink:"Rosa",orange:"Taronja",yellow:"Groc",green:"Verd",teal:"Verd atzur",blue:"Blau",violet:"Violeta",slate:"Pissarra"},hat:{none:"Cap",cap:"Gorra",beanie:"Gorro",tophat:"Barret de copa",crown:"Corona",party:"Festa",cowboy:"Vaquer",wizard:"Mag",chef:"Cuiner",graduation:"Birret",hardhat:"Casc",antenna:"Antena",flower:"Flor"},glasses:{none:"Cap",shades:"De sol"},accessory:{none:"Cap",bowtie:"Pajarita",tie:"Corbata",mustache:"Bigoti"}};
+  var ROLES={"Recepcionista":{body:"arch",tone:"pink",hat:"cap",accessory:"bowtie"},"Cuiner":{body:"cube",tone:"teal",hat:"chef",accessory:"mustache"},"Traductor":{body:"blob",tone:"blue",hat:"beanie"},"Comptable":{body:"cube",tone:"slate",accessory:"tie"},"Tutor":{body:"arch",tone:"yellow",hat:"graduation"},"Suport tècnic":{body:"blob",tone:"violet",hat:"antenna",glasses:"shades"}};
   var bs={name:"Aina",role:"Recepcionista",tone:70,model:"gpt-5-mini"},look=normalizeSpriteLook(ROLES["Recepcionista"]);
   var bname=$("b-name"),broles=$("b-roles"),bcolors=$("b-colors"),btone=$("b-tone"),bmodel=$("b-model"),bcode=$("b-code"),bsay=$("b-say"),bav=$("b-avatar");
   var sels={};
@@ -307,7 +307,7 @@
   /* ---------- Company: un Dot que viu a la pàgina ---------- */
   (function(){
     var host=$("cdot"),bub=$("cbubble");if(!host||!bub)return;
-    var looks=[{body:"blob",tone:"blue",hat:"cap"},{body:"arch",tone:"yellow",hat:"hardhat",accessory:"badge"},{body:"cube",tone:"violet",hat:"wizard",glasses:"round"},{body:"blob",tone:"teal",hat:"chef",accessory:"mustache"},{body:"arch",tone:"pink",hat:"crown",accessory:"bowtie"}];
+    var looks=[{body:"blob",tone:"blue",hat:"cap"},{body:"arch",tone:"yellow",hat:"hardhat"},{body:"cube",tone:"violet",hat:"wizard"},{body:"blob",tone:"teal",hat:"chef",accessory:"mustache"},{body:"arch",tone:"pink",hat:"crown",accessory:"bowtie"}];
     host.innerHTML=av(pick(looks),96,"Dot company");
     var talk=["Hola! Sóc un superDOTat.","Vols crear-ne un de teu?","Tinc un Dot per a cada ofici.","Fes-me un toc, que m'agrada.","Sempre al teu WhatsApp.","Mira el catàleg: en tenim 87."],hide=null,ti=0;
     function say(t){bub.textContent=t;bub.classList.add("on");clearTimeout(hide);hide=setTimeout(function(){bub.classList.remove("on")},3400)}

@@ -7,7 +7,7 @@ import { getAuthStatus, oauthStartUrl, loginWithToken, loginWithPassword, logout
 
 const CAST = [
   { look: { body: 'arch', tone: 'pink', hat: 'cap', accessory: 'bowtie' }, size: 150, style: { left: '6%', top: '12%' } },
-  { look: { body: 'blob', tone: 'blue', glasses: 'round', hat: 'beanie' }, size: 170, style: { right: '7%', top: '9%' }, delay: 1 },
+  { look: { body: 'blob', tone: 'blue', hat: 'beanie' }, size: 170, style: { right: '7%', top: '9%' }, delay: 1 },
   { look: { body: 'cube', tone: 'teal', hat: 'chef', accessory: 'mustache' }, size: 140, style: { left: '10%', bottom: '10%' }, delay: 2 },
   { look: { body: 'blob', tone: 'violet', hat: 'wizard' }, size: 160, style: { right: '10%', bottom: '11%' }, delay: 0.5 },
   { look: { body: 'arch', tone: 'yellow', hat: 'crown', accessory: 'bowtie' }, size: 120, style: { left: '21%', top: '3%' }, delay: 1.5 },

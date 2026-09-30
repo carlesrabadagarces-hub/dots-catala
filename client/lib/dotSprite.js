@@ -9,8 +9,8 @@ export const TONES = ['pink', 'orange', 'yellow', 'green', 'teal', 'blue', 'viol
 export const TONE_COLORS = { pink: '#ff4d7d', orange: '#ff8a3d', yellow: '#ffc21a', green: '#7cd13b', teal: '#19c3a6', blue: '#2f7bff', violet: '#7a4cf0', slate: '#52657a' };
 export const SPRITE_ITEMS = {
   hat: ['none', 'cap', 'beanie', 'tophat', 'crown', 'party', 'cowboy', 'wizard', 'chef', 'graduation', 'hardhat', 'antenna', 'flower'],
-  glasses: ['none', 'round', 'square', 'shades', 'monocle'],
-  accessory: ['none', 'bowtie', 'tie', 'mustache', 'badge'],
+  glasses: ['none', 'shades'],
+  accessory: ['none', 'bowtie', 'tie', 'mustache'],
 };
 export const DEFAULT_SPRITE_LOOK = { body: 'blob', tone: 'violet', hat: 'none', glasses: 'none', accessory: 'none' };
 const FOLDER = { hat: 'hats', glasses: 'glasses', accessory: 'accessories' };
@@ -80,17 +80,15 @@ export function spriteParts(look) {
   add('body', `${l.body}-${l.tone}`, { x: g.left, y: g.top, w: g.bw, h: g.bh }, 2, 'body');
   const A = {
     bowtie: () => place('accessory', 'bowtie', hw * 0.44, 0.5, g.bh * 0.3),
-    tie: () => place('accessory', 'tie', hw * 0.22, 0, g.bh * 0.22),
-    mustache: () => place('accessory', 'mustache', hw * 0.36, 0.5, g.bh * 0.13),
-    badge: () => place('accessory', 'badge', hw * 0.21, 0.5, g.bh * 0.32, hw * 0.28),
+    tie: () => place('accessory', 'tie', hw * 0.28, 0, g.bh * 0.2),
+    mustache: () => place('accessory', 'mustache', hw * 0.44, 0.5, g.bh * 0.12),
   };
   if (A[l.accessory]) add('accessory', l.accessory, A[l.accessory](), 4, 'acc');
   if (l.glasses !== 'none') {
     const gap = g.eyeGap;
     const mk = (w, anchorY, dx) => place('glasses', l.glasses, w, anchorY, 0, dx);
     let box;
-    if (l.glasses === 'monocle') box = mk(gap * 0.92, 0.28, gap / 2);
-    else box = mk(gap * 2.15, 0.5, 0);
+    box = mk(gap * 2.15, 0.5, 0);
     add('glasses', l.glasses, box, 5, 'gl');
   }
   if (l.hat !== 'none') {

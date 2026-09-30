@@ -90,8 +90,8 @@ SECTOR_BASES = {
 
 
 PLUSH_ITEMS = {
-    "glasses": {"none", "round", "square", "shades", "monocle"},
-    "accessory": {"none", "bowtie", "tie", "mustache", "badge"},
+    "glasses": {"none", "shades"},
+    "accessory": {"none", "bowtie", "tie", "mustache"},
 }
 
 

@@ -24,7 +24,7 @@ TONES = ["pink", "orange", "yellow", "green", "teal", "blue", "violet", "slate"]
 BODY_W = 480
 ITEM_MAX = 420
 # Items that did not look right on the bodies (floating or too big); kept in art/raw but not shipped.
-EXCLUDE = {"glasses-visor", "accessories-scarf", "accessories-stethoscope", "accessories-headphones", "accessories-cape"}
+EXCLUDE = {"glasses-round", "glasses-square", "glasses-monocle", "accessories-badge", "glasses-visor", "accessories-scarf", "accessories-stethoscope", "accessories-headphones", "accessories-cape"}
 
 
 def strip_shadow(img):
