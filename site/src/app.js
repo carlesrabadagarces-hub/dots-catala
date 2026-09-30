@@ -276,12 +276,61 @@
     var host=$("cdot"),bub=$("cbubble");if(!host||!bub)return;
     var looks=[{body:"blob",tone:"blue",hat:"tophat"},{body:"arch",tone:"yellow",hat:"hardhat"},{body:"cube",tone:"violet",hat:"wizard"},{body:"blob",tone:"teal",hat:"chef",accessory:"mustache"},{body:"arch",tone:"pink",hat:"crown",accessory:"bowtie"}];
     host.innerHTML=av(pick(looks),96,"Dot company");
-    var talk=["Hola! Sóc un superDOTat.","Vols crear-ne un de teu?","Tinc un Dot per a cada ofici.","Fes-me un toc, que m'agrada.","Sempre al teu WhatsApp.","Mira el catàleg: en tenim 87."],hide=null,ti=0;
+    var talk=["Hola! Sóc un superDOTat.","Vols crear-ne un de teu?","Tinc un Dot per a cada ofici.","Fes-me un toc, que m'agrada.","Sempre al teu WhatsApp.","Mira el catàleg: en tenim 88."],hide=null,ti=0;
     function say(t){bub.textContent=t;bub.classList.add("on");clearTimeout(hide);hide=setTimeout(function(){bub.classList.remove("on")},3400)}
     attachLife(host,{onPoke:function(){say(talk[ti++%talk.length])}});
     setTimeout(function(){say(talk[0])},2600);
     var last=scrollY,lt=0;window.addEventListener("scroll",function(){var d=Math.abs(scrollY-last);last=scrollY;var n=Date.now();if(d>260&&n-lt>1800){lt=n;host.dataset.state="happy";setTimeout(function(){if(host.dataset.state==="happy")host.dataset.state="idle"},600)}},{passive:true});
     setInterval(function(){if(host.dataset.state==="sleepy"){if(!bub.classList.contains("on"))say("zzz…")}},5000);
+  })();
+
+  /* ---------- Carrer: Dots que passegen i activitat en directe ---------- */
+  (function(){
+    var st=$("street"),feed=$("feed");if(!st||!feed)return;
+    var CAST=[
+      [{body:"blob",tone:"orange",hat:"hardhat",accessory:"mustache"},"Fontaner","He trobat la fuita."],
+      [{body:"cube",tone:"pink",glasses:"shades",accessory:"tie"},"Metge","Beu aigua i descansa."],
+      [{body:"blob",tone:"yellow",hat:"flower"},"Mestra","Fem els deures junts?"],
+      [{body:"arch",tone:"teal",hat:"chef",accessory:"mustache"},"Cuiner","Què tens a la nevera?"],
+      [{body:"cube",tone:"yellow",hat:"graduation"},"Professor","Pas a pas, ho veus?"],
+      [{body:"blob",tone:"slate",accessory:"tie"},"Assessor","Ho miro amb el model 303."],
+      [{body:"arch",tone:"violet",hat:"wizard"},"Traductor","Ja ho tinc en anglès."],
+      [{body:"blob",tone:"blue",hat:"party"},"Recepcionista","Dijous a les 10, confirmat."]
+    ];
+    var W=0,ws=[];
+    function size(){W=st.clientWidth}
+    CAST.forEach(function(c,i){
+      var el=document.createElement("div");el.className="walker";
+      el.innerHTML='<div class="wb"></div>'+av(c[0],84,c[1]);st.appendChild(el);
+      var o={el:el,bub:el.firstChild,x:(i/CAST.length)*900,v:(reduce?0:(.25+Math.random()*.35))*(i%2?1:-1),c:c,hop:0,dir:i%2?1:-1};
+      attachLife(el.lastChild);
+      el.onclick=function(){o.bub.textContent=c[2];o.bub.classList.add("on");o.hop=1;setTimeout(function(){o.bub.classList.remove("on")},2200)};
+      ws.push(o);
+    });
+    size();addEventListener("resize",size);
+    var last=0;
+    function step(t){
+      var dt=Math.min(40,t-last);last=t;
+      ws.forEach(function(o){
+        o.x+=o.v*dt*.09*60/60*1;
+        if(o.x>W+60){o.x=-100}else if(o.x<-100){o.x=W+60}
+        o.hop=Math.max(0,o.hop-dt/500);
+        var bob=Math.abs(Math.sin(t/170+o.c[1].length))*5*(reduce?0:1);
+        o.el.style.transform="translate("+o.x+"px,"+(-(bob+Math.sin(o.hop*Math.PI)*22))+"px) scaleX("+(o.v>0?1:1)+")";
+      });
+      requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+    setInterval(function(){var o=ws[Math.floor(Math.random()*ws.length)];if(reduce)return;o.bub.textContent=o.c[2];o.bub.classList.add("on");setTimeout(function(){o.bub.classList.remove("on")},2600)},1900);
+    /* activitat */
+    var EV=[["Fontaner","ha respost una consulta d'una cisterna","WhatsApp"],["Metge","ha derivat un cas a urgències","WhatsApp"],["Traductor","ha traduït un contracte al francès","WhatsApp"],["Cuiner","ha proposat un sopar amb 4 ingredients","WhatsApp"],["Assessor","ha explicat el model 303","WhatsApp"],["Mestra","ha creat un joc de sumes","WhatsApp"],["Recepcionista","ha confirmat una cita de dijous","WhatsApp"],["Professor","ha resolt una equació pas a pas","WhatsApp"],["Creador d'stickers","ha dissenyat 8 stickers","WhatsApp"]];
+    var n=0;
+    function ev(){var e=EV[Math.floor(Math.random()*EV.length)],d=document.createElement("div");d.className="ev";
+      d.innerHTML='<i></i><div><b>'+e[0]+'</b> '+e[1]+'</div><span>ara</span>';feed.insertBefore(d,feed.firstChild);
+      while(feed.children.length>3)feed.removeChild(feed.lastChild);
+      [].slice.call(feed.children).forEach(function(c,i){if(i)c.lastChild.textContent="fa "+(i*4+Math.floor(Math.random()*3))+" s"});}
+    ev();ev();ev();
+    if(!reduce)setInterval(ev,2600);
   })();
 
   if(reduce)packets(0);else requestAnimationFrame(packets);
