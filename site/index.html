@@ -263,8 +263,10 @@ section[id]{scroll-margin-top:84px}
 @media (max-width:980px){.faq{grid-template-columns:minmax(0,1fr);gap:28px;padding-block:64px 48px}.faq-l{position:static}.play{height:200px}.fq .qa p{padding-left:22px}}
 .roofs{padding:0;margin-top:40px;position:relative}.rtag{position:absolute;left:0;right:0;top:6%;text-align:center;color:#fff;text-shadow:0 4px 30px rgba(120,30,0,.7);z-index:2;pointer-events:none}.rtag b{display:block;font-size:clamp(2rem,7vw,5.5rem);letter-spacing:-.05em;line-height:1}.rtag span{font-size:clamp(.9rem,2vw,1.6rem);font-weight:500}.roofs video{display:block;width:100%;aspect-ratio:16/9;max-height:80vh;object-fit:cover;border-radius:32px;background:#000;box-shadow:0 30px 70px -40px rgba(0,0,0,.5)}
 /* street + footer */
-.street{position:relative;height:150px;margin-top:20px;overflow:hidden;mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent);-webkit-mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent)}
-.walker{position:absolute;bottom:-6px;left:0;will-change:transform}
+.street{position:relative;height:250px;margin-top:20px;overflow:hidden;mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent);-webkit-mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent)}
+.walker{position:absolute;bottom:0;left:0;will-change:transform}
+.person{position:absolute;bottom:0;left:0;will-change:transform;line-height:0}
+.pb{position:absolute;left:0;bottom:0;max-width:210px;padding:8px 13px;border-radius:14px 14px 14px 4px;background:#d9fdd3;color:#111;font-size:13px;font-weight:500;line-height:1.3;opacity:0;transition:opacity .3s;z-index:6;box-shadow:0 6px 18px rgba(0,0,0,.16);pointer-events:none}.pb.on{opacity:1}
 .walker .wb{position:absolute;left:50%;bottom:100%;transform:translate(-50%,4px) scale(.9);white-space:nowrap;background:var(--fg);color:var(--bg);font-size:12px;font-weight:500;padding:6px 10px;border-radius:12px;opacity:0;transition:opacity .25s,transform .25s;pointer-events:none;box-shadow:0 6px 18px rgba(0,0,0,.18)}
 .walker .wb.on{opacity:1;transform:translate(-50%,-2px)}
 .mega{background:#0a0a0a;color:#f2f2f0;border-radius:36px 36px 0 0;padding:52px clamp(20px,4vw,52px) 26px;margin-top:-1px;font-size:14px}
@@ -1135,41 +1137,98 @@ var dotSprite = __sprite.dotSprite, spriteParts = __sprite.spriteParts, spriteLa
   /* ---------- Carrer: Dots que passegen i activitat en directe ---------- */
   (function(){
     var st=$("street"),feed=$("feed");if(!st||!feed)return;
+    /* Dues persones caminen mirant el mòbil i una colla de Dots els persegueix. Si hi ha fotos a people/ (a0..a3.png, b0..b3.png) s'usen; si no, dibuixem les persones en SVG. */
+    var small=innerWidth<640,PH=small?120:170,M=200,W=0,SP;
+    function size(){W=st.clientWidth;SP=W+2*M}size();addEventListener("resize",size);
+    var ns="http://www.w3.org/2000/svg";
+    function svgPerson(c){
+      var d=document.createElement("div");d.className="person";
+      d.innerHTML='<svg viewBox="0 0 100 200" width="'+PH*.5+'" height="'+PH+'" aria-hidden="true">'
+        +'<ellipse cx="50" cy="197" rx="27" ry="4" fill="rgba(0,0,0,.22)"/>'
+        +'<g class="lf"><rect x="43.5" y="108" width="13" height="82" rx="6.5" fill="'+c.pantsD+'"/><rect x="42" y="187" width="23" height="9" rx="4.5" fill="'+c.shoes+'"/></g>'
+        +'<g class="af"><rect x="45" y="48" width="9" height="48" rx="4.5" fill="'+c.topD+'"/></g>'
+        +(c.long?'<rect x="34" y="20" width="16" height="40" rx="8" fill="'+c.hair+'"/>':'')
+        +'<rect x="35" y="40" width="30" height="76" rx="13" fill="'+c.top+'"/>'
+        +'<g class="hd"><circle cx="49" cy="23" r="14.5" fill="'+c.hair+'"/><circle cx="53" cy="26" r="12.5" fill="'+c.sk+'"/>'+(c.beard?'<path d="M45 30 q8 14 18 -1 q-2 6 -9 7 q-7 0 -9 -6z" fill="'+c.hair+'"/>':'')+'<path d="M40 19 q12 -12 25 0 q-12 -3 -25 0z" fill="'+c.hair+'"/></g>'
+        +'<g class="ln"><rect x="43.5" y="108" width="13" height="82" rx="6.5" fill="'+c.pants+'"/><rect x="42" y="187" width="23" height="9" rx="4.5" fill="'+c.shoes+'"/></g>'
+        +'<path d="M50 52 L55 80 L71 67" stroke="'+c.top+'" stroke-width="9.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>'
+        +'<circle cx="71" cy="67" r="5" fill="'+c.sk+'"/>'
+        +'<g transform="rotate(-14 73 60)"><rect x="68" y="50" width="11" height="19" rx="2.4" fill="#0d0d10"/><rect class="scr" x="69.3" y="51.5" width="8.4" height="16" rx="1.6" fill="#8fd0ff"/></g></svg>';
+      var q=function(s){return d.querySelector(s)};
+      d.upd=function(ph,run){var a=Math.sin(ph)*24*run;q(".ln").setAttribute("transform","rotate("+a+" 50 108)");q(".lf").setAttribute("transform","rotate("+(-a)+" 50 108)");q(".af").setAttribute("transform","rotate("+(a*.8)+" 50 50)");q(".hd").setAttribute("transform","rotate(14 50 36)")};
+      d.glow=function(on){q(".scr").setAttribute("fill",on?"#ffffff":"#8fd0ff")};
+      return d;
+    }
+    function photoPerson(prefix){
+      var d=document.createElement("div");d.className="person";var img=new Image();img.alt="";img.style.height=PH+"px";img.style.display="block";d.appendChild(img);d.frames=[];var loaded=0;
+      for(var i=0;i<4;i++)(function(i){var im=new Image();im.onload=function(){d.frames[i]=im.src;loaded++;if(loaded===4){d.ready=true;img.src=d.frames[0]}};im.onerror=function(){};im.src="people/"+prefix+i+".png"})(i);
+      d.upd=function(ph){if(!d.ready)return;var f=Math.floor(((ph/(Math.PI*2))%1+1)%1*4);img.src=d.frames[f]};d.glow=function(){};
+      return d;
+    }
+    function person(prefix,c){
+      var p=svgPerson(c);st.appendChild(p);
+      var probe=new Image();probe.onload=function(){var ph=photoPerson(prefix);st.replaceChild(ph,p);P[prefix==="a"?0:1].el=ph};probe.src="people/"+prefix+"0.png";return p;
+    }
+    var P=[{el:person("a",{sk:"#e2b895",hair:"#2a1c15",top:"#f0e4d2",topD:"#d8c9b3",pants:"#3d64a3",pantsD:"#2f4f85",shoes:"#f6f6f6",long:true}),v:60,x0:0,ph:0},
+           {el:person("b",{sk:"#c98f6b",hair:"#3f2a1e",top:"#66753f",topD:"#546131",pants:"#2c2e34",pantsD:"#202228",shoes:"#8b9098",beard:true}),v:60,x0:96,ph:1.7}];
     var CAST=[
-      [{body:"blob",tone:"orange",hat:"hardhat",accessory:"mustache"},"Fontaner","He trobat la fuita."],
-      [{body:"cube",tone:"pink",glasses:"shades",accessory:"tie"},"Metge","Beu aigua i descansa."],
-      [{body:"blob",tone:"yellow",hat:"flower"},"Mestra","Fem els deures junts?"],
-      [{body:"arch",tone:"teal",hat:"chef",accessory:"mustache"},"Cuiner","Què tens a la nevera?"],
-      [{body:"cube",tone:"yellow",hat:"graduation"},"Professor","Pas a pas, ho veus?"],
-      [{body:"blob",tone:"slate",accessory:"tie"},"Assessor","Ho miro i t'ho explico."],
-      [{body:"arch",tone:"violet",hat:"wizard"},"Traductor","Ja ho tinc en anglès."],
-      [{body:"blob",tone:"blue",hat:"party"},"Recepcionista","Dijous a les 10, confirmat."]
+      [{body:"blob",tone:"orange",hat:"hardhat",accessory:"mustache"},"Fontaner"],
+      [{body:"cube",tone:"pink",glasses:"shades",accessory:"tie"},"Metge"],
+      [{body:"arch",tone:"teal",hat:"chef",accessory:"mustache"},"Cuiner"],
+      [{body:"cube",tone:"yellow",hat:"graduation"},"Professor"],
+      [{body:"blob",tone:"slate",accessory:"tie"},"Assessor"],
+      [{body:"arch",tone:"violet",hat:"wizard"},"Traductor"],
+      [{body:"blob",tone:"yellow",hat:"flower"},"Mestra"],
+      [{body:"blob",tone:"blue",hat:"party"},"Recepcionista"]
     ];
-    var W=0,ws=[];
-    function size(){W=st.clientWidth}
+    var EXTRA=small?2:6;
+    for(var e=0;e<EXTRA;e++)CAST.push([{body:pick(BODIES),tone:pick(TONES),hat:pick(["crown","party","tophat","cowboy","antenna","wizard"])},"Dot"]);
+    var ws=[];
     CAST.forEach(function(c,i){
-      var el=document.createElement("div");el.className="walker";
-      el.innerHTML='<div class="wb"></div>'+av(c[0],84,c[1]);st.appendChild(el);
-      var o={el:el,bub:el.firstChild,x:(i/CAST.length)*900,v:(reduce?0:(.25+Math.random()*.35))*(i%2?1:-1),c:c,hop:0,dir:i%2?1:-1};
-      attachLife(el.lastChild);
-      el.onclick=function(){o.bub.textContent=c[2];o.bub.classList.add("on");o.hop=1;setTimeout(function(){o.bub.classList.remove("on")},2200)};
-      ws.push(o);
-    });
-    size();addEventListener("resize",size);
-    var last=0;
-    function step(t){
-      var dt=Math.min(40,t-last);last=t;
-      ws.forEach(function(o){
-        o.x+=o.v*dt*.09*60/60*1;
-        if(o.x>W+60){o.x=-100}else if(o.x<-100){o.x=W+60}
-        o.hop=Math.max(0,o.hop-dt/500);
-        var bob=Math.abs(Math.sin(t/170+o.c[1].length))*5*(reduce?0:1);
-        o.el.style.transform="translate("+o.x+"px,"+(-(bob+Math.sin(o.hop*Math.PI)*22))+"px) scaleX("+(o.v>0?1:1)+")";
+      var far=i%3===0,S=far?(small?54:64):(small?70:88)+(i%4)*6,el=document.createElement("div");el.className="walker";
+      el.innerHTML='<div class="wb"></div>'+av(c[0],S,c[1]);st.appendChild(el);attachLife(el.lastChild);
+      var o={el:el,bub:el.firstChild,S:S,gap:110+i*(small?38:46)+Math.random()*50,A:24+Math.random()*60,w:.5+Math.random()*.9,ph:Math.random()*6.3,f:5+Math.random()*3,jump:0,lane:far?10:0,z:far?1:3,name:c[1],x:0};
+      el.style.zIndex=o.z;el.onclick=function(){o.jump=1;say(o,"Ei!",1600)};ws.push(o)});
+    function say(o,text,ms){o.bub.textContent=text;o.bub.classList.add("on");clearTimeout(o.bt);o.bt=setTimeout(function(){o.bub.classList.remove("on")},ms||2200)}
+    var PB=[];[0,1].forEach(function(){var b=document.createElement("div");b.className="pb";st.appendChild(b);PB.push(b)});
+    var TALK=[
+      [0,"Tinc una fuita a la cisterna…","Fontaner","Ja et miro això!"],
+      [1,"Què faig de sopar amb ous i patates?","Cuiner","Truita! T'ho explico."],
+      [0,"No entenc les fraccions","Professor","Pas a pas, ho veus?"],
+      [1,"Com faig la declaració de la renda?","Assessor","Comencem per les dades."],
+      [0,"Necessito traduir una carta","Traductor","Envia-me-la!"],
+      [1,"Em fa mal el cap des d'ahir","Metge","Beu aigua i descansa."]
+    ];
+    var ti=0,talkT=0,cur=null;
+    function speak(now){
+      var q=TALK[ti++%TALK.length];cur={p:q[0],until:now+2.4};
+      PB[q[0]].textContent=q[1];PB[q[0]].classList.add("on");P[q[0]].el.glow&&P[q[0]].el.glow(true);
+      var d=ws.filter(function(o){return o.name===q[2]})[0];
+      setTimeout(function(){PB[q[0]].classList.remove("on");P[q[0]].el.glow&&P[q[0]].el.glow(false);if(d){d.jump=1.4;say(d,q[3],2600)}},2300);
+    }
+    var last=0,t0=performance.now();
+    function step(now){
+      var t=(now-t0)/1000,dt=Math.min(.05,(now-last)/1000);last=now;
+      P.forEach(function(p,i){
+        var base=reduce?W*.3:(((t*p.v)+W*.28+M)%SP)-M,x=base+p.x0,ph=t*6.2+p.ph,run=reduce?0:1;
+        p.x=x;p.base=base;
+        p.el.upd&&p.el.upd(ph,run);
+        p.el.style.transform="translate("+(x-PH*.25)+"px,"+(-Math.abs(Math.sin(ph))*3*run)+"px)";
+        p.el.style.zIndex=i?2:4;
+        PB[i].style.transform="translate("+(x-30)+"px,"+(-PH-12)+"px)";
       });
+      var L=P[0];
+      ws.forEach(function(o){
+        var x=L.base-o.gap+(reduce?0:o.A*Math.sin(t*o.w+o.ph));
+        o.x=x;o.jump=Math.max(0,o.jump-dt*1.1);
+        var run=reduce?0:1,hop=Math.abs(Math.sin(t*o.f+o.ph))*o.S*.16*run,J=Math.sin(Math.min(1,o.jump)*Math.PI)*o.S*.7*(o.jump>0?1:0);
+        var lean=Math.cos(t*o.w+o.ph)*4*run+4;
+        o.el.style.transform="translate("+(x-o.S/2)+"px,"+(-(hop+J+o.lane))+"px) rotate("+lean+"deg)";
+      });
+      if(!reduce&&t-talkT>6.4){talkT=t;speak(t)}
       requestAnimationFrame(step);
     }
     requestAnimationFrame(step);
-    setInterval(function(){var o=ws[Math.floor(Math.random()*ws.length)];if(reduce)return;o.bub.textContent=o.c[2];o.bub.classList.add("on");setTimeout(function(){o.bub.classList.remove("on")},2600)},1900);
     /* activitat */
     var EV=[["Fontaner","ha ajudat a arreglar una cisterna que perdia aigua",""],["Metge","ha explicat quan cal anar a urgències",""],["Traductor","ha traduït una carta al francès",""],["Cuiner","ha proposat un sopar amb quatre ingredients",""],["Assessor","ha explicat com fer la declaració",""],["Mestra","ha inventat un joc de sumes",""],["Recepcionista","ha confirmat una cita de dijous",""],["Professor","ha resolt una equació pas a pas",""],["Creador d'stickers","ha dissenyat 8 stickers",""]];
     var n=0;
