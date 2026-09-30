@@ -63,6 +63,17 @@ class Settings:
         ).split(",")
         if origin.strip()
     ]
+    # Social sign-in. A provider is offered only when its credentials are set.
+    PUBLIC_BASE_URL: str = os.getenv("PUBLIC_BASE_URL", "").rstrip("/")
+    FRONTEND_URL: str = os.getenv("FRONTEND_URL", "http://127.0.0.1:3000").rstrip("/")
+    GOOGLE_CLIENT_ID: str = os.getenv("GOOGLE_CLIENT_ID", "").strip()
+    GOOGLE_CLIENT_SECRET: str = os.getenv("GOOGLE_CLIENT_SECRET", "").strip()
+    APPLE_CLIENT_ID: str = os.getenv("APPLE_CLIENT_ID", "").strip()
+    APPLE_TEAM_ID: str = os.getenv("APPLE_TEAM_ID", "").strip()
+    APPLE_KEY_ID: str = os.getenv("APPLE_KEY_ID", "").strip()
+    APPLE_PRIVATE_KEY: str = os.getenv("APPLE_PRIVATE_KEY", "").replace("\\n", "\n")
+    APPLE_PRIVATE_KEY_PATH: str = os.getenv("APPLE_PRIVATE_KEY_PATH", "").strip()
+    ALLOW_LOCAL_LOGIN: str = os.getenv("ALLOW_LOCAL_LOGIN", "").strip().lower()
     HOST: str = os.getenv("HOST", "127.0.0.1")
     PORT: int = int(os.getenv("PORT", "8000"))
 

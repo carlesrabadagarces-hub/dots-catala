@@ -16,6 +16,7 @@ from typing import Any, Dict, List, Optional
 
 import httpx
 
+from app.services.context import DEFAULT_OWNER_ID, current_owner
 from app.services.provider_service import provider_service
 from app.services.storage_service import storage_service
 
@@ -82,8 +83,12 @@ class WhatsAppService:
     def public(connection: Dict[str, Any]) -> Dict[str, Any]:
         return {k: v for k, v in connection.items() if k not in SECRET_FIELDS}
 
+    @staticmethod
+    def _mine(connection: Dict[str, Any]) -> bool:
+        return connection.get("owner_id", DEFAULT_OWNER_ID) == current_owner.get()
+
     def list_connections(self) -> List[Dict[str, Any]]:
-        return [self.public(c) for c in self._load()]
+        return [self.public(c) for c in self._load() if self._mine(c)]
 
     def get(self, connection_id: str) -> Optional[Dict[str, Any]]:
         return next((c for c in self._load() if c["id"] == connection_id), None)
@@ -94,6 +99,7 @@ class WhatsAppService:
             raise WhatsAppError("Unknown agent.")
         connection = {
             "id": f"wa-{uuid.uuid4().hex[:8]}",
+            "owner_id": current_owner.get(),
             "bot_id": bot_id,
             "label": (data.get("label") or "WhatsApp").strip(),
             "phone_number_id": str(data["phone_number_id"]).strip(),
@@ -112,7 +118,7 @@ class WhatsAppService:
     def update(self, connection_id: str, updates: Dict[str, Any]) -> Optional[Dict[str, Any]]:
         connections = self._load()
         for connection in connections:
-            if connection["id"] != connection_id:
+            if connection["id"] != connection_id or not self._mine(connection):
                 continue
             if "bot_id" in updates:
                 if not any(b["id"] == updates["bot_id"] for b in storage_service.get_bots()):
@@ -134,7 +140,7 @@ class WhatsAppService:
 
     def delete(self, connection_id: str) -> bool:
         connections = self._load()
-        kept = [c for c in connections if c["id"] != connection_id]
+        kept = [c for c in connections if c["id"] != connection_id or not self._mine(c)]
         if len(kept) == len(connections):
             return False
         self._save(kept)
@@ -188,15 +194,20 @@ class WhatsAppService:
         connection = self.get(connection_id)
         if not connection or not connection.get("enabled", True):
             return
-        for incoming in self.extract_texts(payload, connection["phone_number_id"]):
-            if self._is_duplicate(incoming["id"]):
-                continue
-            # Deny by default: only numbers explicitly allowed can talk to the agent.
-            if incoming["from"] not in connection["allowed_numbers"]:
-                continue
-            reply = await self.generate_reply(connection, incoming["from"], incoming["text"])
-            if reply:
-                await self.send_text(connection_id, incoming["from"], reply)
+        # Webhooks carry no session: act as the member who owns this connection.
+        token = current_owner.set(connection.get("owner_id", DEFAULT_OWNER_ID))
+        try:
+            for incoming in self.extract_texts(payload, connection["phone_number_id"]):
+                if self._is_duplicate(incoming["id"]):
+                    continue
+                # Deny by default: only numbers explicitly allowed can talk to the agent.
+                if incoming["from"] not in connection["allowed_numbers"]:
+                    continue
+                reply = await self.generate_reply(connection, incoming["from"], incoming["text"])
+                if reply:
+                    await self.send_text(connection_id, incoming["from"], reply)
+        finally:
+            current_owner.reset(token)
 
     async def generate_reply(self, connection: Dict[str, Any], sender: str, text: str) -> str:
         bot = next((b for b in storage_service.get_bots() if b["id"] == connection["bot_id"]), None)

@@ -1,38 +1,41 @@
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000/api/v1';
-let sessionPromise = null;
 
 function withAuthHeaders(headers = {}) {
   return new Headers(headers);
 }
 
+export function apiRoot() {
+  return API_BASE_URL;
+}
+
+export async function getAuthStatus() {
+  const res = await fetch(`${API_BASE_URL}/auth/status`, { credentials: 'include' });
+  if (!res.ok) throw new Error('Auth status unavailable');
+  return res.json();
+}
+
+export function oauthStartUrl(provider) {
+  return `${API_BASE_URL}/auth/oauth/${provider}/start`;
+}
+
+export async function loginWithToken(token) {
+  const res = await fetch(`${API_BASE_URL}/auth/login`, {
+    method: 'POST',
+    credentials: 'include',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ token }),
+  });
+  if (!res.ok) throw new Error('Invalid token');
+  return res.json();
+}
+
+export async function logout() {
+  await fetch(`${API_BASE_URL}/auth/logout`, { method: 'POST', credentials: 'include' });
+}
+
+// The AuthGate component signs the member in before the app mounts.
 async function ensureSession() {
-  if (typeof window === 'undefined') return null;
-  if (!sessionPromise) {
-    sessionPromise = fetch(`${API_BASE_URL}/auth/session`, {
-      credentials: 'include',
-    })
-      .then((res) => {
-        if (!res.ok) {
-          const token = window.prompt('Sign in with the owner token from DATA_DIR/.auth-token (or your APP_AUTH_TOKEN):');
-          if (!token) throw new Error('Authentication required');
-          return fetch(`${API_BASE_URL}/auth/login`, {
-            method: 'POST',
-            credentials: 'include',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ token }),
-          }).then((loginResponse) => {
-            if (!loginResponse.ok) throw new Error('Invalid API token');
-            return loginResponse.json();
-          });
-        }
-        return res.json();
-      })
-      .catch((err) => {
-        sessionPromise = null;
-        throw err;
-      });
-  }
-  return sessionPromise;
+  return null;
 }
 
 async function apiFetch(url, options = {}) {

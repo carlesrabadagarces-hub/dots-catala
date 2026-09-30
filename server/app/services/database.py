@@ -73,6 +73,28 @@ SCHEMA_MIGRATIONS = {
         INSERT OR IGNORE INTO users(id, username, role, created_at)
         VALUES ('local-user', 'local', 'owner', datetime('now'));
     """,
+    3: """
+        ALTER TABLE users ADD COLUMN provider TEXT;
+        ALTER TABLE users ADD COLUMN provider_sub TEXT;
+        ALTER TABLE users ADD COLUMN email TEXT;
+        ALTER TABLE users ADD COLUMN name TEXT;
+        ALTER TABLE users ADD COLUMN picture TEXT;
+        CREATE UNIQUE INDEX IF NOT EXISTS idx_users_provider
+            ON users(provider, provider_sub) WHERE provider IS NOT NULL;
+        CREATE INDEX IF NOT EXISTS idx_users_email ON users(email);
+        CREATE TABLE settings_new (
+            key TEXT NOT NULL,
+            value TEXT NOT NULL,
+            is_secret INTEGER NOT NULL DEFAULT 0,
+            owner_id TEXT NOT NULL DEFAULT 'local-user',
+            PRIMARY KEY (owner_id, key)
+        );
+        INSERT INTO settings_new(key, value, is_secret, owner_id)
+            SELECT key, value, is_secret, owner_id FROM settings;
+        DROP TABLE settings;
+        ALTER TABLE settings_new RENAME TO settings;
+        CREATE INDEX IF NOT EXISTS idx_settings_owner ON settings(owner_id);
+    """,
 }
 
 OWNER_TABLES = (

@@ -8,7 +8,7 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 from app.config import settings
-from app.services.auth_service import LOCAL_USER_ID
+from app.services.context import current_owner
 from app.services.database import Database
 from app.services.secret_store import SecretStore, SecretStoreError
 
@@ -37,7 +37,6 @@ class StorageService:
     def __init__(self, data_dir: Optional[Path] = None):
         self.data_dir = (data_dir or settings.DATA_DIR).expanduser().resolve()
         self.data_dir.mkdir(parents=True, exist_ok=True)
-        self.owner_id = LOCAL_USER_ID
 
         # Keep these paths for the one-time migration and as human-readable
         # recovery copies. Normal reads and writes use SQLite below.
@@ -52,6 +51,10 @@ class StorageService:
         self.secret_store = SecretStore(self.data_dir)
         self._migrate_legacy_json()
         self._ensure_defaults()
+
+    @property
+    def owner_id(self) -> str:
+        return current_owner.get()
 
     @staticmethod
     def _default_settings() -> Dict[str, Any]:
@@ -250,6 +253,25 @@ class StorageService:
         if self._count("settings") == 0:
             self.save_settings(self._default_settings())
 
+    def seed_owner(self) -> None:
+        """Give a brand-new member a starter Dot (idempotent)."""
+        if self._count("bots") > 0:
+            return
+        self.save_bots([{
+            "id": f"bot-{uuid.uuid4().hex[:6]}",
+            "name": "El meu primer Dot",
+            "role": "Assistent personal",
+            "description": "Un assistent amable per començar. Edita'l o crea'n de nous.",
+            "avatar": "🤖",
+            "model": self.get_settings().get("default_model") or settings.DEFAULT_MODEL,
+            "accent_color": "#7a4cf0",
+            "system_prompt": "Ets un assistent amable i directe. Respon en català, amb frases curtes.",
+            "tools": [],
+            "pinned": True,
+            "unread_count": 0,
+            "created_at": datetime.now().isoformat(),
+        }])
+
     def get_bots(self) -> List[Dict[str, Any]]:
         with self.database.connect() as connection:
             rows = connection.execute(
@@ -360,7 +382,7 @@ class StorageService:
                     is_secret = 0
                 connection.execute(
                     "INSERT INTO settings(key, owner_id, value, is_secret) VALUES (?, ?, ?, ?) "
-                    "ON CONFLICT(key) DO UPDATE SET owner_id = excluded.owner_id, "
+                    "ON CONFLICT(owner_id, key) DO UPDATE SET "
                     "value = excluded.value, is_secret = excluded.is_secret",
                     (key, self.owner_id, stored_value, is_secret),
                 )

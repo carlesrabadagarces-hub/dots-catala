@@ -5,6 +5,7 @@ from fastapi.responses import JSONResponse
 from app.config import settings
 from app.routers import auth, bots, models, chat, approvals, upload, settings as settings_router, connectors, audit, computers, whatsapp
 from app.services.auth_service import auth_service
+from app.services.context import current_owner
 from app.services.computer_provider import computer_provider
 from app.services.storage_service import storage_service
 
@@ -30,6 +31,7 @@ PUBLIC_API_PATHS = {
     "/api/v1/auth/login",
     "/api/v1/auth/logout",
 }
+PUBLIC_API_PREFIXES = ("/api/v1/whatsapp/webhook/", "/api/v1/auth/oauth/")
 
 
 @app.middleware("http")
@@ -39,7 +41,7 @@ async def require_authentication(request: Request, call_next):
         request.method == "OPTIONS"
         or not path.startswith("/api/v1")
         or path in PUBLIC_API_PATHS
-        or path.startswith("/api/v1/whatsapp/webhook/")
+        or path.startswith(PUBLIC_API_PREFIXES)
     ):
         return await call_next(request)
 
@@ -61,7 +63,11 @@ async def require_authentication(request: Request, call_next):
             headers={"WWW-Authenticate": "Bearer", **cors_headers},
         )
     request.state.user = user
-    return await call_next(request)
+    token = current_owner.set(user["id"])
+    try:
+        return await call_next(request)
+    finally:
+        current_owner.reset(token)
 
 app.include_router(auth.router)
 app.include_router(bots.router)

@@ -1,0 +1,191 @@
+'use client';
+
+import React, { useEffect, useState } from 'react';
+import { getAuthStatus, oauthStartUrl, loginWithToken, logout } from '../lib/api';
+
+/* Flat mascots, one silhouette each, two small vertical eyes. */
+const SHAPES = {
+  circle: <circle cx="50" cy="50" r="42" />,
+  tri: <path d="M50 10 C58 10 64 16 88 66 C94 79 86 90 72 90 H28 C14 90 6 79 12 66 C36 16 42 10 50 10Z" />,
+  drop: <path d="M50 6 C58 24 86 40 86 62 A36 36 0 0 1 14 62 C14 40 42 24 50 6Z" />,
+  hex: <path d="M50 8 L86 29 V71 L50 92 L14 71 V29Z" strokeLinejoin="round" strokeWidth="10" stroke="currentColor" />,
+  arch: <path d="M12 92 V50 A38 38 0 0 1 88 50 V92Z" />,
+  square: <rect x="14" y="14" width="72" height="72" rx="22" />,
+};
+
+function Mascot({ kind, color, size, style, eye = '#14171c', delay = 0 }) {
+  return (
+    <svg
+      viewBox="0 0 100 100"
+      width={size}
+      height={size}
+      aria-hidden="true"
+      style={{ position: 'absolute', color, fill: color, animation: `sd-float ${5 + delay}s ease-in-out ${delay}s infinite`, ...style }}
+    >
+      {SHAPES[kind]}
+      <rect x="35" y="42" width="7" height="16" rx="3.5" fill={eye} />
+      <rect x="58" y="42" width="7" height="16" rx="3.5" fill={eye} />
+    </svg>
+  );
+}
+
+const CAST = [
+  { kind: 'tri', color: '#ff4d7d', size: 92, style: { left: '8%', top: '14%' } },
+  { kind: 'drop', color: '#2f7bff', size: 110, style: { right: '9%', top: '10%' }, delay: 1 },
+  { kind: 'hex', color: '#19c3a6', size: 84, style: { left: '12%', bottom: '14%' }, delay: 2 },
+  { kind: 'circle', color: '#7a4cf0', size: 100, style: { right: '12%', bottom: '16%' }, delay: 0.5 },
+  { kind: 'arch', color: '#ffc21a', size: 70, style: { left: '30%', top: '6%' }, delay: 1.5 },
+  { kind: 'square', color: '#52657a', size: 66, eye: '#fff', style: { right: '28%', bottom: '7%' }, delay: 2.5 },
+  { kind: 'circle', color: '#2f7bff', size: 30, style: { left: '4%', top: '52%' }, delay: 1 },
+  { kind: 'tri', color: '#ffc21a', size: 34, style: { right: '5%', top: '48%' }, delay: 2 },
+  { kind: 'drop', color: '#ff4d7d', size: 30, style: { left: '24%', bottom: '5%' }, delay: 0.7 },
+];
+
+function GoogleMark() {
+  return (
+    <svg width="20" height="20" viewBox="0 0 48 48" aria-hidden="true">
+      <path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9.1 3.6l6.8-6.8C35.8 2.4 30.3 0 24 0 14.6 0 6.5 5.4 2.6 13.2l7.9 6.1C12.4 13.6 17.7 9.5 24 9.5z" />
+      <path fill="#4285F4" d="M46.5 24.6c0-1.6-.1-3.1-.4-4.6H24v9h12.7c-.6 3-2.3 5.5-4.8 7.2l7.6 5.9c4.4-4.1 7-10.1 7-17.5z" />
+      <path fill="#FBBC05" d="M10.5 28.7A14.5 14.5 0 0 1 9.5 24c0-1.6.3-3.2.9-4.7l-7.9-6.1A24 24 0 0 0 0 24c0 3.9.9 7.5 2.6 10.8l7.9-6.1z" />
+      <path fill="#34A853" d="M24 48c6.5 0 11.9-2.1 15.9-5.8l-7.6-5.9c-2.1 1.4-4.9 2.3-8.3 2.3-6.3 0-11.6-4.1-13.5-9.8l-7.9 6.1C6.5 42.6 14.6 48 24 48z" />
+    </svg>
+  );
+}
+
+function AppleMark() {
+  return (
+    <svg width="18" height="20" viewBox="0 0 384 512" aria-hidden="true" fill="currentColor">
+      <path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z" />
+    </svg>
+  );
+}
+
+function Login({ providers, error }) {
+  const [token, setToken] = useState('');
+  const [localError, setLocalError] = useState('');
+  const none = !providers.google && !providers.apple;
+
+  async function submitToken(e) {
+    e.preventDefault();
+    setLocalError('');
+    try {
+      await loginWithToken(token.trim());
+      window.location.reload();
+    } catch {
+      setLocalError('Token no vàlid.');
+    }
+  }
+
+  const btn = 'flex w-full items-center justify-center gap-3 rounded-full px-6 py-3.5 text-[15px] font-semibold transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:translate-y-0';
+
+  return (
+    <div className="fixed inset-0 z-50 overflow-hidden bg-white text-[#0a0a0a]" style={{ fontFamily: 'Geist, Helvetica Neue, Arial, sans-serif' }}>
+      <style>{`@keyframes sd-float{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-14px) rotate(3deg)}}`}</style>
+      {CAST.map((c, i) => <Mascot key={i} {...c} />)}
+      <div className="relative z-10 flex h-full flex-col items-center justify-center px-6 text-center">
+        <div className="font-mono text-xs uppercase tracking-[0.12em] text-neutral-500">Codi obert · WhatsApp</div>
+        <h1 className="mt-4 text-5xl font-semibold tracking-[-0.045em] sm:text-7xl">super<span className="font-bold">DOT</span>ats</h1>
+        <p className="mt-4 max-w-md text-lg text-neutral-500">Crea els teus Dots i connecta&apos;ls al teu WhatsApp. Entra per començar.</p>
+
+        <div className="mt-8 flex w-full max-w-xs flex-col gap-3">
+          <a
+            href={providers.apple ? oauthStartUrl('apple') : undefined}
+            aria-disabled={!providers.apple}
+            className={`${btn} bg-black text-white ${providers.apple ? '' : 'pointer-events-none opacity-40'}`}
+          >
+            <AppleMark /> Continua amb Apple
+          </a>
+          <a
+            href={providers.google ? oauthStartUrl('google') : undefined}
+            aria-disabled={!providers.google}
+            className={`${btn} border border-neutral-300 bg-white text-black ${providers.google ? '' : 'pointer-events-none opacity-40'}`}
+          >
+            <GoogleMark /> Continua amb Google
+          </a>
+        </div>
+
+        {(error || localError) && <p role="alert" className="mt-4 text-sm text-red-600">{error || localError}</p>}
+        {none && !providers.local && (
+          <p className="mt-4 max-w-xs text-sm text-neutral-500">L&apos;inici de sessió no està configurat en aquest servidor.</p>
+        )}
+
+        {providers.local && (
+          <form onSubmit={submitToken} className="mt-8 flex w-full max-w-xs flex-col gap-2">
+            <label htmlFor="sd-token" className="font-mono text-[11px] uppercase tracking-widest text-neutral-500">
+              {none ? 'Accés local (sense Google ni Apple)' : 'Accés local'}
+            </label>
+            <div className="flex gap-2">
+              <input
+                id="sd-token"
+                type="password"
+                value={token}
+                onChange={(e) => setToken(e.target.value)}
+                placeholder="Token del propietari"
+                className="min-w-0 flex-1 rounded-full border border-neutral-300 bg-white px-4 py-2.5 text-sm outline-none focus:border-black"
+              />
+              <button type="submit" className="rounded-full bg-black px-5 text-sm font-semibold text-white">Entra</button>
+            </div>
+          </form>
+        )}
+      </div>
+    </div>
+  );
+}
+
+export default function AuthGate({ children }) {
+  const [state, setState] = useState({ loading: true });
+  const [error, setError] = useState('');
+
+  useEffect(() => {
+    const url = new URL(window.location.href);
+    const err = url.searchParams.get('login_error');
+    if (err) {
+      setError(err);
+      url.searchParams.delete('login_error');
+      window.history.replaceState({}, '', url.pathname + url.search);
+    }
+    getAuthStatus()
+      .then((s) => setState({ loading: false, ...s }))
+      .catch(() => setState({ loading: false, offline: true, providers: {} }));
+  }, []);
+
+  if (state.loading) {
+    return <div className="fixed inset-0 bg-white" aria-busy="true" />;
+  }
+  if (state.offline) {
+    return (
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-white p-6 text-center text-neutral-600">
+        No es pot contactar amb el servidor. Comprova que està en marxa i torna-ho a provar.
+      </div>
+    );
+  }
+  if (!state.authenticated) {
+    return <Login providers={state.providers || {}} error={error} />;
+  }
+
+  const user = state.user || {};
+  const label = user.name || user.email || (user.role === 'owner' ? 'Propietari' : 'Compte');
+  return (
+    <>
+      {children}
+      {user.role !== 'owner' && (
+        <div className="fixed right-3 top-3 z-40 flex items-center gap-2 rounded-full border border-white/10 bg-black/70 py-1 pl-1 pr-3 text-xs text-white backdrop-blur">
+          {user.picture ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={user.picture} alt="" className="h-6 w-6 rounded-full" referrerPolicy="no-referrer" />
+          ) : (
+            <span className="flex h-6 w-6 items-center justify-center rounded-full bg-white/20">{label.charAt(0).toUpperCase()}</span>
+          )}
+          <span className="max-w-[9rem] truncate">{label}</span>
+          <button
+            type="button"
+            className="ml-1 underline-offset-2 hover:underline"
+            onClick={async () => { await logout(); window.location.reload(); }}
+          >
+            Sortir
+          </button>
+        </div>
+      )}
+    </>
+  );
+}
