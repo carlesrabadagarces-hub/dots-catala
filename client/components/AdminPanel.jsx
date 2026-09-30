@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { fetchAdminStats, updateAdminUser } from '../lib/api';
 
 const nf = new Intl.NumberFormat('ca-ES');
@@ -26,7 +26,7 @@ function Bars({ data, valueKey, color }) {
   return (
     <svg viewBox={`0 0 ${w} ${h + 22}`} className="w-full" role="img" aria-label={`Gràfic diari de ${valueKey}`}>
       {[0, 0.5, 1].map((t) => (
-        <line key={t} x1="0" x2={w} y1={h - t * h} y2={h - t * h} stroke="#27272a" strokeDasharray="3 5" />
+        <line key={t} x1="0" x2={w} y1={h - t * h} y2={h - t * h} stroke="rgb(var(--line-1))" strokeDasharray="3 5" />
       ))}
       {data.map((d, i) => {
         const bh = (d[valueKey] / max) * (h - 6);
@@ -38,9 +38,9 @@ function Bars({ data, valueKey, color }) {
           </g>
         );
       })}
-      <text x="0" y={h + 16} fontSize="10" fill="#71717a">{data[0]?.date}</text>
-      <text x={w} y={h + 16} fontSize="10" fill="#71717a" textAnchor="end">{data[data.length - 1]?.date}</text>
-      <text x={w} y="10" fontSize="10" fill="#71717a" textAnchor="end">màx {fmt(max)}</text>
+      <text x="0" y={h + 16} fontSize="10" fill="rgb(var(--z-500))">{data[0]?.date}</text>
+      <text x={w} y={h + 16} fontSize="10" fill="rgb(var(--z-500))" textAnchor="end">{data[data.length - 1]?.date}</text>
+      <text x={w} y="10" fontSize="10" fill="rgb(var(--z-500))" textAnchor="end">màx {fmt(max)}</text>
     </svg>
   );
 }
@@ -68,16 +68,41 @@ export default function AdminPanel() {
   const [stats, setStats] = useState(null);
   const [error, setError] = useState('');
   const [busy, setBusy] = useState('');
+  const [query, setQuery] = useState('');
+  const [sort, setSort] = useState('tokens');
+  const [auto, setAuto] = useState(true);
+  const [updated, setUpdated] = useState(0);
 
   const load = useCallback(() => {
-    fetchAdminStats(days).then((s) => { setStats(s); setError(''); }).catch((e) => setError(e.message));
+    fetchAdminStats(days).then((s) => { setStats(s); setError(''); setUpdated(Date.now()); }).catch((e) => setError(e.message));
   }, [days]);
 
   useEffect(() => {
     load();
+    if (!auto) return undefined;
     const t = setInterval(load, 30000);
     return () => clearInterval(t);
-  }, [load]);
+  }, [load, auto]);
+
+  const members = useMemo(() => {
+    if (!stats) return [];
+    const q = query.trim().toLowerCase();
+    const list = stats.users.filter((u) => !q || `${u.name} ${u.email || ''} ${u.provider}`.toLowerCase().includes(q));
+    const by = { tokens: (a, b) => b.tokens - a.tokens, today: (a, b) => b.tokens_today - a.tokens_today, dots: (a, b) => b.dots - a.dots, recent: (a, b) => String(b.last_seen || '').localeCompare(String(a.last_seen || '')), name: (a, b) => String(a.name).localeCompare(String(b.name)) };
+    return [...list].sort(by[sort] || by.tokens);
+  }, [stats, query, sort]);
+
+  function exportCsv() {
+    const rows = [['nom', 'correu', 'proveïdor', 'dots', 'missatges', 'tokens', 'tokens_avui', 'limit_diari', 'estat']];
+    members.forEach((u) => rows.push([u.name, u.email || '', u.provider, u.dots, u.messages, u.tokens, u.tokens_today, u.token_limit ?? '', u.disabled ? 'suspès' : 'actiu']));
+    const csv = rows.map((r) => r.map((v) => `"${String(v).replace(/"/g, '""')}"`).join(',')).join('\n');
+    const url = URL.createObjectURL(new Blob([`\ufeff${csv}`], { type: 'text/csv;charset=utf-8' }));
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `superdotats-membres-${new Date().toISOString().slice(0, 10)}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+  }
 
   async function control(user, body) {
     setBusy(user.id);
@@ -96,7 +121,7 @@ export default function AdminPanel() {
   const t = stats.totals;
 
   return (
-    <div className="min-h-screen overflow-y-auto bg-[#09090b] p-4 text-zinc-100 sm:p-8" style={{ fontFamily: 'Geist, Helvetica Neue, Arial, sans-serif' }}>
+    <div className="min-h-screen overflow-y-auto bg-surf0 p-4 text-zinc-100 sm:p-8" style={{ fontFamily: 'Geist, Helvetica Neue, Arial, sans-serif' }}>
       <div className="mx-auto max-w-6xl space-y-8">
         <header className="flex flex-wrap items-center justify-between gap-3">
           <div>
@@ -104,10 +129,14 @@ export default function AdminPanel() {
             <h1 className="text-3xl font-semibold tracking-tight">Panell d&apos;administració</h1>
             <p className="text-xs text-zinc-500">Actualitzat {new Date(stats.generated_at).toLocaleTimeString('ca-ES')} · {stats.token_note}</p>
           </div>
-          <div className="flex gap-2">
+          <div className="flex flex-wrap items-center gap-2">
+            <button type="button" onClick={load} className="rounded-full border border-zinc-700 px-3 py-1.5 text-sm text-zinc-300 hover:border-zinc-500" title="Actualitza ara">↻ Actualitza</button>
+            <label className="flex cursor-pointer items-center gap-1.5 rounded-full border border-zinc-700 px-3 py-1.5 text-sm text-zinc-300">
+              <input type="checkbox" checked={auto} onChange={(e) => setAuto(e.target.checked)} className="accent-emerald-500" /> Auto 30 s
+            </label>
             {[7, 30, 90].map((d) => (
               <button key={d} type="button" onClick={() => setDays(d)} aria-pressed={days === d}
-                className={`rounded-full border px-4 py-1.5 text-sm ${days === d ? 'border-white bg-white text-black' : 'border-zinc-700 text-zinc-300 hover:border-zinc-500'}`}>
+                className={`rounded-full border px-4 py-1.5 text-sm ${days === d ? 'border-inv bg-inv text-invtext' : 'border-zinc-700 text-zinc-300 hover:border-zinc-500'}`}>
                 {d} dies
               </button>
             ))}
@@ -165,8 +194,16 @@ export default function AdminPanel() {
         <section className="rounded-2xl border border-zinc-800 bg-zinc-900/60 p-4">
           <h2 className="mb-1 text-sm font-semibold">Membres i control</h2>
           <p className="mb-3 text-xs text-zinc-500">Pots suspendre un compte o limitar-ne els tokens diaris (buit = sense límit).</p>
+          <div className="mb-3 flex flex-wrap items-center gap-2">
+            <input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Cerca per nom o correu…" aria-label="Cerca membres" className="min-w-[14rem] flex-1 rounded-full border border-zinc-700 bg-zinc-950 px-4 py-1.5 text-sm outline-none focus:border-zinc-400" />
+            <select value={sort} onChange={(e) => setSort(e.target.value)} aria-label="Ordena" className="rounded-full border border-zinc-700 bg-zinc-950 px-3 py-1.5 text-sm">
+              <option value="tokens">Més tokens</option><option value="today">Més actius avui</option><option value="dots">Més Dots</option><option value="recent">Vistos fa poc</option><option value="name">Nom (A–Z)</option>
+            </select>
+            <button type="button" onClick={exportCsv} className="rounded-full border border-zinc-700 px-3 py-1.5 text-sm text-zinc-300 hover:border-zinc-500">⭳ Exporta CSV</button>
+            <span className="text-xs text-zinc-500">{members.length} de {stats.users.length}</span>
+          </div>
           <Table head={['Membre', 'Dots', 'Missatges', 'Tokens', 'Avui', 'Límit diari', 'Estat']} empty="Encara no hi ha membres."
-            rows={stats.users.map((u) => (
+            rows={members.map((u) => (
               <tr key={u.id} className="border-b border-zinc-800/60">
                 <td className="px-3 py-2">
                   <div className="font-medium">{u.name}{u.role === 'admin' && <span className="ml-2 rounded-full bg-zinc-800 px-2 py-0.5 text-[10px]">admin</span>}</div>
@@ -174,7 +211,10 @@ export default function AdminPanel() {
                 </td>
                 <td className="px-3 py-2">{fmt(u.dots)}</td>
                 <td className="px-3 py-2">{fmt(u.messages)}</td>
-                <td className="px-3 py-2">{compact(u.tokens)}</td>
+                <td className="px-3 py-2">
+                  {compact(u.tokens)}
+                  <div className="mt-1 h-1 w-20 overflow-hidden rounded-full bg-zinc-800"><div className="h-full rounded-full bg-blue-500" style={{ width: `${Math.min(100, (u.tokens / Math.max(1, ...stats.users.map((x) => x.tokens))) * 100)}%` }} /></div>
+                </td>
                 <td className="px-3 py-2">{compact(u.tokens_today)}</td>
                 <td className="px-3 py-2">
                   <form

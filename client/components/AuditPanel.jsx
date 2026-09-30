@@ -44,8 +44,8 @@ export default function AuditPanel() {
   const recentEvents = [...events].reverse();
 
   return (
-    <div className="flex-1 flex flex-col h-screen overflow-hidden bg-[#09090b] font-sans text-zinc-100">
-      <div className="px-6 py-4 border-b border-[#18181c] flex items-center justify-between flex-shrink-0">
+    <div className="flex-1 flex flex-col h-screen overflow-hidden bg-surf0 font-sans text-zinc-100">
+      <div className="px-6 py-4 border-b border-line1 flex items-center justify-between flex-shrink-0">
         <div>
           <div className="flex items-center gap-2">
             <FiShield className="text-cyan-400" />
@@ -58,7 +58,7 @@ export default function AuditPanel() {
         <button
           type="button"
           onClick={loadEvents}
-          className="p-2 rounded-lg text-zinc-400 hover:text-white hover:bg-[#1e1e22] transition"
+          className="p-2 rounded-lg text-zinc-400 hover:text-fg hover:bg-surf2 transition"
           title="Refresh audit trail"
         >
           <FiRefreshCw className={loading ? 'animate-spin' : ''} />
@@ -75,19 +75,19 @@ export default function AuditPanel() {
         {loading && events.length === 0 ? (
           <div className="py-16 text-center text-sm text-zinc-600">Loading audit events…</div>
         ) : recentEvents.length === 0 ? (
-          <div className="rounded-2xl border border-dashed border-[#27272a] py-16 text-center">
+          <div className="rounded-2xl border border-dashed border-line1 py-16 text-center">
             <FiClock className="mx-auto text-2xl text-zinc-700" />
             <p className="mt-3 text-sm text-zinc-500">No audit events yet.</p>
             <p className="mt-1 text-xs text-zinc-600">Approved workspace actions will appear here.</p>
           </div>
         ) : (
-          <div className="rounded-2xl border border-[#1e1e22] overflow-hidden">
+          <div className="rounded-2xl border border-line1 overflow-hidden">
             {recentEvents.map((item, index) => {
               const event = item.event || item.type || 'event';
               return (
                 <div
                   key={`${item.created_at || 'event'}-${item.request_id || item.connector || index}`}
-                  className={`px-4 py-3.5 ${index > 0 ? 'border-t border-[#1a1a1e]' : ''} bg-[#0d0d10]`}
+                  className={`px-4 py-3.5 ${index > 0 ? 'border-t border-line1' : ''} bg-surf0`}
                 >
                   <div className="flex items-start justify-between gap-4">
                     <div className="min-w-0">

@@ -61,13 +61,13 @@ export default function CatalogModal({ isOpen, onClose, onCreated }) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4" role="dialog" aria-modal="true" aria-label="Afegeix un Dot">
-      <div className="flex max-h-[88vh] w-full max-w-4xl flex-col overflow-hidden rounded-3xl border border-zinc-800 bg-[#0e0e10] text-zinc-100 shadow-2xl">
+      <div className="flex max-h-[88vh] w-full max-w-4xl flex-col overflow-hidden rounded-3xl border border-zinc-800 bg-surf1 text-zinc-100 shadow-2xl">
         <div className="flex items-center justify-between border-b border-zinc-800 px-6 py-4">
           <div>
             <h2 className="text-lg font-semibold tracking-tight">Afegeix un Dot</h2>
             <p className="text-xs text-zinc-500">Tria&apos;n un de fet per al teu ofici o descriu-ne un de nou.</p>
           </div>
-          <button type="button" onClick={onClose} aria-label="Tanca" className="rounded-full p-2 text-zinc-400 hover:bg-zinc-800 hover:text-white">
+          <button type="button" onClick={onClose} aria-label="Tanca" className="rounded-full p-2 text-zinc-400 hover:bg-zinc-800 hover:text-fg">
             <FiX />
           </button>
         </div>
@@ -78,7 +78,7 @@ export default function CatalogModal({ isOpen, onClose, onCreated }) {
               key={id}
               type="button"
               onClick={() => setTab(id)}
-              className={`rounded-full px-4 py-1.5 text-sm font-medium transition ${tab === id ? 'bg-white text-black' : 'bg-zinc-900 text-zinc-300 hover:bg-zinc-800'}`}
+              className={`rounded-full px-4 py-1.5 text-sm font-medium transition ${tab === id ? 'bg-inv text-invtext' : 'bg-zinc-900 text-zinc-300 hover:bg-zinc-800'}`}
             >
               {label}
             </button>
@@ -101,7 +101,7 @@ export default function CatalogModal({ isOpen, onClose, onCreated }) {
                 />
               </div>
               <div className="flex flex-wrap gap-2">
-                <button type="button" onClick={() => setSector('')} className={`rounded-full border px-3 py-1 text-xs ${sector === '' ? 'border-white bg-white text-black' : 'border-zinc-700 text-zinc-300 hover:border-zinc-500'}`}>
+                <button type="button" onClick={() => setSector('')} className={`rounded-full border px-3 py-1 text-xs ${sector === '' ? 'border-inv bg-inv text-invtext' : 'border-zinc-700 text-zinc-300 hover:border-zinc-500'}`}>
                   Tots
                 </button>
                 {sectors.map((s) => (
@@ -109,7 +109,7 @@ export default function CatalogModal({ isOpen, onClose, onCreated }) {
                     key={s.id}
                     type="button"
                     onClick={() => setSector(s.id)}
-                    className={`rounded-full border px-3 py-1 text-xs ${sector === s.id ? 'border-white bg-white text-black' : 'border-zinc-700 text-zinc-300 hover:border-zinc-500'}`}
+                    className={`rounded-full border px-3 py-1 text-xs ${sector === s.id ? 'border-inv bg-inv text-invtext' : 'border-zinc-700 text-zinc-300 hover:border-zinc-500'}`}
                   >
                     {s.name} <span className="opacity-60">{s.count}</span>
                   </button>
@@ -137,7 +137,7 @@ export default function CatalogModal({ isOpen, onClose, onCreated }) {
                     type="button"
                     disabled={busy === a.id}
                     onClick={() => add(a)}
-                    className="mt-4 flex items-center justify-center gap-2 rounded-full bg-white px-4 py-2 text-sm font-semibold text-black transition hover:bg-zinc-200 disabled:opacity-50"
+                    className="mt-4 flex items-center justify-center gap-2 rounded-full bg-inv px-4 py-2 text-sm font-semibold text-invtext transition hover:bg-zinc-200 disabled:opacity-50"
                   >
                     <FiPlus /> {busy === a.id ? 'Afegint…' : 'Afegeix'}
                   </button>
@@ -161,7 +161,7 @@ export default function CatalogModal({ isOpen, onClose, onCreated }) {
               <button
                 type="submit"
                 disabled={busy === 'ai' || description.trim().length < 8}
-                className="rounded-full bg-white px-5 py-2.5 text-sm font-semibold text-black transition hover:bg-zinc-200 disabled:opacity-40"
+                className="rounded-full bg-inv px-5 py-2.5 text-sm font-semibold text-invtext transition hover:bg-zinc-200 disabled:opacity-40"
               >
                 {busy === 'ai' ? 'Dissenyant…' : 'Crea el Dot'}
               </button>

@@ -24,7 +24,7 @@ export default function MessageItem({ message }) {
             <img
               src={message.image_url}
               alt="Uploaded image attachment"
-              className="max-w-full max-h-56 rounded-lg object-cover border border-white/10 mb-1.5"
+              className="max-w-full max-h-56 rounded-lg object-cover border border-fg/10 mb-1.5"
             />
           )}
           <div className="flex justify-end gap-3">
@@ -62,18 +62,18 @@ export default function MessageItem({ message }) {
         <ReactMarkdown
           components={{
             p: ({ node, ...props }) => <div className="mb-2 last:mb-0 leading-relaxed" {...props} />,
-            strong: ({ node, ...props }) => <strong className="font-bold text-white" {...props} />,
+            strong: ({ node, ...props }) => <strong className="font-bold text-fg" {...props} />,
             code: ({ node, inline, className, children, ...props }) => {
               const isInline = inline || (!className && typeof children === 'string' && !children.includes('\n'));
               if (isInline) {
                 return (
-                  <code className="bg-[#2a2a30] text-cyan-300 px-1.5 py-0.5 rounded font-mono text-[11px]" {...props}>
+                  <code className="bg-surf3 text-cyan-300 px-1.5 py-0.5 rounded font-mono text-[11px]" {...props}>
                     {children}
                   </code>
                 );
               }
               return (
-                <pre className="bg-[#141416] p-3 rounded-xl border border-[#2b2b32] text-zinc-300 font-mono text-[11px] overflow-x-auto my-2">
+                <pre className="bg-surf1 p-3 rounded-xl border border-line2 text-zinc-300 font-mono text-[11px] overflow-x-auto my-2">
                   <code {...props}>{children}</code>
                 </pre>
               );

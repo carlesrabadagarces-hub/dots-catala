@@ -63,11 +63,11 @@ export default function SettingsModal({ isOpen, onClose }) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 select-none font-sans">
-      <div className="w-full max-w-lg bg-[#11131b] border border-[#222636] rounded-2xl shadow-2xl p-6 relative text-zinc-100 animate-fade-in space-y-5">
+      <div className="w-full max-w-lg bg-surf1 border border-line1 rounded-2xl shadow-2xl p-6 relative text-zinc-100 animate-fade-in space-y-5">
         {/* Header */}
-        <div className="flex items-center justify-between border-b border-[#1d2130] pb-4">
+        <div className="flex items-center justify-between border-b border-line1 pb-4">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-[#1a1d2c] text-blue-400 border border-[#2b3048] flex items-center justify-center text-base shadow-sm">
+            <div className="w-9 h-9 rounded-xl bg-surf2 text-blue-400 border border-line2 flex items-center justify-center text-base shadow-sm">
               <FiKey />
             </div>
             <div>
@@ -79,7 +79,7 @@ export default function SettingsModal({ isOpen, onClose }) {
           <button
             suppressHydrationWarning={true}
             onClick={onClose}
-            className="p-1.5 rounded-lg text-zinc-400 hover:text-white hover:bg-[#1a1d2c] transition"
+            className="p-1.5 rounded-lg text-zinc-400 hover:text-fg hover:bg-surf2 transition"
           >
             <FiX className="text-base" />
           </button>
@@ -98,7 +98,7 @@ export default function SettingsModal({ isOpen, onClose }) {
                 value={apiKey}
                 onChange={(e) => setApiKey(e.target.value)}
                 placeholder={apiKeyConfigured ? 'Stored securely — enter to replace' : 'Enter inference API key...'}
-                className="w-full rounded-full bg-[#1c202d] border border-[#2a3045] px-4 py-2 pr-10 text-xs text-zinc-100 placeholder-zinc-500 font-mono focus:outline-none focus:border-blue-500 transition"
+                className="w-full rounded-full bg-surf2 border border-line2 px-4 py-2 pr-10 text-xs text-zinc-100 placeholder-zinc-500 font-mono focus:outline-none focus:border-blue-500 transition"
               />
               <button
                 suppressHydrationWarning={true}
@@ -125,7 +125,7 @@ export default function SettingsModal({ isOpen, onClose }) {
               value={baseUrl}
               onChange={(e) => setBaseUrl(e.target.value)}
               placeholder="https://your-inference-host.example/api/v1"
-              className="w-full rounded-full bg-[#1c202d] border border-[#2a3045] px-4 py-2 text-xs text-cyan-300 font-mono focus:outline-none focus:border-blue-500 transition"
+              className="w-full rounded-full bg-surf2 border border-line2 px-4 py-2 text-xs text-cyan-300 font-mono focus:outline-none focus:border-blue-500 transition"
             />
           </div>
 
@@ -139,7 +139,7 @@ export default function SettingsModal({ isOpen, onClose }) {
                 suppressHydrationWarning={true}
                 value={defaultModel}
                 onChange={(e) => setDefaultModel(e.target.value)}
-                className="w-full rounded-full bg-[#1c202d] border border-[#2a3045] px-4 py-2 pr-10 text-xs text-zinc-100 font-sans focus:outline-none focus:border-blue-500 appearance-none cursor-pointer"
+                className="w-full rounded-full bg-surf2 border border-line2 px-4 py-2 pr-10 text-xs text-zinc-100 font-sans focus:outline-none focus:border-blue-500 appearance-none cursor-pointer"
               >
                 <option value="gpt-5-mini">gpt-5-mini (Recommended — High Speed Reasoning)</option>
                 <option value="claude-3-5-sonnet">claude-3-5-sonnet (Anthropic Code Master)</option>
@@ -150,12 +150,12 @@ export default function SettingsModal({ isOpen, onClose }) {
           </div>
 
           {/* Footer Save Action Buttons */}
-          <div className="pt-4 border-t border-[#1d2130] flex items-center justify-end gap-3">
+          <div className="pt-4 border-t border-line1 flex items-center justify-end gap-3">
             <button
               suppressHydrationWarning={true}
               type="button"
               onClick={onClose}
-              className="px-4 py-2 rounded-full text-xs font-medium text-zinc-400 hover:text-white transition"
+              className="px-4 py-2 rounded-full text-xs font-medium text-zinc-400 hover:text-fg transition"
             >
               Cancel
             </button>

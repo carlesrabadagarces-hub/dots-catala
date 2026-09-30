@@ -1,13 +1,16 @@
 import './globals.css';
 
 export const metadata = {
-  title: 'Open Dots — Open-Source Alternative to OpenAI Dots',
-  description: 'Open-source alternative to OpenAI Dots: a self-hosted AI workspace for chat, tools, approvals, connectors, and computer tasks.',
+  title: 'superDOTats',
+  description: 'Els teus agents, al teu WhatsApp.',
 };
+
+const themeScript = `try{var t=localStorage.getItem('sd-theme');if(t!=='light'&&t!=='dark'){t=window.matchMedia&&window.matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'}document.documentElement.setAttribute('data-theme',t)}catch(e){document.documentElement.setAttribute('data-theme','dark')}`;
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className="dark" suppressHydrationWarning={true}>
+    <html lang="ca" className="dark" suppressHydrationWarning={true}>
+      <head><script dangerouslySetInnerHTML={{ __html: themeScript }} /></head>
       <body className="bg-background text-foreground antialiased select-none" suppressHydrationWarning={true}>
         {children}
       </body>

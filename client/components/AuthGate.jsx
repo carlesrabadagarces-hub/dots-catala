@@ -1,5 +1,6 @@
 'use client';
 
+import ThemeToggle from './ThemeToggle';
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 import DotAvatar from './DotAvatar';
@@ -212,6 +213,7 @@ export default function AuthGate({ children, requireAdmin = false }) {
       {user.role === 'admin' && !requireAdmin && (
         <a href="/admin" className="fixed right-3 top-12 z-40 rounded-full bg-white px-3 py-1 text-xs font-semibold text-black shadow">Panell d&apos;admin</a>
       )}
+      {user.role === 'owner' && <ThemeToggle className="fixed right-3 top-3 z-40 border border-fg/15 bg-surf2" />}
       {user.role !== 'owner' && (
         <div className="fixed right-3 top-3 z-40 flex items-center gap-2 rounded-full border border-white/10 bg-black/70 py-1 pl-1 pr-3 text-xs text-white backdrop-blur">
           {user.picture ? (
@@ -221,6 +223,7 @@ export default function AuthGate({ children, requireAdmin = false }) {
             <span className="flex h-6 w-6 items-center justify-center rounded-full bg-white/20">{label.charAt(0).toUpperCase()}</span>
           )}
           <span className="max-w-[9rem] truncate">{label}</span>
+          <ThemeToggle className="text-white" />
           <button
             type="button"
             className="ml-1 underline-offset-2 hover:underline"

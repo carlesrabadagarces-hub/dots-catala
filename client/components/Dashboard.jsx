@@ -88,7 +88,7 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="flex h-screen w-screen overflow-hidden bg-[#09090b] text-zinc-100 font-sans">
+    <div className="flex h-screen w-screen overflow-hidden bg-surf0 text-zinc-100 font-sans">
       {/* Sidebar Navigation & Bot Roster */}
       <Sidebar
         bots={bots}

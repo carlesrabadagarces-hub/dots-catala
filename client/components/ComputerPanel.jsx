@@ -135,7 +135,7 @@ export default function ComputerPanel({ bot, onBackToChat }) {
         <div className="flex items-center gap-3 min-w-0">
           <button
             onClick={onBackToChat}
-            className="w-9 h-9 rounded-xl border border-slate-700 text-slate-400 hover:text-white hover:border-slate-500 flex items-center justify-center transition"
+            className="w-9 h-9 rounded-xl border border-slate-700 text-slate-400 hover:text-fg hover:border-slate-500 flex items-center justify-center transition"
             aria-label="Back to chat"
           >
             <FiArrowLeft />

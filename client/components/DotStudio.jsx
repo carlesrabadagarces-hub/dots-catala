@@ -48,8 +48,8 @@ export default function DotStudio({ bot, onClose, onSave }) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4" role="dialog" aria-modal="true" aria-label="Personalitza el Dot">
-      <div className="flex max-h-[92vh] w-full max-w-4xl flex-col overflow-hidden rounded-3xl border border-zinc-800 bg-[#0e0e10] text-zinc-100 shadow-2xl md:flex-row">
-        <div className="flex flex-col items-center justify-center gap-4 border-b border-zinc-800 bg-gradient-to-b from-zinc-800 to-[#0e0e10] p-6 md:w-80 md:border-b-0 md:border-r">
+      <div className="flex max-h-[92vh] w-full max-w-4xl flex-col overflow-hidden rounded-3xl border border-zinc-800 bg-surf1 text-zinc-100 shadow-2xl md:flex-row">
+        <div className="flex flex-col items-center justify-center gap-4 border-b border-zinc-800 bg-gradient-to-b from-zinc-800 to-surf1 p-6 md:w-80 md:border-b-0 md:border-r">
           <DotAvatar bot={bot} look={look} size={260} />
           <label htmlFor="dot-name" className="sr-only">Nom del Dot</label>
           <input
@@ -67,7 +67,7 @@ export default function DotStudio({ bot, onClose, onSave }) {
         <div className="flex min-h-0 flex-1 flex-col">
           <div className="flex items-center justify-between border-b border-zinc-800 px-6 py-4">
             <h2 className="text-lg font-semibold tracking-tight">Personalitza el teu Dot</h2>
-            <button type="button" onClick={onClose} aria-label="Tanca" className="rounded-full p-2 text-zinc-400 hover:bg-zinc-800 hover:text-white"><FiX /></button>
+            <button type="button" onClick={onClose} aria-label="Tanca" className="rounded-full p-2 text-zinc-400 hover:bg-zinc-800 hover:text-fg"><FiX /></button>
           </div>
 
           <div className="flex-1 space-y-6 overflow-y-auto px-6 py-5">
@@ -120,7 +120,7 @@ export default function DotStudio({ bot, onClose, onSave }) {
             <span role="alert" className="text-sm text-red-400">{error}</span>
             <div className="flex gap-2">
               <button type="button" onClick={onClose} className="rounded-full border border-zinc-700 px-5 py-2 text-sm hover:border-zinc-400">Cancel·la</button>
-              <button type="button" disabled={saving} onClick={save} className="rounded-full bg-white px-5 py-2 text-sm font-semibold text-black hover:bg-zinc-200 disabled:opacity-50">
+              <button type="button" disabled={saving} onClick={save} className="rounded-full bg-inv px-5 py-2 text-sm font-semibold text-invtext hover:bg-zinc-200 disabled:opacity-50">
                 {saving ? 'Desant…' : 'Desa'}
               </button>
             </div>

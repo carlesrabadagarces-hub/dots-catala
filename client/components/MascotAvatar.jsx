@@ -14,7 +14,7 @@ export default function MascotAvatar({ type = 'blue', size = 'md', className = '
   if (type === 'warning' || type === 'alert') {
     return (
       <div
-        className={`${currentSize} rounded-xl bg-[#222226] border border-[#2e2e34] flex items-center justify-center flex-shrink-0 shadow-inner ${className}`}
+        className={`${currentSize} rounded-xl bg-surf3 border border-line2 flex items-center justify-center flex-shrink-0 shadow-inner ${className}`}
       >
         <span className="text-amber-500 font-extrabold text-lg leading-none font-mono">!</span>
       </div>

@@ -88,7 +88,7 @@ function AppIcon({ app }) {
   }
 
   return (
-    <div className="w-8 h-8 rounded-lg bg-[#27272a] flex items-center justify-center text-xs font-bold text-zinc-300 border border-[#333338] flex-shrink-0">
+    <div className="w-8 h-8 rounded-lg bg-surf3 flex items-center justify-center text-xs font-bold text-zinc-300 border border-line2 flex-shrink-0">
       {(app.label || '?').charAt(0).toUpperCase()}
     </div>
   );
@@ -202,8 +202,8 @@ export default function Marketplace({ onOpenSettings }) {
   });
 
   return (
-    <div className="flex-1 flex flex-col h-screen overflow-hidden bg-[#09090b] select-none font-sans text-zinc-100">
-      <div className="px-6 py-4 border-b border-[#18181c] flex items-center justify-between gap-4 flex-shrink-0">
+    <div className="flex-1 flex flex-col h-screen overflow-hidden bg-surf0 select-none font-sans text-zinc-100">
+      <div className="px-6 py-4 border-b border-line1 flex items-center justify-between gap-4 flex-shrink-0">
         <div>
           <div className="flex items-center gap-2">
             <h2 className="text-sm font-bold text-zinc-100 tracking-wide">Connected Apps</h2>
@@ -221,7 +221,7 @@ export default function Marketplace({ onOpenSettings }) {
           <button
             type="button"
             onClick={() => setRefreshToken((value) => value + 1)}
-            className="p-2 rounded-lg text-zinc-400 hover:text-white hover:bg-[#1e1e22] transition"
+            className="p-2 rounded-lg text-zinc-400 hover:text-fg hover:bg-surf2 transition"
             title="Refresh connector status"
           >
             <FiRefreshCw className={loading ? 'animate-spin' : ''} />
@@ -233,7 +233,7 @@ export default function Marketplace({ onOpenSettings }) {
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Search apps…"
-              className="w-full bg-[#18181b] border border-[#27272a] rounded-xl pl-8 pr-3 py-2 text-xs text-zinc-200 placeholder-zinc-500 focus:outline-none focus:border-zinc-500 transition"
+              className="w-full bg-surf2 border border-line1 rounded-xl pl-8 pr-3 py-2 text-xs text-zinc-200 placeholder-zinc-500 focus:outline-none focus:border-zinc-500 transition"
             />
           </div>
         </div>
@@ -251,7 +251,7 @@ export default function Marketplace({ onOpenSettings }) {
             <button
               type="button"
               onClick={onOpenSettings}
-              className="ml-auto flex items-center gap-1 text-blue-200 hover:text-white font-semibold flex-shrink-0"
+              className="ml-auto flex items-center gap-1 text-blue-200 hover:text-fg font-semibold flex-shrink-0"
             >
               <FiSettings /> Settings
             </button>
@@ -271,7 +271,7 @@ export default function Marketplace({ onOpenSettings }) {
       )}
 
       <div
-        className="flex-1 overflow-y-auto mx-6 mt-3 mb-6 rounded-2xl border border-[#1e1e22]"
+        className="flex-1 overflow-y-auto mx-6 mt-3 mb-6 rounded-2xl border border-line1"
         style={{ scrollbarWidth: 'thin', scrollbarColor: '#27272a transparent' }}
       >
         {loading && apps.length === 0 ? (
@@ -285,9 +285,9 @@ export default function Marketplace({ onOpenSettings }) {
             return (
               <div
                 key={app.slug}
-                className={`flex items-center gap-3.5 px-4 py-3.5 transition-colors hover:bg-[#111115] ${
-                  index > 0 ? 'border-t border-[#1a1a1e]' : ''
-                } ${isOn ? 'bg-[#0d1210]' : 'bg-[#09090b]'}`}
+                className={`flex items-center gap-3.5 px-4 py-3.5 transition-colors hover:bg-surf1 ${
+                  index > 0 ? 'border-t border-line1' : ''
+                } ${isOn ? 'bg-surf0' : 'bg-surf0'}`}
               >
                 <AppIcon app={app} />
 
@@ -307,7 +307,7 @@ export default function Marketplace({ onOpenSettings }) {
                   className={`w-28 flex-shrink-0 py-1.5 rounded-xl text-[11px] font-semibold transition flex items-center justify-center gap-1.5 disabled:opacity-50 ${
                     isOn
                       ? 'bg-emerald-600/20 text-emerald-400 border border-emerald-600/40 hover:bg-rose-500/15 hover:text-rose-400 hover:border-rose-500/30'
-                      : 'bg-[#1e1e22] text-zinc-400 border border-[#2a2a30] hover:text-white hover:bg-[#27272a]'
+                      : 'bg-surf2 text-zinc-400 border border-line2 hover:text-fg hover:bg-surf3'
                   }`}
                 >
                   {isBusy ? (

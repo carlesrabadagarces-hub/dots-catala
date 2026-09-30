@@ -137,7 +137,7 @@ export default function ModelPicker({ currentModel, onSelectModel, models }) {
       <button
         suppressHydrationWarning={true}
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#1c1c20] hover:bg-[#242429] border border-[#2b2b32] text-xs text-zinc-200 transition shadow-sm font-medium"
+        className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-surf2 hover:bg-surf3 border border-line2 text-xs text-zinc-200 transition shadow-sm font-medium"
       >
         <span className="font-bold text-[11px]" style={{ color: displayColor }}>{displayIcon}</span>
         <span className="font-medium text-zinc-200 max-w-[130px] truncate">{displayName}</span>
@@ -149,12 +149,12 @@ export default function ModelPicker({ currentModel, onSelectModel, models }) {
       {/* Floating Popover */}
       {isOpen && (
         <div
-          className="absolute right-0 mt-2 w-[320px] rounded-2xl shadow-2xl border border-[#2c2c34] z-50 flex overflow-hidden animate-fade-in"
+          className="absolute right-0 mt-2 w-[320px] rounded-2xl shadow-2xl border border-line2 z-50 flex overflow-hidden animate-fade-in"
           style={{ background: '#141417' }}
           suppressHydrationWarning={true}
         >
           {/* Left Provider Rail */}
-          <div className="w-12 bg-[#101013] border-r border-[#26262b] flex flex-col items-center py-3 gap-1.5 flex-shrink-0">
+          <div className="w-12 bg-surf1 border-r border-line1 flex flex-col items-center py-3 gap-1.5 flex-shrink-0">
             {providers.map((tab) => {
               const isSelected = activeTab === tab.id;
               return (
@@ -195,12 +195,12 @@ export default function ModelPicker({ currentModel, onSelectModel, models }) {
           {/* Right Model List */}
           <div className="flex-1 flex flex-col min-h-0">
             {/* Provider Header */}
-            <div className="px-3.5 pt-3.5 pb-2 border-b border-[#1e1e22] flex-shrink-0">
+            <div className="px-3.5 pt-3.5 pb-2 border-b border-line1 flex-shrink-0">
               <div className="flex items-center gap-2">
                 <span className="font-bold text-base" style={{ color: activeProvider.color }}>
                   {activeProvider.icon}
                 </span>
-                <h4 className="text-xs font-bold text-white tracking-wide">{activeProvider.name}</h4>
+                <h4 className="text-xs font-bold text-fg tracking-wide">{activeProvider.name}</h4>
               </div>
               <p className="text-[10px] text-zinc-500 mt-0.5">
                 {activeProvider.models.length} models available

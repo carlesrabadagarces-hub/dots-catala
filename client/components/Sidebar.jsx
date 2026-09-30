@@ -96,7 +96,7 @@ export default function Sidebar({
             suppressHydrationWarning={true}
             onClick={onOpenNewBot}
             title="Create New Bot"
-            className="text-zinc-400 hover:text-white transition p-1 rounded-md hover:bg-[#222226]"
+            className="text-zinc-400 hover:text-fg transition p-1 rounded-md hover:bg-surf3"
           >
             <FiPlus className="text-lg" />
           </button>
@@ -111,7 +111,7 @@ export default function Sidebar({
             placeholder="Search"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full bg-[#222225] border border-[#2c2c30] rounded-xl pl-8 pr-3 py-1.5 text-xs text-zinc-200 placeholder-zinc-500 focus:outline-none focus:border-zinc-500 transition"
+            className="w-full bg-surf3 border border-line2 rounded-xl pl-8 pr-3 py-1.5 text-xs text-zinc-200 placeholder-zinc-500 focus:outline-none focus:border-zinc-500 transition"
           />
         </div>
       </div>
@@ -127,8 +127,8 @@ export default function Sidebar({
               onClick={() => onSelectBot(botItem.id)}
               className={`group p-2.5 rounded-xl cursor-pointer transition-all duration-150 flex items-start gap-3 ${
                 isActive
-                  ? 'bg-[#27272a] text-white shadow-sm border border-[#34343a]'
-                  : 'hover:bg-[#1c1c20] text-zinc-400 border border-transparent'
+                  ? 'bg-surf3 text-fg shadow-sm border border-line2'
+                  : 'hover:bg-surf2 text-zinc-400 border border-transparent'
               }`}
             >
               {botItem.originalBot ? (
@@ -139,7 +139,7 @@ export default function Sidebar({
 
               <div className="flex-1 min-w-0 pt-0.5">
                 <div className="flex items-center justify-between">
-                  <h3 className={`text-xs font-semibold truncate ${isActive ? 'text-white' : 'text-zinc-200'}`}>
+                  <h3 className={`text-xs font-semibold truncate ${isActive ? 'text-fg' : 'text-zinc-200'}`}>
                     {botItem.name}
                   </h3>
                   {botItem.originalBot && onEditBot && (
@@ -175,15 +175,15 @@ export default function Sidebar({
       </div>
 
       {/* Bottom Sidebar Footer */}
-      <div className="p-3 space-y-2 border-t border-[#1f1f23]">
+      <div className="p-3 space-y-2 border-t border-line1">
         {/* Plugins Section */}
         <button
           suppressHydrationWarning={true}
           onClick={() => onSelectTab && onSelectTab('marketplace')}
           className={`w-full flex items-center gap-2 px-2 py-1 rounded-lg text-xs font-medium transition ${
             activeTab === 'marketplace'
-              ? 'text-white bg-[#1e1e22]'
-              : 'text-zinc-300 hover:text-white hover:bg-[#1e1e22]'
+              ? 'text-fg bg-surf2'
+              : 'text-zinc-300 hover:text-fg hover:bg-surf2'
           }`}
         >
           <span className="text-sm">🧩</span>
@@ -195,8 +195,8 @@ export default function Sidebar({
           onClick={() => onSelectTab && onSelectTab('audit')}
           className={`w-full flex items-center gap-2 px-2 py-1 rounded-lg text-xs font-medium transition ${
             activeTab === 'audit'
-              ? 'text-white bg-[#1e1e22]'
-              : 'text-zinc-300 hover:text-white hover:bg-[#1e1e22]'
+              ? 'text-fg bg-surf2'
+              : 'text-zinc-300 hover:text-fg hover:bg-surf2'
           }`}
         >
           <FiActivity className="text-sm text-cyan-400" />
@@ -231,9 +231,9 @@ export default function Sidebar({
             <button
               suppressHydrationWarning={true}
               onClick={onOpenSettings}
-              className="flex items-center gap-2 px-2 py-1 rounded-lg text-xs font-medium text-zinc-300 hover:text-white hover:bg-[#1e1e22] transition"
+              className="flex items-center gap-2 px-2 py-1 rounded-lg text-xs font-medium text-zinc-300 hover:text-fg hover:bg-surf2 transition"
             >
-              <div className="w-5 h-5 rounded-full bg-[#2a2a2e] flex items-center justify-center text-[10px] text-zinc-400 font-bold border border-[#333338]">
+              <div className="w-5 h-5 rounded-full bg-surf3 flex items-center justify-center text-[10px] text-zinc-400 font-bold border border-line2">
                 {displayName.charAt(0).toUpperCase()}
               </div>
               <span>{displayName}</span>
@@ -244,7 +244,7 @@ export default function Sidebar({
           <button
             suppressHydrationWarning={true}
             onClick={onOpenSettings}
-            className="p-2 text-zinc-400 hover:text-zinc-200 hover:bg-[#1e1e22] rounded-lg transition"
+            className="p-2 text-zinc-400 hover:text-zinc-200 hover:bg-surf2 rounded-lg transition"
             title="Settings"
           >
             <FiSettings className="text-sm" />

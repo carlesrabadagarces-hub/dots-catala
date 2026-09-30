@@ -4,8 +4,8 @@ import React, { useState, useEffect } from "react";
 import { FiX, FiEye, FiEyeOff, FiPlus, FiTrash2, FiChevronDown } from "react-icons/fi";
 import { fetchSettings, saveSettings } from "../lib/api";
 
-const inputClass = "w-full bg-[#222226] border border-[#36363d] rounded-lg px-3 py-2.5 text-xs text-zinc-100 placeholder-zinc-500 focus:outline-none focus:border-violet-400";
-const cardClass = "bg-[#18181b] border border-[#27272a] rounded-2xl p-4 space-y-4";
+const inputClass = "w-full bg-surf3 border border-line2 rounded-lg px-3 py-2.5 text-xs text-zinc-100 placeholder-zinc-500 focus:outline-none focus:border-violet-400";
+const cardClass = "bg-surf2 border border-line1 rounded-2xl p-4 space-y-4";
 const buttonClass = "rounded-lg px-3 py-2 text-xs font-medium bg-violet-500 text-white hover:bg-violet-400 disabled:opacity-50 disabled:cursor-not-allowed";
 
 export default function AppSettingsDrawer({ models, isOpen, onClose, currentModel, onUpdateDefaultModel, onProfileUpdate }) {
@@ -130,10 +130,10 @@ export default function AppSettingsDrawer({ models, isOpen, onClose, currentMode
   };
 
   return (
-    <aside aria-label="App Settings" className="w-96 md:w-[420px] max-w-[100vw] h-screen bg-[#111113] border-l border-[#27272a] flex flex-col z-30 shadow-2xl flex-shrink-0">
-      <div className="p-5 border-b border-[#27272a] flex items-center justify-between">
+    <aside aria-label="App Settings" className="w-96 md:w-[420px] max-w-[100vw] h-screen bg-surf1 border-l border-line1 flex flex-col z-30 shadow-2xl flex-shrink-0">
+      <div className="p-5 border-b border-line1 flex items-center justify-between">
         <h2 className="text-sm font-bold text-zinc-100">App Settings</h2>
-        <button onClick={onClose} title="Close App Settings" className="p-1 text-zinc-400 hover:text-white"><FiX /></button>
+        <button onClick={onClose} title="Close App Settings" className="p-1 text-zinc-400 hover:text-fg"><FiX /></button>
       </div>
       <div className="flex-1 overflow-y-auto p-4 space-y-4">
         <details className={`${cardClass} group`}>
@@ -147,7 +147,7 @@ export default function AppSettingsDrawer({ models, isOpen, onClose, currentMode
             </span>
             <span className="block text-[11px] text-violet-300 mt-2">Click to configure</span>
           </summary>
-          <form onSubmit={saveProvider} onChange={() => setNotice(null)} className="space-y-4 border-t border-[#27272a] pt-4">
+          <form onSubmit={saveProvider} onChange={() => setNotice(null)} className="space-y-4 border-t border-line1 pt-4">
           <p className="text-xs text-zinc-400">Configure your API endpoint and models. Shared by all assistants.</p>
           {!loaded && !notice && <p role="status" className="text-xs text-zinc-400">Loading settings…</p>}
           <fieldset disabled={!loaded || saving} className="space-y-4 disabled:opacity-60">
@@ -182,7 +182,7 @@ export default function AppSettingsDrawer({ models, isOpen, onClose, currentMode
               <datalist id="provider-model-options">{[...new Set([...modelIds.split(/[\n,]+/).map((id) => id.trim()).filter(Boolean), ...(models || []).map((model) => model.id)])].map((id) => <option key={id} value={id} />)}</datalist>
               <p className="text-[11px] text-zinc-500">Used for new assistants. Existing assistants keep their selected model.</p>
             </div>
-            <details className="border border-[#36363d] rounded-lg p-3">
+            <details className="border border-line2 rounded-lg p-3">
               <summary className="cursor-pointer text-xs font-medium">Custom headers · {headersConfigured ? "Configured" : "Optional"}</summary>
               <div className="mt-3 space-y-3">
                 <label htmlFor="provider-header-action" className="block text-xs text-zinc-400">Header action</label>
@@ -193,7 +193,7 @@ export default function AppSettingsDrawer({ models, isOpen, onClose, currentMode
                 </select>
                 <p className="text-[11px] text-zinc-500">Values are encrypted and never shown after saving. Replace all requires the complete set.</p>
                 {headersMode === "replace" && <>
-                  {headers.map((header, index) => <div key={index} className="space-y-2 rounded-lg bg-[#111113] p-2">
+                  {headers.map((header, index) => <div key={index} className="space-y-2 rounded-lg bg-surf1 p-2">
                     <input aria-label={`Header name ${index + 1}`} value={header.name} onChange={(e) => setHeaders(headers.map((row, i) => i === index ? { ...row, name: e.target.value } : row))} placeholder="Header name" className={inputClass} />
                     <div className="flex gap-2">
                       <input aria-label={`Header value ${index + 1}`} type="password" autoComplete="new-password" value={header.value} onChange={(e) => setHeaders(headers.map((row, i) => i === index ? { ...row, value: e.target.value } : row))} placeholder="Header value" className={inputClass} />
