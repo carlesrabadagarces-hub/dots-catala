@@ -50,7 +50,7 @@ export default function DotStudio({ bot, onClose, onSave }) {
       <style>{`@keyframes sd-bob{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-8px) rotate(2deg)}}.sd-bob{animation:sd-bob 3.4s ease-in-out infinite}`}</style>
       <div className="flex max-h-[90vh] w-full max-w-4xl flex-col overflow-hidden rounded-3xl border border-zinc-800 bg-[#0e0e10] text-zinc-100 shadow-2xl md:flex-row">
         <div className="flex flex-col items-center justify-center gap-4 border-b border-zinc-800 bg-gradient-to-b from-zinc-900 to-[#0e0e10] p-6 md:w-80 md:border-b-0 md:border-r">
-          <DotAvatar bot={bot} look={look} size={200} bob />
+          <DotAvatar bot={bot} look={look} size={220} />
           <label htmlFor="dot-name" className="sr-only">Nom del Dot</label>
           <input
             id="dot-name"
@@ -104,7 +104,7 @@ export default function DotStudio({ bot, onClose, onSave }) {
                       onClick={() => set(key, value)}
                       className={`flex flex-col items-center gap-1 rounded-2xl border p-2 text-[11px] transition ${look[key] === value ? 'border-white bg-zinc-800' : 'border-zinc-800 hover:border-zinc-600'}`}
                     >
-                      <DotAvatar look={{ ...look, [key]: value }} size={54} bot={{ name: LABELS[key][value] }} />
+                      <DotAvatar look={{ ...look, [key]: value }} size={56} bot={{ name: LABELS[key][value] }} alive={false} />
                       <span className="truncate text-zinc-300">{LABELS[key][value]}</span>
                     </button>
                   ))}

@@ -132,7 +132,7 @@ export default function Sidebar({
               }`}
             >
               {botItem.originalBot ? (
-                <DotAvatar bot={botItem.originalBot} size={44} />
+                <DotAvatar bot={botItem.originalBot} size={46} alive={isActive} />
               ) : (
                 <MascotAvatar type={botItem.avatarType} size="md" />
               )}

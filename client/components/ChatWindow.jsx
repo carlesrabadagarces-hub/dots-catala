@@ -232,7 +232,7 @@ export default function ChatWindow({ bot, models, messages, setMessages, onUpdat
       <header className="px-6 py-3.5 flex items-center justify-between z-20 bg-[#09090b]/80 backdrop-blur-md border-b border-[#18181c]">
         {/* Left Side: Bot Indicator */}
         <div className="flex items-center gap-2.5">
-          {bot && !bot.isError ? <DotAvatar bot={bot} size={34} /> : <MascotAvatar type={bot?.isError ? 'warning' : 'blue'} size="sm" />}
+          {bot && !bot.isError ? <DotAvatar bot={bot} size={38} mood={isStreaming ? 'talking' : undefined} /> : <MascotAvatar type={bot?.isError ? 'warning' : 'blue'} size="sm" />}
           <h2 className="font-bold text-sm text-zinc-100 tracking-wide">{botTitle}</h2>
           {bot && onEditBot && (
             <button type="button" onClick={() => onEditBot(bot.id)} className="ml-2 rounded-full border border-zinc-700 px-3 py-1 text-[11px] text-zinc-300 hover:border-zinc-400">Personalitza</button>
@@ -304,7 +304,7 @@ export default function ChatWindow({ bot, models, messages, setMessages, onUpdat
 
           {isStreaming && (
             <div className="flex justify-start items-center gap-3 my-3 animate-fade-in">
-              {bot && !bot.isError ? <DotAvatar bot={bot} size={30} /> : <MascotAvatar type={bot?.isError ? 'warning' : 'blue'} size="sm" />}
+              {bot && !bot.isError ? <DotAvatar bot={bot} size={34} mood="thinking" /> : <MascotAvatar type={bot?.isError ? 'warning' : 'blue'} size="sm" />}
               <div className="bg-[#18181b] border border-[#27272a] px-4 py-3 rounded-2xl flex items-center gap-1.5 shadow-sm">
                 <span className="w-2 h-2 rounded-full bg-blue-400 animate-bounce" style={{ animationDelay: '-0.32s' }} />
                 <span className="w-2 h-2 rounded-full bg-blue-400 animate-bounce" style={{ animationDelay: '-0.16s' }} />

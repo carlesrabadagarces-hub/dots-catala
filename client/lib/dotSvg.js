@@ -28,12 +28,24 @@ const A = { // top of head, eye line, chest line, highlight position
   arch: { top: 12, eye: 52, chest: 84, hl: [36, 28] }, square: { top: 14, eye: 50, chest: 78, hl: [30, 28] },
 };
 
+// Stubby arms and feet (like the plush-clay toys), per shape: arm centre, foot line
+const LIMBS = {
+  circle: { arm: [9, 58], foot: 91 }, tri: { arm: [17, 74], foot: 88 }, drop: { arm: [14, 68], foot: 96 },
+  hex: { arm: [14, 56], foot: 86 }, arch: { arm: [12, 66], foot: 91 }, square: { arm: [14, 56], foot: 85 },
+};
+let uid = 0;
+
 const clean = (v, list, fallback) => (list.includes(v) ? v : fallback);
 const hex = (v, fallback) => (/^#[0-9a-fA-F]{6}$/.test(v || '') ? v : fallback);
 
 function darken(h, k) {
   const n = parseInt(h.slice(1), 16);
   const c = [n >> 16, (n >> 8) & 255, n & 255].map((x) => Math.round(x * (1 - k)));
+  return `rgb(${c.join(',')})`;
+}
+function lighten(h, k) {
+  const n = parseInt(h.slice(1), 16);
+  const c = [n >> 16, (n >> 8) & 255, n & 255].map((x) => Math.round(x + (255 - x) * k));
   return `rgb(${c.join(',')})`;
 }
 function lum(h) {
@@ -133,23 +145,29 @@ const esc = (v) => String(v).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&
 export function dotSvg(look, size = 96, label = 'Dot') {
   const l = normalizeLook(look);
   const a = A[l.shape];
-  const ink = lum(l.color) > 0.62 ? '#14171c' : '#ffffff';
+  const lm = LIMBS[l.shape];
+  const gid = `dg${uid++}`;
   const inkEyes = lum(l.color) > 0.5 ? '#14171c' : '#ffffff';
+  const dark = darken(l.color, 0.2);
   const cape = l.accessory === 'cape'
     ? `<path d="M22 ${a.chest - 14}L6 ${a.chest + 26}Q20 ${a.chest + 20} 34 ${a.chest + 24}Z M78 ${a.chest - 14}L94 ${a.chest + 26}Q80 ${a.chest + 20} 66 ${a.chest + 24}Z" fill="#ff4d7d"/>` : '';
   const chestItems = l.accessory === 'cape'
     ? `<path d="M30 ${a.chest - 6}Q50 ${a.chest + 6} 70 ${a.chest - 6}" fill="none" stroke="#ff4d7d" stroke-width="5" stroke-linecap="round"/><circle cx="50" cy="${a.chest}" r="4" fill="#ffc21a"/>`
     : accessorySvg(l.accessory, a.chest, l.accent, a.eye);
   const headphonesFirst = l.accessory === 'headphones';
-  const body = `<path d="${SHAPES[l.shape]}" fill="${l.color}"/><path d="${SHAPES[l.shape]}" fill="url(#none)"/>`
-    + `<ellipse cx="${a.hl[0]}" cy="${a.hl[1]}" rx="13" ry="7" transform="rotate(-28 ${a.hl[0]} ${a.hl[1]})" fill="#fff" opacity=".28"/>`;
-  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="-10 -34 120 140" width="${size}" height="${size}" role="img" aria-label="${esc(label)}">`
-    + cape + (headphonesFirst ? chestItems : '') + body
-    + eyesSvg(l.eyes, a.eye, inkEyes) + mouthSvg(l.mouth, a.eye, inkEyes)
+  const defs = `<defs><radialGradient id="${gid}" cx="34%" cy="26%" r="85%"><stop offset="0" stop-color="${lighten(l.color, 0.28)}"/><stop offset=".5" stop-color="${l.color}"/><stop offset="1" stop-color="${darken(l.color, 0.26)}"/></radialGradient></defs>`;
+  const limbs = `<g class="dl-feet"><ellipse cx="37" cy="${lm.foot}" rx="10" ry="6.5" fill="${dark}"/><ellipse cx="63" cy="${lm.foot}" rx="10" ry="6.5" fill="${dark}"/></g>`
+    + `<g class="dl-arms"><ellipse cx="${lm.arm[0]}" cy="${lm.arm[1]}" rx="7" ry="10.5" transform="rotate(24 ${lm.arm[0]} ${lm.arm[1]})" fill="${dark}"/><ellipse cx="${100 - lm.arm[0]}" cy="${lm.arm[1]}" rx="7" ry="10.5" transform="rotate(-24 ${100 - lm.arm[0]} ${lm.arm[1]})" fill="${dark}"/></g>`;
+  const body = `<g class="dl-body"><path d="${SHAPES[l.shape]}" fill="url(#${gid})"/>`
+    + `<ellipse cx="${a.hl[0]}" cy="${a.hl[1]}" rx="13" ry="7" transform="rotate(-28 ${a.hl[0]} ${a.hl[1]})" fill="#fff" opacity=".26"/></g>`;
+  const shadow = `<ellipse class="dl-shadow" cx="50" cy="${lm.foot + 7}" rx="32" ry="5.5" fill="#000" opacity=".16"/>`;
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="-10 -34 120 148" width="${size}" height="${size}" role="img" aria-label="${esc(label)}">${defs}${shadow}<g class="dl-all">`
+    + cape + (headphonesFirst ? chestItems : '') + limbs + body
+    + `<g class="dl-eyes">${eyesSvg(l.eyes, a.eye, inkEyes)}</g><g class="dl-mouth">${mouthSvg(l.mouth, a.eye, inkEyes)}</g>`
     + glassesSvg(l.glasses, a.eye, l.glasses === 'shades' || l.glasses === 'visor' ? '#14171c' : l.accent)
     + (headphonesFirst ? '' : chestItems)
     + hatSvg(l.hat, a.top, l.accent)
-    + '</svg>';
+    + '</g></svg>';
 }
 
 export function randomLook() {
