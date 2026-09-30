@@ -193,9 +193,57 @@
   var nb=$("navbar");
   window.addEventListener("scroll",function(){nb.classList.toggle("stuck",scrollY>10)},{passive:true});
 
+  /* ---------- FAQ: Dots que juguen ---------- */
+  (function(){
+    var list=$("faqlist"),play=$("play");if(!list||!play)return;
+    var Q=[
+      ["Què és un superDOTat?","Un agent d'IA amb nom, caràcter i instruccions pròpies que respon pel WhatsApp. En tens per a cada ofici: metge, fontaner, mestra, assessor fiscal…",{body:"blob",tone:"blue",hat:"party"}],
+      ["Necessito saber programar?","No. Tries un Dot del catàleg o en crees un de nou dient què vols que faci, i el connectes al teu número. El servidor l'instal·les una vegada.",{body:"cube",tone:"green",hat:"antenna"}],
+      ["Com el connecto al meu WhatsApp?","Amb l'API oficial de Meta (WhatsApp Cloud API). Enganxes el teu token i el teu número, i tu decideixes quins contactes poden parlar-hi.",{body:"arch",tone:"teal",hat:"chef"}],
+      ["Quant costa?","El projecte és de codi obert (llicència MIT). Només pagues on l'allotges i el model d'IA que triïs, i tu controles el consum.",{body:"blob",tone:"yellow",hat:"crown"}],
+      ["Són segures les meves dades?","Les credencials es guarden xifrades al teu servidor, cada missatge de Meta es verifica amb signatura i cada persona té el seu fil separat.",{body:"cube",tone:"slate",accessory:"tie"}],
+      ["Puc crear els meus propis Dots?","Sí. Dins del teu perfil pots crear-ne tants com vulguis i personalitzar-los: color, forma, barret, ulleres i complements.",{body:"arch",tone:"pink",hat:"flower"}],
+      ["Pot substituir un metge o un advocat?","No. Orienta i explica de manera general, i quan el tema el supera o és urgent, et diu a qui has d'anar.",{body:"blob",tone:"orange",hat:"hardhat",accessory:"mustache"}],
+      ["Envia imatges o stickers?","De moment respon amb text. Estem preparant els Dots que fan stickers i busquen imatges, perquè arribin també pel WhatsApp.",{body:"cube",tone:"violet",hat:"wizard"}]
+    ];
+    var items=[],W=0,H=0,ps=[];
+    Q.forEach(function(q,i){
+      var d=document.createElement("div");d.className="fq rv";
+      d.innerHTML='<button aria-expanded="false"><span class="qd">'+av(q[2],56,"")+'</span><span class="qt"></span><span class="pl">+</span></button><div class="qa"><div><p></p></div></div>';
+      d.querySelector(".qt").textContent=q[0];d.querySelector("p").textContent=q[1];
+      var b=d.firstChild,dot=d.querySelector(".qd");attachLife(dot);
+      b.onclick=function(){
+        var open=!d.classList.contains("open");
+        items.forEach(function(x){x.el.classList.remove("open");x.b.setAttribute("aria-expanded","false");var dd=x.el.querySelector(".dl");if(dd&&dd.dataset.state==="talking")dd.dataset.state="idle"});
+        if(open){d.classList.add("open");b.setAttribute("aria-expanded","true");var dl=dot.querySelector(".dl")||dot.firstChild;if(dl&&dl.dataset){dl.dataset.state="talking";setTimeout(function(){if(dl.dataset.state==="talking")dl.dataset.state="idle"},2600)}poke(i)}
+      };
+      list.appendChild(d);items.push({el:d,b:b});io.observe(d)});
+    items[0].b.onclick();
+    /* pati de joc */
+    var LK=[{body:"arch",tone:"pink",hat:"crown"},{body:"blob",tone:"blue",hat:"party"},{body:"cube",tone:"yellow",hat:"hardhat"},{body:"arch",tone:"green",hat:"antenna"},{body:"blob",tone:"violet",hat:"wizard"}];
+    function size(){W=play.clientWidth;H=play.clientHeight}size();addEventListener("resize",size);
+    LK.forEach(function(l,i){
+      var el=document.createElement("div");el.className="pd";var S=78;el.innerHTML=av(l,S,"Dot");play.appendChild(el);attachLife(el.firstChild);
+      var o={el:el,x:30+i*(W/5||60),y:H-S-24,vx:(reduce?0:(Math.random()<.5?-1:1)*(.5+Math.random()*.6)),vy:-(3+Math.random()*3),S:S};
+      el.onclick=function(){o.vy=-8;o.vx=(Math.random()<.5?-1:1)*(.8+Math.random()*.8)};
+      ps.push(o)});
+    function poke(i){var o=ps[i%ps.length];if(o&&!reduce)o.vy=-9}
+    var last=0;
+    function loop(t){
+      var dt=Math.min(32,t-last)/16;last=t;var fl=H-24;
+      ps.forEach(function(o){
+        if(!reduce){o.vy+=.38*dt;o.x+=o.vx*dt;o.y+=o.vy*dt}
+        if(o.x<0){o.x=0;o.vx=Math.abs(o.vx)}else if(o.x>W-o.S){o.x=W-o.S;o.vx=-Math.abs(o.vx)}
+        if(o.y>fl-o.S){o.y=fl-o.S;o.vy=-(4+Math.random()*4.5);if(Math.abs(o.vx)<.3)o.vx=(Math.random()<.5?-1:1)*.7}
+        o.el.style.transform="translate("+o.x+"px,"+o.y+"px)"});
+      ps.forEach(function(a,i){for(var j=i+1;j<ps.length;j++){var b=ps[j];if(Math.abs(a.x-b.x)<a.S*.6&&Math.abs(a.y-b.y)<a.S*.6){var tv=a.vx;a.vx=b.vx;b.vx=tv;if(a.x<b.x){a.x-=2;b.x+=2}else{a.x+=2;b.x-=2}}}});
+      requestAnimationFrame(loop)}
+    requestAnimationFrame(loop);
+  })();
+
   /* ---------- Final: el Dot salta, aterra i fa l'ullet ---------- */
   (function(){
-    var fc=$("fcv"),c=null,FW=0,FH=0,dot=null,parts=[],running=false,started=false,tk=0,last=0,comp=null,skin="#ffc21a",bits=[];
+    var fc=$("fcv");if(!fc)return;var c=null,FW=0,FH=0,dot=null,parts=[],running=false,started=false,tk=0,last=0,comp=null,skin="#ffc21a",bits=[];
     var FL={body:"arch",tone:"pink",hat:"crown"},FS=360;
     compose(FL,FS*2).then(function(cc){comp=cc;
       var g=spriteLayout(FL),x=cc.getContext("2d"),ex=g.fx(g.B.eyeL)*cc.width,ey=g.eyeY*cc.height,s;
