@@ -41,18 +41,18 @@ def sanitize_look(look: Optional[Dict[str, Any]]) -> Dict[str, str]:
 
 # Profession props for catalogue Dots; the rest get a look from their sector.
 AGENT_LOOKS = {
-    "metge-capcalera": {"accessory": "stethoscope", "glasses": "round", "eyes": "pill", "mouth": "smile", "shape": "circle"},
-    "infermer": {"accessory": "stethoscope", "hat": "cap", "accent": "#2fb5ff", "mouth": "smile"},
-    "pediatre": {"accessory": "stethoscope", "eyes": "happy", "mouth": "smile", "hat": "beanie", "accent": "#ffc21a"},
+    "metge-capcalera": {"accessory": "tie", "glasses": "round", "eyes": "pill", "mouth": "smile", "shape": "circle"},
+    "infermer": {"hat": "cap", "accessory": "badge", "accent": "#2fb5ff", "mouth": "smile"},
+    "pediatre": {"accessory": "bowtie", "eyes": "happy", "mouth": "smile", "hat": "beanie", "accent": "#ffc21a"},
     "psicoleg": {"glasses": "round", "eyes": "sleepy", "mouth": "smile", "accent": "#7a4cf0"},
     "dentista": {"hat": "cap", "accent": "#19c3a6", "mouth": "open", "eyes": "happy"},
-    "veterinari": {"accessory": "stethoscope", "eyes": "round", "mouth": "tongue", "shape": "drop"},
+    "veterinari": {"hat": "cap", "accessory": "badge", "eyes": "round", "mouth": "tongue", "shape": "drop"},
     "mestra-infantil-primaria": {"hat": "flower", "eyes": "happy", "mouth": "smile", "accessory": "blush"},
     "professor-matematiques": {"glasses": "square", "hat": "graduation", "accent": "#0a0a0a"},
     "professor-llengues": {"glasses": "round", "hat": "beanie", "accent": "#ff4d7d", "eyes": "happy"},
     "professor-ciencies": {"glasses": "round", "eyes": "wide", "mouth": "open", "hat": "antenna"},
     "professor-idiomes": {"hat": "cap", "accent": "#2f7bff", "eyes": "wink", "mouth": "smile"},
-    "professor-musica": {"accessory": "headphones", "eyes": "happy", "mouth": "smile"},
+    "professor-musica": {"hat": "beanie", "eyes": "happy", "mouth": "smile", "accessory": "bowtie"},
     "tutor-tfg": {"hat": "graduation", "glasses": "round"},
     "jurista-generalista": {"accessory": "tie", "glasses": "square", "accent": "#0a0a0a"},
     "assessor-fiscal": {"accessory": "tie", "glasses": "square", "accent": "#19c3a6", "eyes": "round"},
@@ -68,14 +68,14 @@ AGENT_LOOKS = {
     "cuiner": {"hat": "chef", "accessory": "mustache", "eyes": "happy", "mouth": "smile"},
     "sommelier": {"accessory": "bowtie", "glasses": "monocle", "accent": "#7a1e3c", "mouth": "smirk"},
     "panader-pastisser": {"hat": "chef", "accessory": "blush", "eyes": "happy", "mouth": "smile"},
-    "programador": {"glasses": "square", "accessory": "headphones", "eyes": "pill"},
+    "programador": {"glasses": "square", "hat": "beanie", "eyes": "pill"},
     "ciberseguretat": {"glasses": "shades", "hat": "beanie", "accent": "#0a0a0a", "mouth": "smirk"},
     "creador-de-dots": {"hat": "wizard", "eyes": "heart", "mouth": "smile", "accent": "#ffc21a"},
     "recepcionista": {"accessory": "bowtie", "eyes": "happy", "mouth": "smile", "hat": "cap", "accent": "#ff4d7d"},
     "comercial-vendes": {"accessory": "tie", "glasses": "shades", "mouth": "smirk"},
     "consultor-emprenedoria": {"hat": "crown", "eyes": "wink", "mouth": "smile"},
-    "assistent-personal": {"accessory": "headphones", "eyes": "happy", "mouth": "smile"},
-    "guia-catalunya": {"hat": "cap", "accent": "#ff4d7d", "eyes": "happy", "mouth": "smile", "accessory": "scarf"},
+    "assistent-personal": {"accessory": "bowtie", "hat": "antenna", "eyes": "happy", "mouth": "smile"},
+    "guia-catalunya": {"hat": "cap", "accent": "#ff4d7d", "eyes": "happy", "mouth": "smile", "accessory": "badge"},
     "agronom": {"hat": "cowboy", "accent": "#c4a15a"},
     "logistica": {"hat": "hardhat", "accessory": "badge"},
     "prl": {"hat": "hardhat", "accessory": "badge", "eyes": "wide"},
@@ -89,11 +89,20 @@ SECTOR_BASES = {
 }
 
 
+PLUSH_ITEMS = {
+    "glasses": {"none", "round", "square", "shades", "monocle"},
+    "accessory": {"none", "bowtie", "tie", "mustache", "badge"},
+}
+
+
 def look_for_agent(agent_id: str, sector: str) -> Dict[str, str]:
     base = SECTOR_BASES.get(sector, {})
     merged = {**base, **AGENT_LOOKS.get(agent_id, {})}
     # Plush body varies by Dot so a sector is not a row of clones.
     merged.setdefault("body", PLUSH["body"][sum(map(ord, agent_id)) % 3])
-    if merged.get("accessory") == "blush":
-        merged["accessory"] = "none"
-    return sanitize_look(merged)
+    look = sanitize_look(merged)
+    # Only accessories that look good on the plush bodies are used for catalogue Dots.
+    for key, allowed in PLUSH_ITEMS.items():
+        if look[key] not in allowed:
+            look[key] = "none"
+    return look

@@ -23,6 +23,8 @@ SHAPES = ["blob", "arch", "cube"]
 TONES = ["pink", "orange", "yellow", "green", "teal", "blue", "violet", "slate"]
 BODY_W = 480
 ITEM_MAX = 420
+# Items that did not look right on the bodies (floating or too big); kept in art/raw but not shipped.
+EXCLUDE = {"glasses-visor", "accessories-scarf", "accessories-stethoscope", "accessories-headphones", "accessories-cape"}
 
 
 def strip_shadow(img):
@@ -91,11 +93,15 @@ def main():
 
     for cat in ("hats", "glasses", "accessories"):
         for f in sorted((RAW / cat).glob("*.png")):
+            if f"{cat}-{f.stem}" in EXCLUDE:
+                continue
             img = Image.open(f).convert("RGBA")
             img = img.crop(bbox(img, 12))
             k = ITEM_MAX / max(img.size)
             img = img.resize((round(img.width * k), round(img.height * k)), Image.LANCZOS)
             name = f"{cat}-{f.stem}"
+            if name in EXCLUDE:
+                continue
             img.save(OUT / "items" / f"{name}.webp", "WEBP", quality=90, alpha_quality=100, method=6)
             manifest["items"][name] = {"w": img.width, "h": img.height}
 

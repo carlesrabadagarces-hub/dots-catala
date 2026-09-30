@@ -9,8 +9,8 @@ const LABELS = {
   body: { blob: 'Gota', arch: 'Arc', cube: 'Cub' },
   tone: { pink: 'Rosa', orange: 'Taronja', yellow: 'Groc', green: 'Verd', teal: 'Verd atzur', blue: 'Blau', violet: 'Violeta', slate: 'Pissarra' },
   hat: { none: 'Cap', cap: 'Gorra', beanie: 'Gorro', tophat: 'Barret de copa', crown: 'Corona', party: 'Festa', cowboy: 'Vaquer', wizard: 'Mag', chef: 'Cuiner', graduation: 'Birret', hardhat: 'Casc', antenna: 'Antena', flower: 'Flor' },
-  glasses: { none: 'Cap', round: 'Rodones', square: 'Quadrades', shades: 'De sol', monocle: 'Monocle', visor: 'Visera' },
-  accessory: { none: 'Cap', bowtie: 'Pajarita', tie: 'Corbata', scarf: 'Bufanda', stethoscope: 'Fonendoscopi', headphones: 'Auriculars', mustache: 'Bigoti', badge: 'Insígnia', cape: 'Capa' },
+  glasses: { none: 'Cap', round: 'Rodones', square: 'Quadrades', shades: 'De sol', monocle: 'Monocle' },
+  accessory: { none: 'Cap', bowtie: 'Pajarita', tie: 'Corbata', mustache: 'Bigoti', badge: 'Insígnia' },
 };
 
 const SECTIONS = [['hat', 'Barret'], ['glasses', 'Ulleres'], ['accessory', 'Complements']];

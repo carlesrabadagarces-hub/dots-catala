@@ -2,7 +2,7 @@
 
 Els Dots "de peluix" són imatges en capes generades amb Higgsfield (GPT Image 2.5, fons transparent):
 - 3 cossos (gota, arc, cub) × 8 colors de pelatge (rosa, taronja, groc, verd, verd atzur, blau, violeta, pissarra).
-- 25 complements: 12 barrets, 5 ulleres, 8 complements (pajarita, corbata, bufanda, fonendoscopi, auriculars, bigoti, insígnia, capa).
+- 20 complements: 12 barrets, 4 ulleres, 4 complements (pajarita, corbata, bigoti, insígnia). Es van descartar visera, bufanda, fonendoscopi, auriculars i capa perquè quedaven malament sobre els cossos.
 
 ## Flux de treball
 1. Les imatges originals (PNG 1024) van a `brand/art/raw/` (no es pugen a git; la llista amb els enllaços és a `brand/art/manifest.json` i es poden tornar a baixar amb `python brand/download_assets.py`).
@@ -15,3 +15,6 @@ Els Dots "de peluix" són imatges en capes generades amb Higgsfield (GPT Image 2
 ## Limitacions
 - Els ulls són part de la imatge: no segueixen el cursor ni parpellegen en els Dots de peluix (només el moviment del cos). L'ullet del final és un pedaç dibuixat sobre l'ull.
 - Cada complement té una posició calculada per als 3 cossos; convé revisar-los a ull si en canvies les imatges.
+
+## Logotip
+El logotip és el nostre Dot blau (cos "gota"): `brand/logo-blue-*.png`. `python brand/make_logo.py` regenera el logotip, la icona de l'app i la de la web.

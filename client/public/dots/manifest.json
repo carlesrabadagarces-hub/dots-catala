@@ -93,10 +93,6 @@
    "w": 420,
    "h": 165
   },
-  "glasses-visor": {
-   "w": 420,
-   "h": 170
-  },
   "accessories-badge": {
    "w": 405,
    "h": 420
@@ -105,25 +101,9 @@
    "w": 420,
    "h": 239
   },
-  "accessories-cape": {
-   "w": 420,
-   "h": 302
-  },
-  "accessories-headphones": {
-   "w": 392,
-   "h": 420
-  },
   "accessories-mustache": {
    "w": 420,
    "h": 139
-  },
-  "accessories-scarf": {
-   "w": 314,
-   "h": 420
-  },
-  "accessories-stethoscope": {
-   "w": 170,
-   "h": 420
   },
   "accessories-tie": {
    "w": 197,

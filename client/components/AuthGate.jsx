@@ -10,8 +10,8 @@ const CAST = [
   { look: { body: 'blob', tone: 'blue', glasses: 'round', hat: 'beanie' }, size: 170, style: { right: '7%', top: '9%' }, delay: 1 },
   { look: { body: 'cube', tone: 'teal', hat: 'chef', accessory: 'mustache' }, size: 140, style: { left: '10%', bottom: '10%' }, delay: 2 },
   { look: { body: 'blob', tone: 'violet', hat: 'wizard' }, size: 160, style: { right: '10%', bottom: '11%' }, delay: 0.5 },
-  { look: { body: 'arch', tone: 'yellow', hat: 'crown', accessory: 'cape' }, size: 120, style: { left: '21%', top: '3%' }, delay: 1.5 },
-  { look: { body: 'cube', tone: 'slate', glasses: 'shades', accessory: 'headphones' }, size: 110, style: { right: '27%', bottom: '3%' }, delay: 2.5 },
+  { look: { body: 'arch', tone: 'yellow', hat: 'crown', accessory: 'bowtie' }, size: 120, style: { left: '21%', top: '3%' }, delay: 1.5 },
+  { look: { body: 'cube', tone: 'slate', glasses: 'shades', hat: 'cap' }, size: 110, style: { right: '27%', bottom: '3%' }, delay: 2.5 },
   { look: { body: 'blob', tone: 'orange', hat: 'hardhat' }, size: 70, style: { left: '3%', top: '52%' }, delay: 1 },
   { look: { body: 'arch', tone: 'green' }, size: 70, style: { right: '3%', top: '46%' }, delay: 2 },
 ];
@@ -82,6 +82,8 @@ function Login({ providers, error }) {
       <style>{`@keyframes sd-float{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-14px) rotate(3deg)}}`}</style>
       {CAST.map((c, i) => <Mascot key={i} {...c} />)}
       <div className="relative z-10 flex h-full flex-col items-center justify-center px-6 text-center">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="/logo.png" alt="" width="92" height="92" className="mb-3" />
         <div className="font-mono text-xs uppercase tracking-[0.12em] text-neutral-500">Codi obert · WhatsApp</div>
         <h1 className="mt-4 text-5xl font-semibold tracking-[-0.045em] sm:text-7xl">super<span className="font-bold">DOT</span>ats</h1>
         <p className="mt-4 max-w-md text-lg text-neutral-500">Crea els teus Dots i connecta&apos;ls al teu WhatsApp. Entra per començar.</p>
