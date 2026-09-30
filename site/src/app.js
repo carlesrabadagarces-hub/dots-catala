@@ -1,4 +1,7 @@
 (function(){
+  /* La pàgina sempre carrega des de dalt (no restaura l'scroll d'una visita o recàrrega anterior), tret que l'enllaç porti un #àncora. */
+  try{if("scrollRestoration" in history)history.scrollRestoration="manual"}catch(e){}
+  if(!location.hash){window.scrollTo(0,0);addEventListener("load",function(){window.scrollTo(0,0);setTimeout(function(){window.scrollTo(0,0)},60)});addEventListener("pageshow",function(ev){if(ev.persisted)window.scrollTo(0,0)})}
   var reduce=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   var $=function(id){return document.getElementById(id)};
   var css=function(v){return getComputedStyle(document.documentElement).getPropertyValue(v).trim()};
