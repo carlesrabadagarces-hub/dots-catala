@@ -95,6 +95,25 @@ SCHEMA_MIGRATIONS = {
         ALTER TABLE settings_new RENAME TO settings;
         CREATE INDEX IF NOT EXISTS idx_settings_owner ON settings(owner_id);
     """,
+    4: """
+        ALTER TABLE users ADD COLUMN disabled INTEGER NOT NULL DEFAULT 0;
+        ALTER TABLE users ADD COLUMN token_limit INTEGER;
+        ALTER TABLE users ADD COLUMN last_seen TEXT;
+        CREATE TABLE IF NOT EXISTS usage_events (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            owner_id TEXT NOT NULL,
+            bot_id TEXT,
+            model TEXT,
+            channel TEXT NOT NULL DEFAULT 'web',
+            prompt_tokens INTEGER NOT NULL DEFAULT 0,
+            completion_tokens INTEGER NOT NULL DEFAULT 0,
+            latency_ms INTEGER NOT NULL DEFAULT 0,
+            ok INTEGER NOT NULL DEFAULT 1,
+            created_at TEXT NOT NULL
+        );
+        CREATE INDEX IF NOT EXISTS idx_usage_owner_time ON usage_events(owner_id, created_at);
+        CREATE INDEX IF NOT EXISTS idx_usage_time ON usage_events(created_at);
+    """,
 }
 
 OWNER_TABLES = (

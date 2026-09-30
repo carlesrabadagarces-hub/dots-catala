@@ -8,6 +8,7 @@ import Marketplace from './Marketplace';
 import AuditPanel from './AuditPanel';
 import AppSettingsDrawer from './AppSettingsDrawer';
 import CatalogModal from './CatalogModal';
+import DotStudio from './DotStudio';
 
 import { 
   fetchBots, 
@@ -25,6 +26,7 @@ export default function Dashboard() {
   const [messages, setMessages] = useState([]);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [isCatalogOpen, setIsCatalogOpen] = useState(false);
+  const [studioBotId, setStudioBotId] = useState('');
   const [defaultModel, setDefaultModel] = useState('gpt-5-mini');
   const [userName, setUserName] = useState(() => {
     if (typeof window !== 'undefined') {
@@ -74,6 +76,11 @@ export default function Dashboard() {
 
   const handleCreateNewBot = () => setIsCatalogOpen(true);
 
+  const handleSaveLook = async (botId, updates) => {
+    const updated = await updateBot(botId, updates);
+    setBots((prev) => prev.map((b) => (b.id === botId ? updated : b)));
+  };
+
   const handleBotCreated = (bot) => {
     setBots((prev) => [...prev, bot]);
     setActiveBotId(bot.id);
@@ -95,6 +102,7 @@ export default function Dashboard() {
         onSelectTab={setActiveTab}
         onOpenSettings={() => setIsSettingsOpen(!isSettingsOpen)}
         onOpenNewBot={handleCreateNewBot}
+        onEditBot={setStudioBotId}
       />
 
       {/* Main Workspace Display Area */}
@@ -108,6 +116,7 @@ export default function Dashboard() {
             onUpdateBotModel={handleUpdateBotModel}
             onToggleComputer={() => setActiveTab('computer')}
             defaultModel={defaultModel}
+            onEditBot={setStudioBotId}
           />
         )}
 
@@ -121,6 +130,14 @@ export default function Dashboard() {
 
         {activeTab === 'audit' && <AuditPanel />}
       </main>
+
+      {studioBotId && (
+        <DotStudio
+          bot={bots.find((b) => b.id === studioBotId)}
+          onClose={() => setStudioBotId('')}
+          onSave={handleSaveLook}
+        />
+      )}
 
       <CatalogModal isOpen={isCatalogOpen} onClose={() => setIsCatalogOpen(false)} onCreated={handleBotCreated} />
 

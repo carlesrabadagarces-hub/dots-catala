@@ -6,11 +6,13 @@ from typing import Any, Dict, Optional
 
 from app.services.storage_service import storage_service
 
-PUBLIC_FIELDS = ("id", "username", "role", "email", "name", "picture", "provider")
+PUBLIC_FIELDS = ("id", "username", "role", "email", "name", "picture", "provider", "disabled", "token_limit")
 
 
 def _public(row) -> Dict[str, Any]:
-    return {k: row[k] for k in PUBLIC_FIELDS}
+    data = {k: row[k] for k in PUBLIC_FIELDS}
+    data["disabled"] = bool(data["disabled"])
+    return data
 
 
 class UserService:
@@ -19,8 +21,26 @@ class UserService:
             row = c.execute("SELECT * FROM users WHERE id = ?", (user_id,)).fetchone()
         return _public(row) if row else None
 
+    def set_role(self, user_id: str, role: str) -> Optional[Dict[str, Any]]:
+        with storage_service.database.connect() as c:
+            c.execute("UPDATE users SET role = ? WHERE id = ?", (role, user_id))
+        return self.get(user_id)
+
+    def touch(self, user_id: str) -> None:
+        with storage_service.database.connect() as c:
+            c.execute("UPDATE users SET last_seen = ? WHERE id = ?",
+                      (datetime.now(timezone.utc).isoformat(), user_id))
+
+    def set_controls(self, user_id: str, disabled=None, token_limit="keep") -> Optional[Dict[str, Any]]:
+        with storage_service.database.connect() as c:
+            if disabled is not None:
+                c.execute("UPDATE users SET disabled = ? WHERE id = ?", (1 if disabled else 0, user_id))
+            if token_limit != "keep":
+                c.execute("UPDATE users SET token_limit = ? WHERE id = ?", (token_limit, user_id))
+        return self.get(user_id)
+
     def upsert_social(self, provider: str, sub: str, email: str = "", name: str = "",
-                      picture: str = "", email_verified: bool = False) -> Dict[str, Any]:
+                      picture: str = "", email_verified: bool = False, role: str = "member") -> Dict[str, Any]:
         """Find the member for a provider identity, linking by verified email."""
         with storage_service.database.connect() as c:
             row = c.execute("SELECT * FROM users WHERE provider = ? AND provider_sub = ?",
@@ -38,8 +58,8 @@ class UserService:
             user_id = f"usr-{uuid.uuid4().hex[:12]}"
             c.execute(
                 "INSERT INTO users(id, username, role, created_at, provider, provider_sub, email, name, picture) "
-                "VALUES (?, ?, 'member', ?, ?, ?, ?, ?, ?)",
-                (user_id, f"{provider}:{sub}", datetime.now(timezone.utc).isoformat(),
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                (user_id, f"{provider}:{sub}", role, datetime.now(timezone.utc).isoformat(),
                  provider, sub, email or None, name or None, picture or None))
             row = c.execute("SELECT * FROM users WHERE id = ?", (user_id,)).fetchone()
         return _public(row)

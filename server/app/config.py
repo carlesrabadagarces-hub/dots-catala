@@ -73,6 +73,14 @@ class Settings:
     APPLE_KEY_ID: str = os.getenv("APPLE_KEY_ID", "").strip()
     APPLE_PRIVATE_KEY: str = os.getenv("APPLE_PRIVATE_KEY", "").replace("\\n", "\n")
     APPLE_PRIVATE_KEY_PATH: str = os.getenv("APPLE_PRIVATE_KEY_PATH", "").strip()
+    # Test logins (see docs/AUTH.md). Local development defaults to 123456 / admin;
+    # a public deployment must set its own values.
+    TEST_MEMBER_PASSWORD: str = os.getenv("TEST_MEMBER_PASSWORD", "")
+    ADMIN_PASSWORD: str = os.getenv("ADMIN_PASSWORD", "")
+    ALLOW_WEAK_TEST_LOGINS: str = os.getenv("ALLOW_WEAK_TEST_LOGINS", "").strip().lower()
+    ADMIN_EMAILS: str = os.getenv("ADMIN_EMAILS", "")
+    TOKEN_PRICE_IN_PER_M: float = float(os.getenv("TOKEN_PRICE_IN_PER_M", "0.25"))
+    TOKEN_PRICE_OUT_PER_M: float = float(os.getenv("TOKEN_PRICE_OUT_PER_M", "2.0"))
     ALLOW_LOCAL_LOGIN: str = os.getenv("ALLOW_LOCAL_LOGIN", "").strip().lower()
     HOST: str = os.getenv("HOST", "127.0.0.1")
     PORT: int = int(os.getenv("PORT", "8000"))

@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { FiSearch, FiPlus, FiSettings, FiActivity } from 'react-icons/fi';
 import MascotAvatar from './MascotAvatar';
+import DotAvatar from './DotAvatar';
 
 export default function Sidebar({
   bots,
@@ -12,7 +13,8 @@ export default function Sidebar({
   activeTab,
   onSelectTab,
   onOpenSettings,
-  onOpenNewBot
+  onOpenNewBot,
+  onEditBot
 }) {
   const [searchTerm, setSearchTerm] = useState('');
   const [isIssueDismissed, setIsIssueDismissed] = useState(false);
@@ -129,13 +131,27 @@ export default function Sidebar({
                   : 'hover:bg-[#1c1c20] text-zinc-400 border border-transparent'
               }`}
             >
-              <MascotAvatar type={botItem.avatarType} size="md" />
+              {botItem.originalBot ? (
+                <DotAvatar bot={botItem.originalBot} size={44} />
+              ) : (
+                <MascotAvatar type={botItem.avatarType} size="md" />
+              )}
 
               <div className="flex-1 min-w-0 pt-0.5">
                 <div className="flex items-center justify-between">
                   <h3 className={`text-xs font-semibold truncate ${isActive ? 'text-white' : 'text-zinc-200'}`}>
                     {botItem.name}
                   </h3>
+                  {botItem.originalBot && onEditBot && (
+                    <button
+                      type="button"
+                      title="Personalitza"
+                      onClick={(e) => { e.stopPropagation(); onEditBot(botItem.id); }}
+                      className="ml-1 rounded-full bg-zinc-800 px-2 py-0.5 text-[10px] text-zinc-200 opacity-0 transition group-hover:opacity-100 hover:bg-zinc-700"
+                    >
+                      Personalitza
+                    </button>
+                  )}
                   {botItem.time && (
                     <span className="text-[10px] text-zinc-400 font-normal ml-1">
                       {botItem.time}

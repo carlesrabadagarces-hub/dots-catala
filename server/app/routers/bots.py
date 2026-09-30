@@ -6,6 +6,7 @@ from pydantic import ValidationError
 from app.services.computer_provider import computer_provider, ComputerProviderError
 
 from app.schemas.contracts import Bot
+from app.services.look import sanitize_look
 from app.services.storage_service import storage_service
 
 router = APIRouter(prefix="/api/v1/bots", tags=["bots"])
@@ -16,7 +17,7 @@ async def get_bots():
 
 @router.post("", response_model=Bot)
 async def create_bot(bot_data: Dict[str, Any]):
-    allowed = {"name", "role", "description", "avatar", "model", "accent_color", "system_prompt", "tools", "pinned", "unread_count"}
+    allowed = {"name", "role", "description", "avatar", "model", "accent_color", "system_prompt", "tools", "pinned", "unread_count", "look"}
     unknown = set(bot_data) - allowed
     if unknown:
         raise HTTPException(status_code=422, detail=f"Unsupported bot fields: {', '.join(sorted(unknown))}")
@@ -35,7 +36,8 @@ async def create_bot(bot_data: Dict[str, Any]):
         "tools": bot_data.get("tools", []),
         "pinned": False,
         "unread_count": 0,
-        "created_at": datetime.now().isoformat()
+        "created_at": datetime.now().isoformat(),
+        "look": sanitize_look(bot_data.get("look")) if bot_data.get("look") else None,
     }
     try:
         bot = Bot.model_validate(bot).model_dump()
@@ -48,7 +50,7 @@ async def create_bot(bot_data: Dict[str, Any]):
 
 @router.put("/{bot_id}", response_model=Bot)
 async def update_bot(bot_id: str, updates: Dict[str, Any]):
-    allowed = {"name", "role", "description", "avatar", "model", "accent_color", "system_prompt", "tools", "pinned", "unread_count"}
+    allowed = {"name", "role", "description", "avatar", "model", "accent_color", "system_prompt", "tools", "pinned", "unread_count", "look"}
     unknown = set(updates) - allowed
     if unknown:
         raise HTTPException(status_code=422, detail=f"Unsupported bot fields: {', '.join(sorted(unknown))}")
@@ -56,6 +58,8 @@ async def update_bot(bot_id: str, updates: Dict[str, Any]):
     for i, b in enumerate(bots):
         if b["id"] == bot_id:
             candidate = {**b, **updates, "id": bot_id}
+            if "look" in updates:
+                candidate["look"] = sanitize_look(updates["look"])
             try:
                 bots[i] = Bot.model_validate(candidate).model_dump()
             except ValidationError as exc:

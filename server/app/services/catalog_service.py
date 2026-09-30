@@ -7,6 +7,8 @@ from datetime import datetime
 from typing import Any, Dict, List, Optional
 
 from app.config import settings
+from app.services.context import current_channel
+from app.services.look import look_for_agent, sanitize_look
 from app.services.catalog_data import CATALOG, META, SECTORS
 from app.services.provider_service import provider_service
 from app.services.storage_service import storage_service
@@ -113,6 +115,7 @@ def _bot_from_spec(spec: Dict[str, Any]) -> Dict[str, Any]:
         "pinned": False,
         "unread_count": 0,
         "created_at": datetime.now().isoformat(),
+        "look": look_for_agent(spec["id"], spec["sector"]) if spec["id"] != "custom" else sanitize_look(spec.get("look")),
     }
 
 
@@ -131,7 +134,7 @@ def install(agent_id: str) -> Dict[str, Any]:
 
 # ---- creation from a description -------------------------------------------------
 GENERATOR_SYSTEM = """Ets un dissenyador expert d'agents d'IA. Reps la descripció d'una feina o d'un negoci i respons NOMÉS amb un objecte JSON vàlid (sense text al voltant) amb aquestes claus:
-{"name": "nom curt de l'agent", "role": "ofici o rol precís", "persona": "una frase sobre el seu caràcter", "expertise": ["4 a 6 àrees de coneixement concretes"], "tasks": ["4 a 6 coses concretes que fa"], "safety": ["2 a 4 límits o precaucions específiques de l'àmbit"], "escalate": "quan cal derivar a una persona o servei", "starters": ["3 preguntes d'exemple"], "icon": "un únic emoji", "sector": "un de: educacio, salut, legal, oficis, negoci, hostaleria, tecnologia, vida, public, industria"}
+{"name": "nom curt de l'agent", "role": "ofici o rol precís", "persona": "una frase sobre el seu caràcter", "expertise": ["4 a 6 àrees de coneixement concretes"], "tasks": ["4 a 6 coses concretes que fa"], "safety": ["2 a 4 límits o precaucions específiques de l'àmbit"], "escalate": "quan cal derivar a una persona o servei", "starters": ["3 preguntes d'exemple"], "icon": "un únic emoji", "look": {"shape": "circle|tri|drop|hex|arch|square", "color": "#rrggbb", "accent": "#rrggbb", "eyes": "pill|round|happy|sleepy|wide|wink|heart", "mouth": "none|smile|open|smirk|tongue", "hat": "none|cap|beanie|tophat|crown|party|cowboy|wizard|chef|graduation|hardhat|antenna|flower", "glasses": "none|round|square|shades|monocle|visor", "accessory": "none|bowtie|tie|scarf|stethoscope|headphones|mustache|blush|badge|cape"}, "sector": "un de: educacio, salut, legal, oficis, negoci, hostaleria, tecnologia, vida, public, industria"}
 Sigues específic i realista. Escriu en català."""
 
 
@@ -159,6 +162,7 @@ def normalise_spec(raw: Dict[str, Any]) -> Dict[str, Any]:
         "expertise": as_list(raw["expertise"]), "tasks": as_list(raw["tasks"]),
         "starters": as_list(raw.get("starters", [])), "safety": as_list(raw.get("safety", [])),
         "escalate": str(raw.get("escalate", "")).strip()[:400],
+        "look": raw.get("look") if isinstance(raw.get("look"), dict) else None,
     }
 
 
@@ -170,15 +174,19 @@ async def generate(description: str) -> Dict[str, Any]:
     if len(description) < 8:
         raise CatalogError("Describe the Dot with a bit more detail.")
     text, ok = "", True
-    async for event in provider_service.stream_chat_completion(
-        model=storage_service.get_settings().get("default_model") or settings.DEFAULT_MODEL,
-        messages=[{"role": "user", "content": description[:2000]}],
-        system_prompt=GENERATOR_SYSTEM,
-    ):
-        if event["type"] == "content.delta":
-            text += event["delta"]
-        elif event["type"] == "turn.completed":
-            ok = event.get("ok", True)
+    channel_token = current_channel.set("generate")
+    try:
+        async for event in provider_service.stream_chat_completion(
+            model=storage_service.get_settings().get("default_model") or settings.DEFAULT_MODEL,
+            messages=[{"role": "user", "content": description[:2000]}],
+            system_prompt=GENERATOR_SYSTEM,
+        ):
+            if event["type"] == "content.delta":
+                text += event["delta"]
+            elif event["type"] == "turn.completed":
+                ok = event.get("ok", True)
+    finally:
+        current_channel.reset(channel_token)
     if not ok or not text.strip():
         raise CatalogError("The model is not available right now.")
     spec = normalise_spec(_extract_json(text))

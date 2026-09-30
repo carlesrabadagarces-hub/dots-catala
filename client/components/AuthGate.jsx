@@ -1,7 +1,8 @@
 'use client';
 
+import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
-import { getAuthStatus, oauthStartUrl, loginWithToken, logout } from '../lib/api';
+import { getAuthStatus, oauthStartUrl, loginWithToken, loginWithPassword, logout } from '../lib/api';
 
 /* Flat mascots, one silhouette each, two small vertical eyes. */
 const SHAPES = {
@@ -64,6 +65,22 @@ function Login({ providers, error }) {
   const [token, setToken] = useState('');
   const [localError, setLocalError] = useState('');
   const none = !providers.google && !providers.apple;
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [busy, setBusy] = useState(false);
+
+  async function submitPassword(e) {
+    e.preventDefault();
+    setLocalError('');
+    setBusy(true);
+    try {
+      await loginWithPassword(username.trim(), password);
+      window.location.reload();
+    } catch (err) {
+      setLocalError(err.message);
+      setBusy(false);
+    }
+  }
 
   async function submitToken(e) {
     e.preventDefault();
@@ -109,6 +126,37 @@ function Login({ providers, error }) {
           <p className="mt-4 max-w-xs text-sm text-neutral-500">L&apos;inici de sessió no està configurat en aquest servidor.</p>
         )}
 
+        {(providers.password || providers.admin) && (
+          <form onSubmit={submitPassword} className="mt-8 flex w-full max-w-xs flex-col gap-2">
+            <label htmlFor="sd-user" className="font-mono text-[11px] uppercase tracking-widest text-neutral-500">Entra amb contrasenya</label>
+            <input
+              id="sd-user"
+              type="text"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              placeholder="Nom (o admin)"
+              autoComplete="username"
+              className="rounded-full border border-neutral-300 bg-white px-4 py-2.5 text-sm outline-none focus:border-black"
+            />
+            <div className="flex gap-2">
+              <input
+                id="sd-pass"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Contrasenya"
+                autoComplete="current-password"
+                aria-label="Contrasenya"
+                className="min-w-0 flex-1 rounded-full border border-neutral-300 bg-white px-4 py-2.5 text-sm outline-none focus:border-black"
+              />
+              <button type="submit" disabled={busy || !password} className="rounded-full bg-black px-5 text-sm font-semibold text-white disabled:opacity-40">Entra</button>
+            </div>
+            {providers.dev_hint && (
+              <p className="text-center font-mono text-[11px] text-neutral-400">Mode prova: qualsevol nom + 123456 · admin + admin</p>
+            )}
+          </form>
+        )}
+
         {providers.local && (
           <form onSubmit={submitToken} className="mt-8 flex w-full max-w-xs flex-col gap-2">
             <label htmlFor="sd-token" className="font-mono text-[11px] uppercase tracking-widest text-neutral-500">
@@ -132,7 +180,7 @@ function Login({ providers, error }) {
   );
 }
 
-export default function AuthGate({ children }) {
+export default function AuthGate({ children, requireAdmin = false }) {
   const [state, setState] = useState({ loading: true });
   const [error, setError] = useState('');
 
@@ -164,10 +212,22 @@ export default function AuthGate({ children }) {
   }
 
   const user = state.user || {};
+  const isAdmin = user.role === 'admin' || user.role === 'owner';
+  if (requireAdmin && !isAdmin) {
+    return (
+      <div className="fixed inset-0 z-50 flex flex-col items-center justify-center gap-4 bg-white p-6 text-center text-neutral-700">
+        <p>Aquesta zona és només per a administradors.</p>
+        <Link href="/" className="rounded-full bg-black px-5 py-2.5 text-sm font-semibold text-white">Torna a l&apos;app</Link>
+      </div>
+    );
+  }
   const label = user.name || user.email || (user.role === 'owner' ? 'Propietari' : 'Compte');
   return (
     <>
       {children}
+      {user.role === 'admin' && !requireAdmin && (
+        <a href="/admin" className="fixed right-3 top-12 z-40 rounded-full bg-white px-3 py-1 text-xs font-semibold text-black shadow">Panell d&apos;admin</a>
+      )}
       {user.role !== 'owner' && (
         <div className="fixed right-3 top-3 z-40 flex items-center gap-2 rounded-full border border-white/10 bg-black/70 py-1 pl-1 pr-3 text-xs text-white backdrop-blur">
           {user.picture ? (

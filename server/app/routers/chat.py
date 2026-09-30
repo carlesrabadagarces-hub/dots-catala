@@ -7,6 +7,7 @@ from sse_starlette.sse import EventSourceResponse
 from typing import List, Optional
 
 from app.schemas.contracts import TurnRequest, Message
+from app.services.context import current_bot as current_bot_ctx
 from app.services.storage_service import storage_service
 from app.services.provider_service import provider_service
 from app.services.action_gateway import (
@@ -73,6 +74,7 @@ async def stream_turn(thread_id: str, model: Optional[str] = Query(None)):
 
 
     async def event_generator():
+        current_bot_ctx.set(thread_id)
         bot_msg_id = f"msg-{uuid.uuid4().hex[:6]}"
         accumulated_text = ""
         tool_context = ""

@@ -7,6 +7,7 @@ from pydantic import BaseModel, Field
 from app.config import settings
 from app.services.auth_service import auth_service
 from app.services.context import current_owner
+from app.services import password_login
 from app.services.oauth_service import BINDING_COOKIE, OAuthError, oauth_service
 from app.services.storage_service import storage_service
 from app.services.user_service import user_service
@@ -36,7 +37,8 @@ def _base(request: Request) -> str:
 
 
 def _providers():
-    return {**oauth_service.enabled(), "local": oauth_service.local_login_allowed()}
+    return {**oauth_service.enabled(), **password_login.enabled(), "local": oauth_service.local_login_allowed(),
+            "dev_hint": password_login.dev_mode() and not settings.TEST_MEMBER_PASSWORD and not settings.ADMIN_PASSWORD}
 
 
 @router.get("/status")
@@ -66,6 +68,37 @@ async def login(credentials: LoginRequest, request: Request, response: Response)
         raise _authentication_error()
     auth_service.set_session_cookie(response, secure=request.url.scheme == "https")
     return _session_payload(auth_service.user)
+
+
+class PasswordLogin(BaseModel):
+    username: str = Field(default="", max_length=60)
+    password: str = Field(min_length=1, max_length=200)
+
+
+@router.post("/login/password")
+async def login_password(body: PasswordLogin, request: Request, response: Response):
+    key = request.client.host if request.client else "?"
+    if password_login.limiter.blocked(key):
+        raise HTTPException(status_code=429, detail="Massa intents. Espera un minut.")
+    kind = password_login.check(body.username, body.password)
+    if not kind:
+        password_login.limiter.fail(key)
+        raise HTTPException(status_code=401, detail="Usuari o contrasenya incorrectes.")
+    password_login.limiter.clear(key)
+    if kind == "admin":
+        user = user_service.upsert_social("admin", "admin", "", "Administrador", role="admin")
+    else:
+        who = password_login.slug(body.username)
+        user = user_service.upsert_social("test", who, "", body.username.strip() or "Provador")
+    if user["disabled"]:
+        raise HTTPException(status_code=403, detail="Compte suspès.")
+    token = current_owner.set(user["id"])
+    try:
+        storage_service.seed_owner()
+    finally:
+        current_owner.reset(token)
+    auth_service.set_session_cookie(response, secure=request.url.scheme == "https", user_id=user["id"])
+    return _session_payload(user)
 
 
 @router.post("/logout")
@@ -101,8 +134,15 @@ async def _finish(provider: str, request: Request, code: str, state: str, apple_
             provider, code, state, request.cookies.get(BINDING_COOKIE), _base(request), secure, apple_user)
     except OAuthError as exc:
         return _fail(str(exc))
+    admins = {e.strip().lower() for e in settings.ADMIN_EMAILS.split(",") if e.strip()}
+    is_admin = identity["email_verified"] and identity["email"].lower() in admins
     user = user_service.upsert_social(provider, identity["sub"], identity["email"], identity["name"],
-                                      identity["picture"], identity["email_verified"])
+                                      identity["picture"], identity["email_verified"],
+                                      role="admin" if is_admin else "member")
+    if is_admin and user["role"] != "admin":
+        user = user_service.set_role(user["id"], "admin")
+    if user["disabled"]:
+        return _fail("Compte suspès.")
     token = current_owner.set(user["id"])
     try:
         storage_service.seed_owner()

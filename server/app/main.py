@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
 from app.config import settings
-from app.routers import auth, bots, models, chat, approvals, upload, settings as settings_router, connectors, audit, computers, whatsapp, catalog
+from app.routers import auth, bots, models, chat, approvals, upload, settings as settings_router, connectors, audit, computers, whatsapp, catalog, admin
 from app.services.auth_service import auth_service
 from app.services.context import current_owner
 from app.services.computer_provider import computer_provider
@@ -29,6 +29,7 @@ PUBLIC_API_PATHS = {
     "/api/v1/auth/status",
     "/api/v1/auth/session",
     "/api/v1/auth/login",
+    "/api/v1/auth/login/password",
     "/api/v1/auth/logout",
 }
 PUBLIC_API_PREFIXES = ("/api/v1/whatsapp/webhook/", "/api/v1/auth/oauth/")
@@ -62,6 +63,8 @@ async def require_authentication(request: Request, call_next):
             status_code=401,
             headers={"WWW-Authenticate": "Bearer", **cors_headers},
         )
+    if user.get("disabled"):
+        return JSONResponse({"detail": "Compte suspès."}, status_code=403)
     request.state.user = user
     token = current_owner.set(user["id"])
     try:
@@ -81,6 +84,7 @@ app.include_router(audit.router)
 app.include_router(computers.router)
 app.include_router(whatsapp.router)
 app.include_router(catalog.router)
+app.include_router(admin.router)
 
 
 @app.get("/api/v1/health")

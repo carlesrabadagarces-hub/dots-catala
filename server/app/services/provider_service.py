@@ -3,6 +3,9 @@ import asyncio
 import httpx
 from typing import AsyncGenerator, Dict, Any, List
 from app.config import settings
+import time
+from app.services import usage_service
+from app.services.context import current_bot, current_channel, current_owner
 from app.services.storage_service import storage_service
 
 class ModelProviderService:
@@ -10,6 +13,38 @@ class ModelProviderService:
         pass
 
     async def stream_chat_completion(
+        self,
+        model: str,
+        messages: List[Dict[str, str]],
+        system_prompt: str = ""
+    ) -> AsyncGenerator[Dict[str, Any], None]:
+        """Stream a completion, enforcing member quotas and recording usage."""
+        owner = current_owner.get()
+        blocked = usage_service.quota_status(owner)
+        if blocked:
+            yield {"type": "content.delta", "delta": blocked}
+            yield {"type": "turn.completed", "ok": False}
+            return
+        started = time.monotonic()
+        output, ok = "", True
+        try:
+            async for event in self._stream_raw(model, messages, system_prompt):
+                if event.get("type") == "content.delta":
+                    output += event.get("delta", "")
+                elif event.get("type") == "turn.completed":
+                    ok = event.get("ok", True)
+                yield event
+        except BaseException:
+            ok = False
+            raise
+        finally:
+            prompt_text = system_prompt + "".join(str(m.get("content", "")) for m in messages)
+            usage_service.record(
+                owner, current_bot.get(), model, current_channel.get(),
+                usage_service.estimate_tokens(prompt_text), usage_service.estimate_tokens(output),
+                int((time.monotonic() - started) * 1000), ok)
+
+    async def _stream_raw(
         self,
         model: str,
         messages: List[Dict[str, str]],

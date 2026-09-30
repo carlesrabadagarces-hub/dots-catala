@@ -16,7 +16,7 @@ from typing import Any, Dict, List, Optional
 
 import httpx
 
-from app.services.context import DEFAULT_OWNER_ID, current_owner
+from app.services.context import DEFAULT_OWNER_ID, current_bot, current_channel, current_owner
 from app.services.provider_service import provider_service
 from app.services.storage_service import storage_service
 
@@ -196,6 +196,8 @@ class WhatsAppService:
             return
         # Webhooks carry no session: act as the member who owns this connection.
         token = current_owner.set(connection.get("owner_id", DEFAULT_OWNER_ID))
+        ch_token = current_channel.set("whatsapp")
+        bot_token = current_bot.set(connection["bot_id"])
         try:
             for incoming in self.extract_texts(payload, connection["phone_number_id"]):
                 if self._is_duplicate(incoming["id"]):
@@ -207,6 +209,8 @@ class WhatsAppService:
                 if reply:
                     await self.send_text(connection_id, incoming["from"], reply)
         finally:
+            current_bot.reset(bot_token)
+            current_channel.reset(ch_token)
             current_owner.reset(token)
 
     async def generate_reply(self, connection: Dict[str, Any], sender: str, text: str) -> str:

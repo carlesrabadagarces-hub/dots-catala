@@ -371,3 +371,33 @@ export async function generateAgent(description) {
   if (!res.ok) throw new Error(payload.detail || 'No s\'ha pogut crear el Dot.');
   return payload;
 }
+
+export async function loginWithPassword(username, password) {
+  const res = await fetch(`${API_BASE_URL}/auth/login/password`, {
+    method: 'POST',
+    credentials: 'include',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ username, password }),
+  });
+  const payload = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(payload.detail || 'No s\'ha pogut entrar.');
+  return payload;
+}
+
+export async function fetchAdminStats(days = 30) {
+  const res = await fetch(`${API_BASE_URL}/admin/stats?days=${days}`, { credentials: 'include' });
+  if (!res.ok) throw new Error(res.status === 403 ? 'forbidden' : 'No s\'han pogut carregar les estadístiques.');
+  return res.json();
+}
+
+export async function updateAdminUser(userId, body) {
+  const res = await fetch(`${API_BASE_URL}/admin/users/${encodeURIComponent(userId)}`, {
+    method: 'PATCH',
+    credentials: 'include',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+  });
+  const payload = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(payload.detail || 'No s\'ha pogut actualitzar.');
+  return payload;
+}
