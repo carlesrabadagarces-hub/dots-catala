@@ -67,7 +67,6 @@ nav .links a{text-decoration:none}nav .links a:hover{color:var(--fg)}
 .reel[hidden]{display:none}
 .vwrap{position:relative;aspect-ratio:16/9;border-radius:32px;overflow:hidden;background:var(--bg2);box-shadow:0 40px 90px -40px var(--shadow)}
 .reel video{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;display:block}
-.reel video.off{visibility:hidden}
 /* marquee */
 .marq{overflow:hidden;border-block:1px solid var(--line);padding-block:18px;mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);-webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
 .track{display:flex;gap:14px;width:max-content;animation:mq 42s linear infinite}
@@ -167,7 +166,7 @@ footer{border-top:1px solid var(--line);padding-block:32px 48px;color:var(--mute
 <div class="navbar" id="navbar"><nav>
   <a class="logo" href="#"><i></i><span>super<b style="font-weight:700;letter-spacing:.02em">DOT</b>ats</span></a>
   <div class="links"><a href="#crea">Crea</a><a href="#demo">Demo</a><a href="#flux">Com funciona</a><a href="#funcions">Funcions</a></div>
-  <a class="btn sm" href="https://github.com/carlesrabadagarces-hub/dots-catala">GitHub</a>
+  <a class="btn sm" id="enter" href="http://127.0.0.1:3000">Entra</a>
 </nav></div>
 
 <header class="hero" id="hero">
@@ -227,10 +226,9 @@ footer{border-top:1px solid var(--line);padding-block:32px 48px;color:var(--mute
 <section class="reel" id="reel" hidden>
   <div class="eyebrow rv">Barcelona</div>
   <h2 class="rv">Una ciutat sencera de superDOTats</h2>
-  <p class="sub rv">Els Dots baixen per les parets de la Sagrada Família i envaeixen els carrers de Barcelona, amb la gent corrent al davant. Trenta segons de caos alegre i un final que deixa el nom ben gran.</p>
+  <p class="sub rv">Els Dots baixen per les parets de la Sagrada Família i envaeixen els carrers de Barcelona, amb la gent corrent al davant. Quaranta segons de caos alegre i un final que deixa el nom ben gran.</p>
   <div class="vwrap rv">
-    <video id="hv" muted playsinline preload="metadata"><source src="media/hero.mp4" type="video/mp4"><source src="https://d8j0ntlcm91z4.cloudfront.net/user_384dtuaRPjdFihDaUTg24SaMFeK/hf_20260930_082035_a07d11fe-d06c-4de3-b1cf-6587be19a013.mp4" type="video/mp4"></video>
-    <video id="hv2" muted playsinline preload="none"><source src="media/finale.mp4" type="video/mp4"><source src="https://d8j0ntlcm91z4.cloudfront.net/user_384dtuaRPjdFihDaUTg24SaMFeK/hf_20260930_083550_b3de2190-3aaf-4c2d-8a14-ae0652a52cc8.mp4" type="video/mp4"></video>
+    <video id="hv" muted loop playsinline preload="metadata" poster="media/poster.jpg"><source src="media/superdotats.mp4" type="video/mp4"><source src="media/superdotats.webm" type="video/webm"></video>
   </div>
 </section>
 
@@ -457,14 +455,9 @@ footer{border-top:1px solid var(--line);padding-block:32px 48px;color:var(--mute
     var hit=dots.filter(function(d){return Math.hypot(d.x-mouse.x,d.y-mouse.y)<d.r+6})[0];
     if(hit){say(hit.i,SOLO[Math.floor(Math.random()*SOLO.length)],2400);hit.vx+=(Math.random()-.5)*3;hit.vy-=2.5}});
   stage.addEventListener("keydown",function(e){if(e.key==="Enter"||e.key===" "){e.preventDefault();talk()}});
-  var hv2=document.getElementById("hv2"),cur2=false;
-  hv2.classList.add("off");
-  var showReel=function(){if(!reel.hidden)return;reel.hidden=false;var p=hv.play();if(p&&p.catch)p.catch(function(){})};
-  hv.addEventListener("loadeddata",showReel);hv.addEventListener("loadedmetadata",showReel);
-  function swap(to){var a=to?hv2:hv,b=to?hv:hv2;a.currentTime=0;a.classList.remove("off");var p=a.play();if(p&&p.catch)p.catch(function(){});b.classList.add("off");b.pause()}
-  hv.addEventListener("playing",function(){if(hv2.preload!=="auto"){hv2.preload="auto";hv2.load()}});
-  hv.addEventListener("ended",function(){if(hv2.readyState>=2)swap(true);else{hv.currentTime=0;hv.play()}});
-  hv2.addEventListener("ended",function(){swap(false)});
+  var showReel=function(){if(!reel.hidden)return;reel.hidden=false};
+  hv.addEventListener("loadeddata",showReel);hv.addEventListener("loadedmetadata",showReel);if(hv.readyState>=1)showReel();
+  new IntersectionObserver(function(es){es.forEach(function(en){if(en.isIntersecting){var p=hv.play();if(p&&p.catch)p.catch(function(){})}else hv.pause()})},{threshold:.4}).observe(hv);
   if(reduce){talk();draw()}else requestAnimationFrame(frame);
   /* dibuixa un orbe petit que segueix el ratolí i parpelleja */
   var minis=[];
