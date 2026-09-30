@@ -1,0 +1,316 @@
+<!doctype html>
+<html lang="ca">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>html,body{margin:0}</style>
+<title>Dots Català</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Instrument+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: hero amb text a l'esquerra i camp de Dots vius a la dreta; després demo de mòbil, passos, seguretat. */
+:root{
+  --bg:#0f1317; --panel:#171d23; --panel2:#1e262d; --fg:#f2f4f0; --muted:#98a3ab; --line:#2a343c;
+  --btn-bg:#f2f4f0; --btn-fg:#0f1317; --ink:#0f1317;
+  --c-coral:#ff6b57; --c-amber:#ffbe3b; --c-blue:#4c8dff; --c-green:#2fcf8a; --c-violet:#9b7bff; --c-teal:#24c6c0;
+  --chat-bg:#0d1418; --bubble-in:#1f2c34; --bubble-out:#005c4b;
+  --display:"Bricolage Grotesque","Helvetica Neue",Arial,sans-serif;
+  --body:"Instrument Sans","Helvetica Neue",Arial,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+  color-scheme:dark;
+}
+@media (prefers-color-scheme: light){:root:not([data-theme="dark"]){
+  --bg:#f6f7f3; --panel:#ffffff; --panel2:#eceee8; --fg:#12181d; --muted:#5b6770; --line:#dcdfd7;
+  --btn-bg:#12181d; --btn-fg:#f6f7f3; --chat-bg:#efeae2; --bubble-in:#ffffff; --bubble-out:#d9fdd3; color-scheme:light}}
+:root[data-theme="light"]{
+  --bg:#f6f7f3; --panel:#ffffff; --panel2:#eceee8; --fg:#12181d; --muted:#5b6770; --line:#dcdfd7;
+  --btn-bg:#12181d; --btn-fg:#f6f7f3; --chat-bg:#efeae2; --bubble-in:#ffffff; --bubble-out:#d9fdd3; color-scheme:light}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:16px;line-height:1.55;padding-inline:clamp(16px,4vw,48px);padding-block:0}
+*{box-sizing:border-box}
+.wrap{max-width:1160px;margin-inline:auto}
+a{color:inherit}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;margin:0;line-height:1.05;letter-spacing:-.02em}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+nav{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-block:20px;flex-wrap:wrap}
+.logo{font-family:var(--display);font-weight:800;font-size:20px;display:flex;align-items:center;gap:10px;text-decoration:none}
+.logo i{width:22px;height:22px;border-radius:50%;background:var(--c-coral);position:relative;display:inline-block}
+.logo i::after{content:"";position:absolute;right:-7px;bottom:-3px;width:12px;height:12px;border-radius:50%;background:var(--c-blue);border:2px solid var(--bg)}
+nav .links{display:flex;gap:22px;font-size:14px;color:var(--muted)}
+nav .links a{text-decoration:none}nav .links a:hover{color:var(--fg)}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:13px 22px;border-radius:999px;background:var(--btn-bg);color:var(--btn-fg);font-weight:600;text-decoration:none;border:0;font:600 15px var(--body);cursor:pointer}
+.btn.ghost{background:transparent;color:var(--fg);border:1px solid var(--line)}
+.btn:focus-visible,.chip:focus-visible,.tab:focus-visible,.stage:focus-visible{outline:2px solid var(--c-blue);outline-offset:3px}
+.hero{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:32px;align-items:center;padding-block:32px 56px}
+.hero h1{font-size:clamp(2.6rem,6.4vw,5rem);font-weight:800}
+.hero h1 em{font-style:normal;background:linear-gradient(90deg,var(--c-coral),var(--c-amber));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p.lead{font-size:1.15rem;color:var(--muted);max-width:34em;margin:20px 0 28px}
+.cta{display:flex;gap:12px;flex-wrap:wrap}
+.stage{position:relative;height:440px;border-radius:28px;background:var(--panel);border:1px solid var(--line);overflow:hidden;min-width:0}
+.stage canvas{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:pan-y}
+.stage .hint{position:absolute;left:16px;bottom:12px;font-family:var(--mono);font-size:11px;color:var(--muted);pointer-events:none}
+section{padding-block:64px;border-top:1px solid var(--line)}
+section h2{font-size:clamp(1.9rem,4vw,3rem);font-weight:700;margin:10px 0 14px}
+section p.sub{color:var(--muted);max-width:40em;margin:0 0 36px}
+.demo{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:40px;align-items:start}
+.tabs{display:flex;flex-direction:column;gap:10px;min-width:0}
+.tab{display:flex;gap:14px;align-items:center;text-align:left;background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:14px 16px;color:var(--fg);font:inherit;cursor:pointer}
+.tab .dot{flex:none;width:38px;height:38px;border-radius:50%}
+.tab b{font-family:var(--display);font-size:1.1rem;display:block}
+.tab span.r{color:var(--muted);font-size:14px}
+.tab[aria-selected="true"]{border-color:var(--fg);background:var(--panel2)}
+.phone{width:100%;max-width:340px;justify-self:center;border-radius:36px;border:1px solid var(--line);background:var(--panel);padding:10px}
+.screen{border-radius:28px;overflow:hidden;background:var(--chat-bg);display:flex;flex-direction:column;height:520px}
+.top{display:flex;align-items:center;gap:10px;padding:12px 14px;background:var(--panel2)}
+.top .dot{width:34px;height:34px;border-radius:50%;flex:none}
+.top b{display:block;line-height:1.1;font-size:15px}.top small{color:var(--muted);font-size:12px}
+.msgs{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:8px;font-size:14px}
+.m{max-width:82%;padding:8px 11px;border-radius:14px;background:var(--bubble-in);white-space:pre-wrap;overflow-wrap:anywhere}
+.m.out{align-self:flex-end;background:var(--bubble-out)}
+.m.typing{color:var(--muted);letter-spacing:.2em}
+.chips{display:flex;flex-wrap:wrap;gap:8px;padding:10px 12px 14px;background:var(--panel2)}
+.chip{border:1px solid var(--line);background:var(--panel);color:var(--fg);border-radius:999px;padding:7px 12px;font:500 13px var(--body);cursor:pointer}
+.chip:disabled{opacity:.4;cursor:default}
+.note{font-family:var(--mono);font-size:11px;color:var(--muted);margin-top:12px;text-align:center}
+.steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
+.step{background:var(--panel);border:1px solid var(--line);border-radius:22px;padding:24px;min-width:0}
+.step h3{font-size:1.35rem;margin:14px 0 8px}.step p{margin:0;color:var(--muted);font-size:15px}
+.step .bd{width:14px;height:14px;border-radius:50%;display:block}
+pre{margin:22px 0 0;background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:18px 20px;overflow-x:auto;font:400 13px/1.6 var(--mono);color:var(--fg)}
+pre .k{color:var(--c-amber)}pre .s{color:var(--c-green)}
+.sec{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px 40px}
+.sec div{display:flex;gap:14px;align-items:flex-start;padding-block:12px;border-bottom:1px solid var(--line)}
+.sec i{flex:none;margin-top:7px;width:10px;height:10px;border-radius:50%}
+.sec b{display:block;font-family:var(--display);font-size:1.05rem}.sec span{color:var(--muted);font-size:15px}
+footer{border-top:1px solid var(--line);padding-block:32px 48px;color:var(--muted);font-size:14px;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+@media (max-width:900px){
+  .hero{grid-template-columns:minmax(0,1fr)}.stage{height:380px}
+  .demo{grid-template-columns:minmax(0,1fr)}.steps{grid-template-columns:minmax(0,1fr)}.sec{grid-template-columns:minmax(0,1fr)}
+  nav .links{display:none}
+}
+</style>
+
+<div class="wrap">
+<nav>
+  <a class="logo" href="#"><i></i>Dots Català</a>
+  <div class="links"><a href="#demo">Demo</a><a href="#com">Com funciona</a><a href="#seguretat">Seguretat</a></div>
+  <a class="btn ghost" href="https://github.com/carlesrabadagarces-hub/dots-catala">GitHub</a>
+</nav>
+
+<header class="hero">
+  <div>
+    <div class="eyebrow">Codi obert · Autoallotjat · WhatsApp</div>
+    <h1 style="margin-top:14px">Els teus agents, <em>al teu WhatsApp.</em></h1>
+    <p class="lead">Crea tants agents com vulguis, cadascun amb el seu caràcter i el seu model. Connecta'ls al teu número i xerra-hi des del mòbil, com amb qualsevol contacte.</p>
+    <div class="cta">
+      <a class="btn" href="#com">Comença ara</a>
+      <a class="btn ghost" href="#demo">Prova la demo</a>
+    </div>
+  </div>
+  <div class="stage" id="stage" tabindex="0" aria-label="Sis Dots que conversen entre ells. Mou el ratolí o toca'ls per fer-los parlar.">
+    <canvas id="cv"></canvas>
+    <div class="hint">Toca un Dot i parlarà</div>
+  </div>
+</header>
+
+<section id="demo">
+  <div class="eyebrow">Demo</div>
+  <h2>Tria un Dot i escriu-li</h2>
+  <p class="sub">Cada agent té les seves instruccions. Aquí veus com et respondria al WhatsApp. Les respostes d'aquesta pàgina són d'exemple.</p>
+  <div class="demo">
+    <div class="tabs" role="tablist" id="tabs"></div>
+    <div>
+      <div class="phone"><div class="screen">
+        <div class="top"><span class="dot" id="pdot"></span><div><b id="pname"></b><small>en línia</small></div></div>
+        <div class="msgs" id="msgs" aria-live="polite"></div>
+        <div class="chips" id="chips"></div>
+      </div></div>
+      <div class="note">Simulació. L'agent real respon amb el model que triïs.</div>
+    </div>
+  </div>
+</section>
+
+<section id="com">
+  <div class="eyebrow">Com funciona</div>
+  <h2>Tres passos, un número</h2>
+  <p class="sub">Cada persona fa servir el seu propi número amb l'API oficial de WhatsApp Cloud. No cal cap servei de tercers.</p>
+  <div class="steps">
+    <div class="step"><span class="bd" style="background:var(--c-coral)"></span><h3>Crea l'agent</h3><p>Posa-li nom, instruccions i model a la interfície d'Open Dots. Pots tenir-ne els que vulguis.</p></div>
+    <div class="step"><span class="bd" style="background:var(--c-amber)"></span><h3>Registra la connexió</h3><p>Enllaça el número de WhatsApp Business amb l'agent i indica quins números poden escriure-li.</p></div>
+    <div class="step"><span class="bd" style="background:var(--c-blue)"></span><h3>Posa el webhook</h3><p>Enganxa l'adreça de la teva connexió a Meta. Envia un missatge i l'agent respon.</p></div>
+  </div>
+<pre><span class="k">POST</span> /api/v1/whatsapp/connections
+{
+  <span class="s">"bot_id"</span>: <span class="s">"bot-a1b2c3"</span>,
+  <span class="s">"phone_number_id"</span>: <span class="s">"1234567890"</span>,
+  <span class="s">"access_token"</span>: <span class="s">"…"</span>,
+  <span class="s">"app_secret"</span>: <span class="s">"…"</span>,
+  <span class="s">"allowed_numbers"</span>: [<span class="s">"+34600111222"</span>]
+}</pre>
+</section>
+
+<section id="seguretat">
+  <div class="eyebrow">Seguretat</div>
+  <h2>Només parla amb qui tu vulguis</h2>
+  <p class="sub">Les dades i les credencials es queden al teu servidor.</p>
+  <div class="sec">
+    <div><i style="background:var(--c-green)"></i><p style="margin:0"><b>Llista de números</b><span>Si un número no és a la llista, l'agent no respon. Per defecte no respon a ningú.</span></p></div>
+    <div><i style="background:var(--c-blue)"></i><p style="margin:0"><b>Signatura verificada</b><span>Cada missatge que arriba de Meta es comprova amb el teu app secret.</span></p></div>
+    <div><i style="background:var(--c-amber)"></i><p style="margin:0"><b>Credencials xifrades</b><span>El token i l'app secret es guarden xifrats i no es tornen a mostrar.</span></p></div>
+    <div><i style="background:var(--c-coral)"></i><p style="margin:0"><b>Sense accions ocultes</b><span>Les eines que demanen aprovació només funcionen des de la interfície web.</span></p></div>
+  </div>
+</section>
+
+<footer>
+  <span>Fork d'<a href="https://github.com/Anil-matcha/Open-Dots">Open-Dots</a> (llicència MIT). Projecte independent, sense relació amb OpenAI.</span>
+  <a href="https://github.com/carlesrabadagarces-hub/dots-catala">Codi a GitHub</a>
+</footer>
+</div>
+
+<script>
+(function(){
+  var AG=[
+    {n:"Aina",r:"Recepcionista",c:"--c-coral",p:[
+      ["Tinc hora dijous?","Dijous tens visita a les 10:30 amb la doctora Puig. T'envio un recordatori el dimecres al vespre."],
+      ["Puc canviar-la?","Tinc lliure divendres a les 9:00 o a les 12:15. Quina et va millor?"]]},
+    {n:"Pau",r:"Cuiner",c:"--c-amber",p:[
+      ["Sopar ràpid amb ous","Truita de patata en 15 minuts: 4 ous, 2 patates fines i ceba opcional. Vols la recepta pas a pas?"],
+      ["Sí, sense ceba","Talla les patates ben fines, fregeix-les 8 minuts, barreja-les amb els ous batuts i cuaja 3 minuts per banda."]]},
+    {n:"Laia",r:"Traductora",c:"--c-blue",p:[
+      ["Tradueix: bon profit","Anglès: enjoy your meal. Francès: bon appétit. Alemany: guten Appetit."],
+      ["I en italià?","Buon appetito. Igual que en castellà: buen provecho."]]},
+    {n:"Marc",r:"Comptable",c:"--c-green",p:[
+      ["Quin IVA porta un llibre?","A Espanya els llibres porten el 4% d'IVA. Confirma-ho amb el teu gestor per a casos especials."],
+      ["I un cafè al bar?","La restauració va al 10%."]]},
+    {n:"Núria",r:"Tutora",c:"--c-violet",p:[
+      ["Explica'm les fraccions","Una fracció és una part d'un tot. Si talles una pizza en 4 i te'n menges 1, has menjat 1/4."],
+      ["Posa'm un exercici","Quant és 1/2 + 1/4? Pista: converteix-les a quarts."]]},
+    {n:"Jordi",r:"Suport tècnic",c:"--c-teal",p:[
+      ["El wifi va lent","Reinicia el router 30 segons. Si continua igual, digues-me si va lent a tots els aparells o només a un."],
+      ["Només al portàtil","Oblida la xarxa al portàtil i torna-la a connectar. Si no, actualitza el controlador de wifi."]]}
+  ];
+  var css=function(v){return getComputedStyle(document.documentElement).getPropertyValue(v).trim()};
+
+  /* ---------- Demo de mòbil ---------- */
+  var tabs=document.getElementById("tabs"),msgs=document.getElementById("msgs"),chips=document.getElementById("chips"),
+      pdot=document.getElementById("pdot"),pname=document.getElementById("pname"),cur=0,busy=false,timer=null;
+  AG.forEach(function(a,i){
+    var b=document.createElement("button");b.className="tab";b.setAttribute("role","tab");
+    b.innerHTML='<span class="dot" style="background:var('+a.c+')"></span><span><b>'+a.n+'</b><span class="r">'+a.r+'</span></span>';
+    b.onclick=function(){select(i)};tabs.appendChild(b);
+  });
+  function add(t,cls){var d=document.createElement("div");d.className="m "+(cls||"");d.textContent=t;msgs.appendChild(d);msgs.scrollTop=msgs.scrollHeight;return d}
+  function select(i){
+    clearTimeout(timer);busy=false;cur=i;var a=AG[i];
+    [].forEach.call(tabs.children,function(t,j){t.setAttribute("aria-selected",j===i)});
+    pdot.style.background="var("+a.c+")";pname.textContent=a.n;msgs.innerHTML="";
+    add("Hola! Sóc "+a.n+", el teu agent de "+a.r.toLowerCase()+". En què et puc ajudar?");
+    chips.innerHTML="";
+    a.p.forEach(function(p,k){
+      var c=document.createElement("button");c.className="chip";c.textContent=p[0];
+      c.onclick=function(){ask(k,c)};chips.appendChild(c);
+    });
+  }
+  function ask(k,chip){
+    if(busy)return;busy=true;chip.disabled=true;var p=AG[cur].p[k];
+    add(p[0],"out");var t=add("···","typing");
+    timer=setTimeout(function(){t.remove();add(p[1]);busy=false},900);
+  }
+  select(0);
+
+  /* ---------- Camp de Dots ---------- */
+  var stage=document.getElementById("stage"),cv=document.getElementById("cv"),ctx=cv.getContext("2d");
+  var W=0,H=0,dpr=1,mouse={x:-999,y:-999,in:false},dots=[],bubbles=[],last=0,nextTalk=1200,colors={},tick=0;
+  var reduce=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var CHAT=[
+    [[0,"Algú té la reserva de dijous?"],[1,"Sí, a les 21:00 per a quatre."]],
+    [[2,"Com es diu \"bon profit\" en anglès?"],[4,"Enjoy your meal. Ho pots practicar?"]],
+    [[3,"Falta la factura del trimestre."],[0,"L'envio ara mateix."]],
+    [[5,"Reinicia el router i em dius."],[1,"Fet. Ja va més ràpid."]],
+    [[4,"Repassem les fraccions?"],[2,"Endavant, 1/2 + 1/4?"]]
+  ];
+  var SOLO=["Hola!","Què necessites?","Sóc aquí.","Parla'm per WhatsApp.","Tinc idees."];
+  function layout(){
+    var r=stage.getBoundingClientRect();W=r.width;H=r.height;dpr=Math.min(window.devicePixelRatio||1,2);
+    cv.width=W*dpr;cv.height=H*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);
+    if(!dots.length){
+      dots=AG.map(function(a,i){var R=W<500?30:38;
+        return {a:a,i:i,r:R+(i%3)*4,x:R+Math.random()*(W-2*R),y:R+Math.random()*(H-2*R),vx:(Math.random()-.5)*.7,vy:(Math.random()-.5)*.7,look:0}});
+    }
+    dots.forEach(function(d){d.x=Math.min(Math.max(d.x,d.r),W-d.r);d.y=Math.min(Math.max(d.y,d.r),H-d.r)});
+    if(reduce)draw();
+  }
+  function say(i,text,ms){bubbles=bubbles.filter(function(b){return b.d!==i});bubbles.push({d:i,t:text,life:ms||2600})}
+  function talk(){
+    var s=CHAT[Math.floor(Math.random()*CHAT.length)];
+    say(s[0][0],s[0][1],2800);
+    setTimeout(function(){say(s[1][0],s[1][1],2800)},1500);
+  }
+  function step(dt){
+    var k=dt/16.7;
+    dots.forEach(function(d,i){
+      for(var j=i+1;j<dots.length;j++){var o=dots[j],dx=o.x-d.x,dy=o.y-d.y,m=d.r+o.r+18,q=dx*dx+dy*dy;
+        if(q<m*m&&q>0.01){var l=Math.sqrt(q),f=(m-l)*.0009*k;d.vx-=dx/l*f*30;d.vy-=dy/l*f*30;o.vx+=dx/l*f*30;o.vy+=dy/l*f*30}}
+      if(mouse.in){var mx=d.x-mouse.x,my=d.y-mouse.y,md=Math.sqrt(mx*mx+my*my);
+        if(md<130&&md>1){d.vx+=mx/md*.09*k;d.vy+=my/md*.09*k}}
+      d.vx*=.995;d.vy*=.995;var sp=Math.hypot(d.vx,d.vy);if(sp<.25){d.vx+=(Math.random()-.5)*.05;d.vy+=(Math.random()-.5)*.05}if(sp>1.6){d.vx*=.96;d.vy*=.96}
+      d.x+=d.vx*k;d.y+=d.vy*k;
+      if(d.x<d.r){d.x=d.r;d.vx=Math.abs(d.vx)}if(d.x>W-d.r){d.x=W-d.r;d.vx=-Math.abs(d.vx)}
+      if(d.y<d.r+30){d.y=d.r+30;d.vy=Math.abs(d.vy)}if(d.y>H-d.r){d.y=H-d.r;d.vy=-Math.abs(d.vy)}
+    });
+    bubbles.forEach(function(b){b.life-=dt});bubbles=bubbles.filter(function(b){return b.life>0});
+  }
+  function rr(x,y,w,h,r){ctx.beginPath();ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);ctx.closePath()}
+  function draw(){
+    if(tick++%30===0){AG.forEach(function(a){colors[a.c]=css(a.c)});colors.line=css("--line");colors.bin=css("--bubble-in");colors.fg=css("--fg");colors.bg=css("--panel");colors.ink=css("--ink")}
+    ctx.clearRect(0,0,W,H);
+    var talking=bubbles.map(function(b){return b.d});
+    for(var i=0;i<dots.length;i++)for(var j=i+1;j<dots.length;j++){
+      var a=dots[i],b=dots[j],dist=Math.hypot(a.x-b.x,a.y-b.y),both=talking.indexOf(i)>-1&&talking.indexOf(j)>-1;
+      if(dist<190||both){ctx.globalAlpha=both?.9:(1-dist/190)*.6;ctx.strokeStyle=both?colors.fg:colors.line;ctx.lineWidth=both?2:1;
+        ctx.setLineDash(both?[]:[4,5]);ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke()}}
+    ctx.setLineDash([]);ctx.globalAlpha=1;
+    dots.forEach(function(d){
+      ctx.fillStyle=colors[d.a.c]||"#888";ctx.beginPath();ctx.arc(d.x,d.y,d.r,0,7);ctx.fill();
+      var tx=mouse.in?mouse.x:d.x+d.vx*20,ty=mouse.in?mouse.y:d.y+d.vy*20,ang=Math.atan2(ty-d.y,tx-d.x),
+          off=Math.min(4,Math.hypot(tx-d.x,ty-d.y)/20),ex=d.r*.32,ey=d.r*.12;
+      [-1,1].forEach(function(s){var cx=d.x+s*ex,cy=d.y-ey;
+        ctx.fillStyle="#fff";ctx.beginPath();ctx.arc(cx,cy,d.r*.2,0,7);ctx.fill();
+        ctx.fillStyle="#0f1317";ctx.beginPath();ctx.arc(cx+Math.cos(ang)*off*.9,cy+Math.sin(ang)*off*.9,d.r*.09,0,7);ctx.fill()});
+      var speaking=talking.indexOf(d.i)>-1;
+      ctx.strokeStyle="#0f1317";ctx.lineWidth=2.2;ctx.lineCap="round";ctx.beginPath();
+      if(speaking)ctx.ellipse(d.x,d.y+d.r*.36,d.r*.13,d.r*.09+((tick>>3)%2)*d.r*.05,0,0,7);
+      else ctx.arc(d.x,d.y+d.r*.18,d.r*.22,.2,Math.PI-.2);
+      ctx.stroke();
+      ctx.font="500 11px "+getComputedStyle(document.body).fontFamily;ctx.textAlign="center";ctx.fillStyle=colors.fg;ctx.globalAlpha=.7;
+      ctx.fillText(d.a.n,d.x,d.y+d.r+15);ctx.globalAlpha=1;
+    });
+    ctx.font="500 13px "+getComputedStyle(document.body).fontFamily;ctx.textAlign="left";
+    bubbles.forEach(function(b){
+      var d=dots[b.d],words=b.t.split(" "),lines=[],ln="";
+      words.forEach(function(w){var t=ln?ln+" "+w:w;if(ctx.measureText(t).width>150&&ln){lines.push(ln);ln=w}else ln=t});lines.push(ln);
+      var bw=Math.min(180,Math.max.apply(null,lines.map(function(l){return ctx.measureText(l).width}))+22),bh=lines.length*17+14,
+          bx=Math.min(Math.max(d.x-bw/2,8),W-bw-8),by=d.y-d.r-bh-10;if(by<6)by=d.y+d.r+22;
+      var fade=Math.min(1,b.life/300);ctx.globalAlpha=fade;
+      ctx.fillStyle=colors.fg;rr(bx,by,bw,bh,14);ctx.fill();
+      ctx.fillStyle=colors.bg;lines.forEach(function(l,i){ctx.fillText(l,bx+11,by+19+i*17)});ctx.globalAlpha=1;
+    });
+  }
+  function frame(t){
+    var dt=Math.min(t-last,50);last=t;
+    nextTalk-=dt;if(nextTalk<=0){talk();nextTalk=4200+Math.random()*1800}
+    step(dt);draw();requestAnimationFrame(frame);
+  }
+  layout();new ResizeObserver(layout).observe(stage);
+  function pos(e){var r=stage.getBoundingClientRect();mouse.x=e.clientX-r.left;mouse.y=e.clientY-r.top}
+  stage.addEventListener("pointermove",function(e){pos(e);mouse.in=true});
+  stage.addEventListener("pointerleave",function(){mouse.in=false});
+  stage.addEventListener("pointerdown",function(e){pos(e);
+    var hit=dots.filter(function(d){return Math.hypot(d.x-mouse.x,d.y-mouse.y)<d.r+6})[0];
+    if(hit){say(hit.i,SOLO[Math.floor(Math.random()*SOLO.length)],2200);hit.vx+=(Math.random()-.5)*3;hit.vy-=2}});
+  stage.addEventListener("keydown",function(e){if(e.key==="Enter"||e.key===" "){e.preventDefault();talk()}});
+  if(reduce){colors={};talk();draw()}else requestAnimationFrame(frame);
+})();
+</script>
+
+</html>
