@@ -16,6 +16,7 @@ from typing import Any, Dict, List, Optional
 
 import httpx
 
+from app.services import memory_service, routing_service
 from app.services.context import DEFAULT_OWNER_ID, current_bot, current_channel, current_owner
 from app.services.provider_service import provider_service
 from app.services.storage_service import storage_service
@@ -24,6 +25,7 @@ GRAPH_API_BASE = "https://graph.facebook.com/v21.0"
 WHATSAPP_MAX_CHARS = 4000
 HISTORY_LIMIT = 20
 SECRET_FIELDS = ("access_token", "app_secret")
+AUTO = "auto"  # connection mode: the Dot is chosen per message
 
 
 class WhatsAppError(RuntimeError):
@@ -94,13 +96,15 @@ class WhatsAppService:
         return next((c for c in self._load() if c["id"] == connection_id), None)
 
     def create(self, data: Dict[str, Any]) -> Dict[str, Any]:
-        bot_id = data["bot_id"]
-        if not any(b["id"] == bot_id for b in storage_service.get_bots()):
+        auto = bool(data.get("auto_route")) or data.get("bot_id") in (None, "", AUTO)
+        bot_id = AUTO if auto else data["bot_id"]
+        if not auto and not any(b["id"] == bot_id for b in storage_service.get_bots()):
             raise WhatsAppError("Unknown agent.")
         connection = {
             "id": f"wa-{uuid.uuid4().hex[:8]}",
             "owner_id": current_owner.get(),
             "bot_id": bot_id,
+            "auto_route": auto,
             "label": (data.get("label") or "WhatsApp").strip(),
             "phone_number_id": str(data["phone_number_id"]).strip(),
             "allowed_numbers": sorted({n for n in map(normalize_number, data.get("allowed_numbers", [])) if n}),
@@ -120,10 +124,14 @@ class WhatsAppService:
         for connection in connections:
             if connection["id"] != connection_id or not self._mine(connection):
                 continue
-            if "bot_id" in updates:
+            if updates.get("auto_route") or updates.get("bot_id") == AUTO:
+                connection["bot_id"] = AUTO
+                connection["auto_route"] = True
+            elif "bot_id" in updates:
                 if not any(b["id"] == updates["bot_id"] for b in storage_service.get_bots()):
                     raise WhatsAppError("Unknown agent.")
                 connection["bot_id"] = updates["bot_id"]
+                connection["auto_route"] = False
             for field in ("label", "phone_number_id", "enabled"):
                 if field in updates:
                     connection[field] = updates[field]
@@ -213,9 +221,98 @@ class WhatsAppService:
             current_channel.reset(ch_token)
             current_owner.reset(token)
 
+    WELCOME = (
+        "Hola! Sóc superDOTats. Escriu-me el teu dubte (una fuita, la renda, una recepta, una carta…) "
+        "i et poso amb el Dot adequat.\n"
+        "Recordo el que em diguis de tu (nom, ciutat, família) perquè no ho hagis de repetir. "
+        "/memoria ho mostra i /oblida ho esborra. /ajuda per veure les ordres."
+    )
+    HELP = (
+        "Ordres:\n- /dots: alguns Dots que et poden ajudar\n- /tria <nom>: parlar amb un Dot concret (p. ex. /tria fontaner)\n"
+        "- /auto: torno a triar-lo jo segons el que preguntis\n- /memoria: el que recordo de tu\n- /oblida: esborro tot el que sé de tu"
+    )
+
+    @staticmethod
+    def _find_spec(name: str) -> Optional[Dict[str, Any]]:
+        from app.services.catalog_data import CATALOG
+
+        needle = routing_service._strip(name.strip().lower())
+        if not needle:
+            return None
+        exact = [s for s in CATALOG if routing_service._strip(s["name"].lower()) == needle]
+        part = [s for s in CATALOG if needle in routing_service._strip(s["name"].lower())]
+        return (exact or part or [None])[0]
+
+    def _command(self, sender: str, text: str) -> Optional[str]:
+        """Handle /commands. Returns the reply, or None when the text is not a command."""
+        raw = text.strip()
+        if not raw.startswith("/"):
+            return None
+        cmd, _, arg = raw[1:].partition(" ")
+        cmd = cmd.lower()
+        if cmd in ("ajuda", "help", "ayuda", "start"):
+            return self.HELP
+        if cmd == "dots":
+            from app.services.catalog_data import CATALOG
+
+            sample = ["fontaner", "metge-capcalera", "assessor-fiscal", "professor-matematiques", "cuiner", "traductor",
+                      "jurista-generalista", "veterinari", "psicoleg", "creador-stickers"]
+            names = [f"{s['icon']} {s['name']}" for s in CATALOG if s["id"] in sample]
+            return "Alguns Dots que et poden ajudar:\n" + "\n".join(names) + f"\n…i {len(CATALOG) - len(names)} més. Escriu el dubte i el triaré jo, o fes /tria <nom>."
+        if cmd == "auto":
+            memory_service.set_dot(sender, None)
+            return "Fet. A partir d'ara triaré el Dot segons el que em preguntis."
+        if cmd in ("tria", "elige", "pick"):
+            spec = self._find_spec(arg)
+            if not spec:
+                return "No he trobat aquest Dot. Prova /dots per veure'n alguns."
+            memory_service.set_dot(sender, spec["id"])
+            return f"{spec['icon']} Ara et respon {spec['name']}. Digues-me el teu dubte. (/auto per tornar a la tria automàtica)"
+        if cmd in ("memoria", "memòria", "memory"):
+            facts = memory_service.list_facts(sender)
+            if not facts:
+                return "Encara no recordo res de tu. Pots dir-me «recorda que…» i ho anoto."
+            return "Això és el que recordo de tu:\n" + "\n".join(f"- {f}" for f in facts) + "\n/oblida ho esborra tot."
+        if cmd in ("oblida", "olvida", "forget"):
+            n = memory_service.forget(sender)
+            return "Ja he esborrat tot el que sabia de tu." if n else "No tenia res guardat de tu."
+        return None
+
+    def _resolve_bot(self, connection: Dict[str, Any], sender: str, text: str):
+        """The Dot that answers: the fixed one, or (auto mode) the best match for this message."""
+        if not connection.get("auto_route"):
+            bot = next((b for b in storage_service.get_bots() if b["id"] == connection["bot_id"]), None)
+            return bot, None
+        from app.config import settings
+        from app.services.catalog_service import build_prompt, get_spec
+
+        current = memory_service.get_dot(sender)
+        picked = routing_service.route(text, current)
+        spec = get_spec(picked["id"]) if picked else (get_spec(current) if current else None)
+        if not spec:
+            return None, None
+        memory_service.set_dot(sender, spec["id"])
+        model = storage_service.get_settings().get("default_model") or settings.DEFAULT_MODEL
+        bot = {"id": f"auto:{spec['id']}", "name": spec["name"], "model": model, "system_prompt": build_prompt(spec)}
+        current_bot.set(bot["id"])  # usage accounting sees the Dot that really answers
+        return bot, {"changed": spec["id"] != current, "icon": spec["icon"], "name": spec["name"]}
+
     async def generate_reply(self, connection: Dict[str, Any], sender: str, text: str) -> str:
-        bot = next((b for b in storage_service.get_bots() if b["id"] == connection["bot_id"]), None)
+        reply = self._command(sender, text)
+        if reply is not None:
+            return reply
+        first_time = not memory_service.list_facts(sender) and memory_service.get_dot(sender) is None
+        explicit = memory_service.EXPLICIT.match(text.strip())
+        facts = memory_service.extract_facts(text)
+        if facts:
+            memory_service.remember(sender, facts, "explicit" if explicit else "auto")
+        if explicit:
+            return "Anotat ✅ " + (facts[0] if facts else "") + " (/memoria per veure-ho, /oblida per esborrar-ho)"
+        bot, info = self._resolve_bot(connection, sender, text)
         if not bot:
+            if connection.get("auto_route"):
+                return (self.WELCOME if first_time else
+                        "Explica'm una mica més què necessites, per exemple: «tinc una fuita a la cisterna» o «com faig la declaració de la renda».")
             return ""
         thread_id = f"{connection['id']}:{sender}"
         now = datetime.now(timezone.utc).isoformat()
@@ -229,10 +326,12 @@ class WhatsAppService:
             for m in storage_service.get_messages(thread_id=thread_id)
             if m["sender"] in ("user", "bot")
         ][-HISTORY_LIMIT:]
+        memory = memory_service.prompt_block(sender)
         system_prompt = (
             f"Current Date & Time: {datetime.now().strftime('%A, %B %d, %Y at %I:%M %p')}.\n\n"
             f"{bot['system_prompt']}\n\n"
-            "You are replying over WhatsApp: keep answers short and use plain text."
+            + (f"{memory}\n\n" if memory else "")
+            + "You are replying over WhatsApp: keep answers short and use plain text."
         )
         reply = ""
         ok = True
@@ -250,6 +349,10 @@ class WhatsAppService:
             "sender": "bot", "text": reply, "created_at": datetime.now(timezone.utc).isoformat(),
             "model": bot["model"], "item_type": "assistant_text",
         })
+        if info and info["changed"]:
+            reply = f"{info['icon']} {info['name']}:\n{reply}"
+        if first_time and connection.get("auto_route"):
+            reply = f"{self.WELCOME}\n\n{reply}"
         return reply
 
     async def send_text(self, connection_id: str, to: str, text: str) -> None:

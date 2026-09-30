@@ -11,7 +11,8 @@ router = APIRouter(prefix="/api/v1/whatsapp", tags=["whatsapp"])
 
 
 class ConnectionCreate(BaseModel):
-    bot_id: str
+    bot_id: str = "auto"  # "auto": the Dot is chosen per message
+    auto_route: bool = False
     label: str = "WhatsApp"
     phone_number_id: str = Field(min_length=1)
     access_token: str = Field(min_length=1)
@@ -21,6 +22,7 @@ class ConnectionCreate(BaseModel):
 
 class ConnectionUpdate(BaseModel):
     bot_id: Optional[str] = None
+    auto_route: Optional[bool] = None
     label: Optional[str] = None
     phone_number_id: Optional[str] = None
     access_token: Optional[str] = None

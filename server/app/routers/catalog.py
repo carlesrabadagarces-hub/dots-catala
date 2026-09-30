@@ -1,10 +1,10 @@
 from typing import Optional
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Query
 from pydantic import BaseModel, Field
 from pydantic import ValidationError
 
-from app.services import catalog_service
+from app.services import catalog_service, routing_service
 from app.services.catalog_service import CatalogError
 
 router = APIRouter(prefix="/api/v1/catalog", tags=["catalog"])
@@ -22,6 +22,12 @@ async def sectors():
 @router.get("")
 async def list_catalog(sector: Optional[str] = None, q: str = ""):
     return catalog_service.list_catalog(sector, q)
+
+
+@router.get("/route")
+async def route(q: str = Query("", max_length=500)):
+    """Which Dots fit this question? Free and instant (no model call)."""
+    return routing_service.rank(q, limit=3)
 
 
 @router.post("/generate")

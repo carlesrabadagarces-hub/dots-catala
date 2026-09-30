@@ -114,6 +114,24 @@ SCHEMA_MIGRATIONS = {
         CREATE INDEX IF NOT EXISTS idx_usage_owner_time ON usage_events(owner_id, created_at);
         CREATE INDEX IF NOT EXISTS idx_usage_time ON usage_events(created_at);
     """,
+    5: """
+        CREATE TABLE IF NOT EXISTS contact_memory (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            owner_id TEXT NOT NULL,
+            contact TEXT NOT NULL,
+            fact TEXT NOT NULL,
+            source TEXT NOT NULL DEFAULT 'auto',
+            created_at TEXT NOT NULL
+        );
+        CREATE INDEX IF NOT EXISTS idx_contact_memory ON contact_memory(owner_id, contact);
+        CREATE TABLE IF NOT EXISTS contact_state (
+            owner_id TEXT NOT NULL,
+            contact TEXT NOT NULL,
+            dot_id TEXT,
+            updated_at TEXT NOT NULL,
+            PRIMARY KEY (owner_id, contact)
+        );
+    """,
 }
 
 OWNER_TABLES = (

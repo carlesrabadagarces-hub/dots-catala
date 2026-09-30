@@ -48,6 +48,17 @@ def quota_status(owner_id: str) -> Optional[str]:
     return None
 
 
+def _auto_name(bot_id: str) -> str:
+    """Dots picked by the automatic router are not stored bots; show the catalogue name."""
+    if bot_id.startswith("auto:"):
+        from app.services.catalog_service import get_spec
+
+        spec = get_spec(bot_id[5:])
+        if spec:
+            return spec["name"]
+    return "(esborrat)"
+
+
 def cost(tokens_in: int, tokens_out: int) -> float:
     return round(tokens_in / 1e6 * settings.TOKEN_PRICE_IN_PER_M + tokens_out / 1e6 * settings.TOKEN_PRICE_OUT_PER_M, 4)
 
@@ -135,7 +146,7 @@ def stats(days: int = 30) -> Dict[str, Any]:
         })
     user_rows.sort(key=lambda r: r["tokens"], reverse=True)
     top_dots = sorted(
-        ({"id": k, "name": bots.get(k, {}).get("name", "(esborrat)"),
+        ({"id": k, "name": bots.get(k, {}).get("name") or _auto_name(k),
           "owner": names.get(bots.get(k, {}).get("owner", ""), "?"), **v} for k, v in by_dot.items()),
         key=lambda r: r["tokens"], reverse=True)[:10]
     return {
