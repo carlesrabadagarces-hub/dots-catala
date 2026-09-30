@@ -132,7 +132,9 @@ pre .k{color:var(--c-amber)}pre .s{color:var(--c-green)}
 .tile h3{font-size:1.6rem;margin-bottom:10px;position:relative}.tile p{color:var(--muted);position:relative;max-width:30em}
 .t1{grid-column:span 4}.t2{grid-column:span 2}.t3{grid-column:span 2}.t4{grid-column:span 2}.t5{grid-column:span 2}.t6{grid-column:span 3}.t7{grid-column:span 3}
 /* cta */
-.final{text-align:center;padding-block:110px}
+.final{text-align:center;padding-block:40px 110px}
+#fcv{width:100%;height:min(56vh,440px);min-height:320px;display:block;cursor:pointer;touch-action:manipulation}
+.hintf{font-family:var(--mono);font-size:12px;color:var(--muted);margin:-6px 0 28px}
 .final h2{font-size:clamp(2.4rem,6.5vw,4.8rem)}
 .final .cta{justify-content:center;margin-top:30px}
 footer{border-top:1px solid var(--line);padding-block:32px 48px;color:var(--muted);font-size:14px;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
@@ -155,7 +157,7 @@ footer{border-top:1px solid var(--line);padding-block:32px 48px;color:var(--mute
 
 <div class="wrap">
 <div class="navbar" id="navbar"><nav>
-  <a class="logo" href="#"><i></i>super<b style="font-weight:700;letter-spacing:.02em">DOT</b>ats</a>
+  <a class="logo" href="#"><i></i><span>super<b style="font-weight:700;letter-spacing:.02em">DOT</b>ats</span></a>
   <div class="links"><a href="#crea">Crea</a><a href="#demo">Demo</a><a href="#flux">Com funciona</a><a href="#funcions">Funcions</a></div>
   <a class="btn sm" href="https://github.com/carlesrabadagarces-hub/dots-catala">GitHub</a>
 </nav></div>
@@ -250,9 +252,11 @@ footer{border-top:1px solid var(--line);padding-block:32px 48px;color:var(--mute
   </div>
 </section>
 
-<section class="final">
-  <h2 class="rv">Posa un Dot a cada conversa.</h2>
-  <div class="cta rv"><a class="btn" href="https://github.com/carlesrabadagarces-hub/dots-catala">Obre el projecte a GitHub</a><a class="btn ghost" href="#crea">Torna a dissenyar-ne un</a></div>
+<section class="final" id="final">
+  <canvas id="fcv" aria-label="Un Dot salta al mig de la pantalla i et fa l'ullet. Clica'l."></canvas>
+  <div class="hintf">Clica-li l'ull</div>
+  <h2 class="rv">Posa un superDOTat a cada conversa.</h2>
+  <div class="cta rv"><a class="btn" href="https://github.com/carlesrabadagarces-hub/dots-catala">Obre el projecte a GitHub →</a><a class="btn ghost" href="#crea">Torna a dissenyar-ne un</a></div>
 </section>
 
 <footer>
@@ -326,8 +330,13 @@ footer{border-top:1px solid var(--line);padding-block:32px 48px;color:var(--mute
     c.restore();
     var ink=o.ink||"#14171c",ey=(k==="tri"?r*.18:k==="drop"?r*.05:-r*.02)+ly*r*.09,ex=r*.27,ew=r*.085*(1+lv*.3),eh=(o.blink?r*.03:r*.19*(1+lv*.25));
     c.fillStyle=ink;
-    [-1,1].forEach(function(s){var px=s*ex+lx*r*.12;c.beginPath();
-      if(c.roundRect)c.roundRect(px-ew,ey-eh,ew*2,eh*2,ew);else c.rect(px-ew,ey-eh,ew*2,eh*2);c.fill()});
+    var wk=o.wink||0;
+    [-1,1].forEach(function(s){var px=s*ex+lx*r*.12,h=eh;
+      if(s===-1&&wk>.02){
+        if(wk>.5){c.strokeStyle=ink;c.lineWidth=ew*1.5;c.lineCap="round";c.beginPath();c.arc(px,ey+ew*2.2,ew*3.1,Math.PI*1.16,Math.PI*1.84);c.stroke();return}
+        h=eh*(1-wk*2)+r*.03}
+      c.beginPath();
+      if(c.roundRect)c.roundRect(px-ew,ey-h,ew*2,h*2,ew);else c.rect(px-ew,ey-h,ew*2,h*2);c.fill()});
     c.restore();
   }
   function hiDPI(cv,w,h){var d=Math.min(window.devicePixelRatio||1,2);cv.width=w*d;cv.height=h*d;var c=cv.getContext("2d");c.setTransform(d,0,0,d,0,0);return c}
@@ -535,6 +544,56 @@ footer{border-top:1px solid var(--line);padding-block:32px 48px;color:var(--mute
   [].forEach.call(document.querySelectorAll(".rv"),function(el){io.observe(el)});
   var nb=document.getElementById("navbar");
   window.addEventListener("scroll",function(){nb.classList.toggle("stuck",scrollY>10)},{passive:true});
+
+
+  /* ---------- Final: el Dot salta, aterra i fa l'ullet ---------- */
+  (function(){
+    var fc=document.getElementById("fcv"),c=null,FW=0,FH=0,dot=null,parts=[],running=false,started=false,tk=0,last=0,cols={};
+    function fl(){var r=fc.getBoundingClientRect();FW=r.width;FH=r.height;c=hiDPI(fc,FW,FH);if(dot){dot.r=Math.min(78,FH*.2);dot.gy=FH-dot.r*1.5}}
+    function init(){dot={x:0,y:-200,vy:0,sq:0,wink:0,winkT:-1,hop:0,r:70,gy:0,settled:false,at:0};fl();dot.y=-dot.r*2.5}
+    function burst(){
+      for(var i=0;i<30;i++){var a=Math.random()*Math.PI*2,sp=3+Math.random()*7;
+        parts.push({x:dot.x,y:dot.y-dot.r*.1,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp-5,r:5+Math.random()*7,rot:Math.random()*6,vr:(Math.random()-.5)*.3,life:1,k:CK[i%6],c:COLS[i%6]})}
+    }
+    function doWink(){dot.winkT=0}
+    function jump(v){dot.vy=-(v||16);dot.settled=false;dot.hop=1}
+    function step(dt){
+      var k=dt/16.7;dot.x=FW/2;
+      if(!dot.settled){dot.vy+=.95*k;dot.y+=dot.vy*k;
+        if(dot.y>=dot.gy){dot.y=dot.gy;if(Math.abs(dot.vy)>3.2){dot.sq=Math.min(.3,Math.abs(dot.vy)*.02);dot.vy=-dot.vy*.5}else{dot.vy=0;dot.settled=true;dot.sq=.18;dot.at=tk;if(!dot.hop)dot.winkT=-40;dot.hop=0}}
+        else dot.sq=Math.max(-.16,-Math.abs(dot.vy)*.011)}
+      else dot.sq*=.86;
+      if(dot.winkT>=0){dot.winkT+=k/38;if(dot.winkT>=1){dot.winkT=-1;dot.wink=0}else dot.wink=Math.sin(Math.PI*dot.winkT)}
+      else if(dot.winkT<-1){dot.winkT+=k;if(dot.winkT>=-1)dot.winkT=0}
+      else if(dot.settled&&tk-dot.at>260&&tk%260===0)doWink();
+      parts.forEach(function(p){p.vy+=.35*k;p.x+=p.vx*k;p.y+=p.vy*k;p.rot+=p.vr*k;p.life-=.012*k});parts=parts.filter(function(p){return p.life>0&&p.y<FH+30});
+    }
+    function star(x,y,r,a){c.save();c.translate(x,y);c.rotate(Math.PI/4*a);c.fillStyle=cols.amber;c.beginPath();
+      for(var i=0;i<8;i++){var rr=i%2?r*.28:r,t=i*Math.PI/4;c.lineTo(Math.cos(t)*rr,Math.sin(t)*rr)}c.closePath();c.fill();c.restore()}
+    function draw(){
+      if(tk%40===0){["--c-coral","--c-amber","--c-blue","--c-green","--c-violet","--c-teal"].forEach(function(v){cols[v]=css(v)});cols.amber=cols["--c-amber"];cols.fg=css("--fg")}
+      c.clearRect(0,0,FW,FH);
+      var sh=Math.max(.25,1-(dot.gy-dot.y)/(FH*.9));
+      c.fillStyle="rgba(0,0,0,"+(.16*sh)+")";c.beginPath();c.ellipse(dot.x,dot.gy+dot.r*1.04,dot.r*1.05*sh,dot.r*.17*sh,0,0,7);c.fill();
+      parts.forEach(function(p){c.save();c.globalAlpha=Math.max(0,p.life);c.translate(p.x,p.y);c.rotate(p.rot);c.fillStyle=cols[p.c]||"#888";shape(c,p.k,p.r);c.fill();c.restore()});
+      var mx=gmx===null?0:gmx-(fc.getBoundingClientRect().left+dot.x),my=gmy===null?0:gmy-(fc.getBoundingClientRect().top+dot.y),l=Math.hypot(mx,my)||1,e=Math.min(1,l/300);
+      orb(c,dot.x,dot.y,dot.r,cols["--c-coral"]||"#ff4d7d",{kind:"circle",t:tk*16.7,seed:1.3,squash:dot.sq,lx:mx/l*e,ly:my/l*e,wink:dot.wink,level:dot.wink*.5});
+      if(dot.wink>.35){var sx=dot.x-dot.r*.62,sy=dot.y-dot.r*.55,sc=dot.wink;star(sx,sy,dot.r*.3*sc,tk*.02);star(sx-dot.r*.28,sy+dot.r*.14,dot.r*.14*sc,-tk*.03)}
+    }
+    function frame(t){
+      if(!running)return;var dt=Math.min(t-last,50);last=t;tk++;step(dt);draw();requestAnimationFrame(frame)}
+    function run(){if(!running){running=true;last=performance.now();requestAnimationFrame(frame)}}
+    fc.addEventListener("pointerdown",function(e){
+      if(!dot||!dot.settled&&dot.y<0)return;
+      var r=fc.getBoundingClientRect(),x=e.clientX-r.left,y=e.clientY-r.top;
+      if(Math.hypot(x-dot.x,y-dot.y)<dot.r*1.5){doWink();burst();if(dot.settled)jump(14)}});
+    fc.addEventListener("pointermove",function(e){fc.style.cursor=dot&&Math.hypot(e.clientX-fc.getBoundingClientRect().left-dot.x,e.clientY-fc.getBoundingClientRect().top-dot.y)<dot.r*1.5?"pointer":"default"});
+    new IntersectionObserver(function(es){es.forEach(function(en){
+      if(en.isIntersecting){if(!started){started=true;init();
+        if(reduce){dot.y=dot.gy;dot.settled=true;dot.wink=1;draw()}else{run();}}
+        else if(!reduce)run()}else running=false})},{threshold:.35}).observe(fc);
+    new ResizeObserver(function(){if(started){fl();if(reduce)draw()}}).observe(fc);
+  })();
 
   if(reduce){drawMinis(0);packets(0)}else{requestAnimationFrame(drawMinis);requestAnimationFrame(packets)}
 })();
