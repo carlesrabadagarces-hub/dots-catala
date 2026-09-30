@@ -349,7 +349,7 @@
     stage.appendChild(msg);
     function show(i,manual){
       if(i===cur)return;cur=i;var c=SC[i];
-      Object.keys(els).forEach(function(k){var e=els[k];if(+k===i){e.classList.remove("on");void e.offsetWidth;e.classList.add("on");if(e.play&&!reduce)try{e.currentTime=0;e.play()}catch(x){}}else{e.classList.remove("on");if(e.pause)e.pause()}});
+      Object.keys(els).forEach(function(k){var e=els[k];if(+k===i){e.classList.remove("on");void e.offsetWidth;e.classList.add("on");if(e.play&&!reduce){e.currentTime=0;var pr=e.play();if(pr&&pr.catch)pr.catch(function(){})}}else{e.classList.remove("on");if(e.pause)e.pause()}});
       bt.forEach(function(b,j){b.setAttribute("aria-selected",j===i?"true":"false")});
       msg.innerHTML='<div class="q"></div><div class="a"></div>';msg.firstChild.textContent=c.q;msg.lastChild.textContent=c.a;
       if(manual){clearInterval(timer);timer=null}
@@ -360,7 +360,33 @@
     var seen=false;new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting&&!seen){seen=true;if(!reduce&&!timer)timer=setInterval(function(){show((cur+1)%SC.length)},6500)}})},{threshold:.4}).observe(stage);
   })();
 
-  (function(){var v=$("rv");if(!v||reduce)return;new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){var p=v.play();if(p&&p.catch)p.catch(function(){})}else v.pause()})},{threshold:.35}).observe(v)})();
+  /* Els vídeos es reprodueixen sols i en bucle, però només mentre es veuen: així no
+     gasten bateria ni dades de fons. El navegador només ho permet si són muts.
+     Si algú té activada la reducció de moviment, no n'arrenca cap. */
+  (function(){
+    // El vídeo de la secció "Al teu dia" no hi entra: aquella secció ja decideix
+    // quina escena toca i quan s'ha de reproduir.
+    var vids=[].slice.call(document.querySelectorAll("video")).filter(function(v){return !v.closest("#lstage")});
+    if(!vids.length)return;
+    var play=function(v){var p=v.play();if(p&&p.catch)p.catch(function(){})};
+    if(reduce){vids.forEach(function(v){v.autoplay=false;v.pause()});return}
+    var io=new IntersectionObserver(function(es){es.forEach(function(e){
+      if(e.isIntersecting)play(e.target);else e.target.pause();
+    })},{threshold:.25});
+    vids.forEach(function(v){
+      v.muted=true;                                   // sense això el navegador no deixa arrencar
+      io.observe(v);
+      v.addEventListener("ended",function(){v.currentTime=0;play(v)});   // per si el bucle falla
+    });
+    // Tornar a la pestanya reprèn el que es veia
+    document.addEventListener("visibilitychange",function(){
+      if(document.hidden)vids.forEach(function(v){v.pause()});
+      else vids.forEach(function(v){
+        var r=v.getBoundingClientRect();
+        if(r.top<innerHeight&&r.bottom>0)play(v);
+      });
+    });
+  })();
 
   /* ---------- Carrer: Dots que passegen i activitat en directe ---------- */
   (function(){

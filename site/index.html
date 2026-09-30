@@ -337,7 +337,7 @@ section[id]{scroll-margin-top:84px}
   <div class="eyebrow rv">Com funciona</div>
   <h2 class="rv">Un Dot en 16 segons</h2>
   <p class="sub rv">Tries un Dot, li escrius i et respon en català. I quan el tema és seriós, t&apos;explica a qui has d&apos;anar.</p>
-  <div class="vwrap rv" style="aspect-ratio:16/9"><video id="ev" controls muted loop playsinline preload="metadata" poster="media/explainer-poster.jpg"><source src="media/explainer.mp4" type="video/mp4"><source src="media/explainer.webm" type="video/webm"></video></div>
+  <div class="vwrap rv" style="aspect-ratio:16/9"><video id="ev" controls autoplay muted loop playsinline preload="auto" poster="media/explainer-poster.jpg"><source src="media/explainer.mp4" type="video/mp4"><source src="media/explainer.webm" type="video/webm"></video></div>
   <p class="note" style="margin-top:12px">Són exemples per fer-te una idea; les respostes reals poden variar.</p>
 </section>
 
@@ -388,7 +388,7 @@ section[id]{scroll-margin-top:84px}
   <h2 class="rv">Una ciutat sencera de superDOTats</h2>
   <p class="sub rv">Imagina Barcelona plena de Dots ajudant tothom: baixen per la Sagrada Família i s'escampen pels carrers. Quaranta segons de caos alegre.</p>
   <div class="vwrap rv">
-    <video id="hv" muted loop playsinline preload="metadata" poster="media/poster.jpg"><source src="media/superdotats.mp4" type="video/mp4"><source src="media/superdotats.webm" type="video/webm"></video>
+    <video id="hv" autoplay muted loop playsinline preload="metadata" poster="media/poster.jpg"><source src="media/superdotats.mp4" type="video/mp4"><source src="media/superdotats.webm" type="video/webm"></video>
   </div>
 </section>
 
@@ -468,7 +468,7 @@ section[id]{scroll-margin-top:84px}
 
 <div class="companion" id="companion"><div class="cbubble" id="cbubble" role="status" aria-live="polite"></div><div id="cdot" aria-label="Un superDOTat que viu a la pàgina. Toca'l."></div></div>
 
-<section class="roofs" aria-label="Dots saltant per les teulades de Barcelona"><div class="rtag"><b>superDOTats</b><span>Barcelona ja n'està plena.</span></div><video id="rv" muted loop playsinline preload="metadata" poster="media/teulades-poster.jpg"><source src="media/teulades.mp4" type="video/mp4"><source src="media/teulades.webm" type="video/webm"></video></section>
+<section class="roofs" aria-label="Dots saltant per les teulades de Barcelona"><div class="rtag"><b>superDOTats</b><span>Barcelona ja n'està plena.</span></div><video id="rv" autoplay muted loop playsinline preload="metadata" poster="media/teulades-poster.jpg"><source src="media/teulades.mp4" type="video/mp4"><source src="media/teulades.webm" type="video/webm"></video></section>
 <div class="street" id="street" aria-hidden="true"></div>
 <footer class="mega">
   <div class="mg-top">
@@ -1113,7 +1113,7 @@ var dotSprite = __sprite.dotSprite, spriteParts = __sprite.spriteParts, spriteLa
     stage.appendChild(msg);
     function show(i,manual){
       if(i===cur)return;cur=i;var c=SC[i];
-      Object.keys(els).forEach(function(k){var e=els[k];if(+k===i){e.classList.remove("on");void e.offsetWidth;e.classList.add("on");if(e.play&&!reduce)try{e.currentTime=0;e.play()}catch(x){}}else{e.classList.remove("on");if(e.pause)e.pause()}});
+      Object.keys(els).forEach(function(k){var e=els[k];if(+k===i){e.classList.remove("on");void e.offsetWidth;e.classList.add("on");if(e.play&&!reduce){e.currentTime=0;var pr=e.play();if(pr&&pr.catch)pr.catch(function(){})}}else{e.classList.remove("on");if(e.pause)e.pause()}});
       bt.forEach(function(b,j){b.setAttribute("aria-selected",j===i?"true":"false")});
       msg.innerHTML='<div class="q"></div><div class="a"></div>';msg.firstChild.textContent=c.q;msg.lastChild.textContent=c.a;
       if(manual){clearInterval(timer);timer=null}
@@ -1124,7 +1124,33 @@ var dotSprite = __sprite.dotSprite, spriteParts = __sprite.spriteParts, spriteLa
     var seen=false;new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting&&!seen){seen=true;if(!reduce&&!timer)timer=setInterval(function(){show((cur+1)%SC.length)},6500)}})},{threshold:.4}).observe(stage);
   })();
 
-  (function(){var v=$("rv");if(!v||reduce)return;new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){var p=v.play();if(p&&p.catch)p.catch(function(){})}else v.pause()})},{threshold:.35}).observe(v)})();
+  /* Els vídeos es reprodueixen sols i en bucle, però només mentre es veuen: així no
+     gasten bateria ni dades de fons. El navegador només ho permet si són muts.
+     Si algú té activada la reducció de moviment, no n'arrenca cap. */
+  (function(){
+    // El vídeo de la secció "Al teu dia" no hi entra: aquella secció ja decideix
+    // quina escena toca i quan s'ha de reproduir.
+    var vids=[].slice.call(document.querySelectorAll("video")).filter(function(v){return !v.closest("#lstage")});
+    if(!vids.length)return;
+    var play=function(v){var p=v.play();if(p&&p.catch)p.catch(function(){})};
+    if(reduce){vids.forEach(function(v){v.autoplay=false;v.pause()});return}
+    var io=new IntersectionObserver(function(es){es.forEach(function(e){
+      if(e.isIntersecting)play(e.target);else e.target.pause();
+    })},{threshold:.25});
+    vids.forEach(function(v){
+      v.muted=true;                                   // sense això el navegador no deixa arrencar
+      io.observe(v);
+      v.addEventListener("ended",function(){v.currentTime=0;play(v)});   // per si el bucle falla
+    });
+    // Tornar a la pestanya reprèn el que es veia
+    document.addEventListener("visibilitychange",function(){
+      if(document.hidden)vids.forEach(function(v){v.pause()});
+      else vids.forEach(function(v){
+        var r=v.getBoundingClientRect();
+        if(r.top<innerHeight&&r.bottom>0)play(v);
+      });
+    });
+  })();
 
   /* ---------- Carrer: Dots que passegen i activitat en directe ---------- */
   (function(){
