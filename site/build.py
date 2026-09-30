@@ -1,4 +1,5 @@
 """Assemble body.html: inline the shared Dot libraries and site/src/app.js into its <script>."""
+import os
 import re
 from pathlib import Path
 
@@ -22,6 +23,9 @@ libs = (
     "var dotSprite = __sprite.dotSprite, spriteParts = __sprite.spriteParts, spriteLayout = __sprite.spriteLayout, normalizeSpriteLook = __sprite.normalizeSpriteLook, BODIES = __sprite.BODIES, TONES = __sprite.TONES, TONE_COLORS = __sprite.TONE_COLORS, SPRITE_ITEMS = __sprite.SPRITE_ITEMS, ensureSpriteStyles = __sprite.ensureSpriteStyles, randomSpriteLook = __sprite.randomSpriteLook;\n"
 )
 app = (here / "src" / "app.js").read_text(encoding="utf-8")
+# Where the "Entra" buttons go. Locally that is the app on this machine; a deploy of
+# the public site alone passes APP_URL (e.g. the catalogue) so the links never dangle.
+app = re.sub(r'var APP_URL="[^"]*";', 'var APP_URL="%s";' % os.environ.get("APP_URL", "http://127.0.0.1:3000"), app, count=1)
 target = here / "body.html"
 html = target.read_text(encoding="utf-8")
 new, n = re.subn(r"(<script>\n)(?:(?!</script>).)*?(</script>\s*)$", lambda m: m.group(1) + libs + app + "\n" + m.group(2), html, flags=re.S)

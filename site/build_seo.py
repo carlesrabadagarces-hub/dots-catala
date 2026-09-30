@@ -25,6 +25,7 @@ from app.services.look import look_for_agent  # noqa: E402
 
 SITE = os.environ.get("SITE_URL", "https://superdotats.cat").rstrip("/")
 APP_URL = os.environ.get("APP_URL", "http://127.0.0.1:3000")
+PRIVATE = os.environ.get("PRIVATE", "") in ("1", "true", "yes")   # no indexis res
 GITHUB = "https://github.com/carlesrabadagarces-hub/dots-catala"
 TODAY = os.environ.get("BUILD_DATE", date.today().isoformat())
 SPECS = CATALOG + META
@@ -71,6 +72,9 @@ ORG = {"@type": "Organization", "@id": f"{SITE}/#org", "name": "superDOTats", "u
 LOGO_SVG = '<img src="{p}dots/logo.png" width="32" height="32" alt="" loading="eager">'
 
 
+ROBOTS = "noindex,nofollow" if PRIVATE else "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1"
+
+
 def head(title, desc, path, depth, extra="", og_type="website"):
     p = "../" * depth
     url = f"{SITE}{path}"
@@ -84,7 +88,7 @@ def head(title, desc, path, depth, extra="", og_type="website"):
 <link rel="canonical" href="{url}">
 <link rel="alternate" hreflang="ca" href="{url}">
 <link rel="alternate" hreflang="x-default" href="{url}">
-<meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1">
+<meta name="robots" content="{ROBOTS}">
 <meta name="theme-color" content="#ffffff">
 <meta property="og:site_name" content="superDOTats">
 <meta property="og:locale" content="ca_ES">
@@ -169,7 +173,8 @@ home_ld = {"@context": "https://schema.org", "@graph": [
 ]}
 fonts = ('<link rel="preconnect" href="https://fonts.googleapis.com">\n<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n'
          '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap">\n')
-home_body = re.sub(r"<title>.*?</title>\n?", "", body, count=1, flags=re.S)
+home_body = body.replace("http://127.0.0.1:3000", APP_URL)   # els botons "Entra", també sense JS
+home_body = re.sub(r"<title>.*?</title>\n?", "", home_body, count=1, flags=re.S)
 home_body = re.sub(r'<link rel="icon"[^>]*>\n?', "", home_body, count=1)
 home_body = re.sub(r'<link rel="preconnect"[^>]*>\n?', "", home_body)
 home_body = re.sub(r'<link rel="stylesheet" href="https://fonts.googleapis.com[^>]*>\n?', "", home_body)
@@ -303,7 +308,10 @@ for sid, items in by_sector().items():
 
 # ---------------------------------------------------------------- robots, sitemap, llms.txt, manifest
 AI_BOTS = ["GPTBot", "OAI-SearchBot", "ChatGPT-User", "ClaudeBot", "Claude-User", "Claude-SearchBot", "PerplexityBot", "Google-Extended", "Applebot-Extended", "CCBot"]
-robots = "User-agent: *\nAllow: /\n\n" + "".join(f"User-agent: {b}\nAllow: /\n\n" for b in AI_BOTS) + f"Sitemap: {SITE}/sitemap.xml\n"
+if PRIVATE:
+    robots = "# Web privada: encara no volem que ningú la indexi.\nUser-agent: *\nDisallow: /\n"
+else:
+    robots = "User-agent: *\nAllow: /\n\n" + "".join(f"User-agent: {b}\nAllow: /\n\n" for b in AI_BOTS) + f"Sitemap: {SITE}/sitemap.xml\n"
 (here / "robots.txt").write_text(robots, encoding="utf-8")
 
 urls = [("/", "1.0", "weekly")] + [(f"/sectors/{k}/", "0.8", "monthly") for k, v in by_sector().items() if v] + [(f"/agents/{s['id']}/", "0.7", "monthly") for s in SPECS]

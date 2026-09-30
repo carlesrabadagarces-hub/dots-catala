@@ -4,130 +4,130 @@
 
 ## Fets clau
 - Nom: superDOTats (escrit amb majúscules a DOT).
-- Web: https://superdotats.cat/
+- Web: https://superdots.vercel.app/
 - Idioma per defecte: català (respon també en castellà i anglès).
 - Privacitat: cada persona té la seva conversa apart, només responen les persones autoritzades i es pot veure i esborrar el que el Dot recorda.
 
 ## Pàgines principals
-- [Inici](https://superdotats.cat/): què és i com funciona
-- [Preguntes freqüents](https://superdotats.cat/#faq): respostes curtes
-- [Directori de Dots](https://superdotats.cat/#directori): tots els Dots per sector
-- [Text complet per a models](https://superdotats.cat/llms-full.txt)
+- [Inici](https://superdots.vercel.app/): què és i com funciona
+- [Preguntes freqüents](https://superdots.vercel.app/#faq): respostes curtes
+- [Directori de Dots](https://superdots.vercel.app/#directori): tots els Dots per sector
+- [Text complet per a models](https://superdots.vercel.app/llms-full.txt)
 
 ## Educació
 
-- [Mestra d'infantil i primària](https://superdotats.cat/agents/mestra-infantil-primaria/): Mestra d'educació infantil i primària
-- [Professor de matemàtiques](https://superdotats.cat/agents/professor-matematiques/): Professor de matemàtiques d'ESO i batxillerat
-- [Professor de llengua i literatura](https://superdotats.cat/agents/professor-llengues/): Professor de llengua catalana, castellana i literatura
-- [Professor de ciències](https://superdotats.cat/agents/professor-ciencies/): Professor de física, química, biologia i geologia
-- [Professor d'idiomes](https://superdotats.cat/agents/professor-idiomes/): Professor d'anglès, francès i alemany
-- [Orientador educatiu](https://superdotats.cat/agents/orientador-educatiu/): Orientador acadèmic i professional
-- [Preparador d'oposicions](https://superdotats.cat/agents/preparador-oposicions/): Preparador d'oposicions
-- [Tutor de treballs acadèmics](https://superdotats.cat/agents/tutor-tfg/): Tutor de TFG, TFM i treballs de recerca
-- [Professor de música](https://superdotats.cat/agents/professor-musica/): Professor de música i llenguatge musical
-- [Psicopedagog](https://superdotats.cat/agents/psicopedagog/): Psicopedagog i especialista en dificultats d'aprenentatge
+- [Mestra d'infantil i primària](https://superdots.vercel.app/agents/mestra-infantil-primaria/): Mestra d'educació infantil i primària
+- [Professor de matemàtiques](https://superdots.vercel.app/agents/professor-matematiques/): Professor de matemàtiques d'ESO i batxillerat
+- [Professor de llengua i literatura](https://superdots.vercel.app/agents/professor-llengues/): Professor de llengua catalana, castellana i literatura
+- [Professor de ciències](https://superdots.vercel.app/agents/professor-ciencies/): Professor de física, química, biologia i geologia
+- [Professor d'idiomes](https://superdots.vercel.app/agents/professor-idiomes/): Professor d'anglès, francès i alemany
+- [Orientador educatiu](https://superdots.vercel.app/agents/orientador-educatiu/): Orientador acadèmic i professional
+- [Preparador d'oposicions](https://superdots.vercel.app/agents/preparador-oposicions/): Preparador d'oposicions
+- [Tutor de treballs acadèmics](https://superdots.vercel.app/agents/tutor-tfg/): Tutor de TFG, TFM i treballs de recerca
+- [Professor de música](https://superdots.vercel.app/agents/professor-musica/): Professor de música i llenguatge musical
+- [Psicopedagog](https://superdots.vercel.app/agents/psicopedagog/): Psicopedagog i especialista en dificultats d'aprenentatge
 
 ## Salut i benestar
 
-- [Metge de capçalera](https://superdotats.cat/agents/metge-capcalera/): Metge de família (informació de salut)
-- [Infermer/a](https://superdotats.cat/agents/infermer/): Infermer/a d'atenció primària
-- [Pediatre](https://superdotats.cat/agents/pediatre/): Pediatre (orientació per a famílies)
-- [Psicòleg](https://superdotats.cat/agents/psicoleg/): Psicòleg (acompanyament emocional, no clínic)
-- [Nutricionista](https://superdotats.cat/agents/nutricionista/): Dietista-nutricionista
-- [Entrenador personal](https://superdotats.cat/agents/entrenador-personal/): Entrenador personal i preparador físic
-- [Fisioterapeuta](https://superdotats.cat/agents/fisioterapeuta/): Fisioterapeuta (orientació)
-- [Farmacèutic](https://superdotats.cat/agents/farmaceutic/): Farmacèutic (informació sobre medicaments)
-- [Dentista](https://superdotats.cat/agents/dentista/): Odontòleg (informació de salut bucodental)
-- [Veterinari](https://superdotats.cat/agents/veterinari/): Veterinari (informació per a propietaris)
-- [Coach de son i benestar](https://superdotats.cat/agents/coach-son-benestar/): Especialista en son, estrès i hàbits
+- [Metge de capçalera](https://superdots.vercel.app/agents/metge-capcalera/): Metge de família (informació de salut)
+- [Infermer/a](https://superdots.vercel.app/agents/infermer/): Infermer/a d'atenció primària
+- [Pediatre](https://superdots.vercel.app/agents/pediatre/): Pediatre (orientació per a famílies)
+- [Psicòleg](https://superdots.vercel.app/agents/psicoleg/): Psicòleg (acompanyament emocional, no clínic)
+- [Nutricionista](https://superdots.vercel.app/agents/nutricionista/): Dietista-nutricionista
+- [Entrenador personal](https://superdots.vercel.app/agents/entrenador-personal/): Entrenador personal i preparador físic
+- [Fisioterapeuta](https://superdots.vercel.app/agents/fisioterapeuta/): Fisioterapeuta (orientació)
+- [Farmacèutic](https://superdots.vercel.app/agents/farmaceutic/): Farmacèutic (informació sobre medicaments)
+- [Dentista](https://superdots.vercel.app/agents/dentista/): Odontòleg (informació de salut bucodental)
+- [Veterinari](https://superdots.vercel.app/agents/veterinari/): Veterinari (informació per a propietaris)
+- [Coach de son i benestar](https://superdots.vercel.app/agents/coach-son-benestar/): Especialista en son, estrès i hàbits
 
 ## Legal i fiscal
 
-- [Jurista](https://superdotats.cat/agents/jurista-generalista/): Advocat generalista (orientació jurídica)
-- [Assessor fiscal](https://superdotats.cat/agents/assessor-fiscal/): Assessor fiscal i tributari
-- [Laboralista](https://superdotats.cat/agents/laboralista/): Advocat laboralista i expert en Seguretat Social
-- [Advocat d'habitatge i lloguers](https://superdotats.cat/agents/advocat-arrendaments/): Advocat d'arrendaments i propietat
-- [Delegat de protecció de dades](https://superdotats.cat/agents/proteccio-dades/): Expert en RGPD i privacitat
-- [Jurista penal](https://superdotats.cat/agents/jurista-penal/): Advocat penalista (orientació)
-- [Gestor administratiu](https://superdotats.cat/agents/gestor-administratiu/): Gestor administratiu
-- [Mediador de conflictes](https://superdotats.cat/agents/mediador-conflictes/): Mediador i negociador
+- [Jurista](https://superdots.vercel.app/agents/jurista-generalista/): Advocat generalista (orientació jurídica)
+- [Assessor fiscal](https://superdots.vercel.app/agents/assessor-fiscal/): Assessor fiscal i tributari
+- [Laboralista](https://superdots.vercel.app/agents/laboralista/): Advocat laboralista i expert en Seguretat Social
+- [Advocat d'habitatge i lloguers](https://superdots.vercel.app/agents/advocat-arrendaments/): Advocat d'arrendaments i propietat
+- [Delegat de protecció de dades](https://superdots.vercel.app/agents/proteccio-dades/): Expert en RGPD i privacitat
+- [Jurista penal](https://superdots.vercel.app/agents/jurista-penal/): Advocat penalista (orientació)
+- [Gestor administratiu](https://superdots.vercel.app/agents/gestor-administratiu/): Gestor administratiu
+- [Mediador de conflictes](https://superdots.vercel.app/agents/mediador-conflictes/): Mediador i negociador
 
 ## Oficis i llar
 
-- [Fontaner](https://superdotats.cat/agents/fontaner/): Fontaner i instal·lador de canonades
-- [Electricista](https://superdotats.cat/agents/electricista/): Electricista instal·lador
-- [Paleta i reformista](https://superdotats.cat/agents/paleta-reformes/): Paleta i cap d'obra
-- [Fuster](https://superdotats.cat/agents/fuster/): Fuster i ebenista
-- [Pintor](https://superdotats.cat/agents/pintor/): Pintor i decorador
-- [Serraller](https://superdotats.cat/agents/serraller/): Serraller i tècnic de seguretat
-- [Tècnic de climatització](https://superdotats.cat/agents/tecnic-climatitzacio/): Tècnic de calefacció, aire condicionat i aerotèrmia
-- [Instal·lador solar](https://superdotats.cat/agents/installador-solar/): Tècnic d'autoconsum fotovoltaic
-- [Mecànic d'automòbils](https://superdotats.cat/agents/mecanic/): Mecànic de l'automòbil
-- [Tècnic d'electrodomèstics](https://superdotats.cat/agents/tecnic-electrodomestics/): Tècnic de reparació d'electrodomèstics
-- [Jardiner](https://superdotats.cat/agents/jardiner/): Jardiner i paisatgista
-- [Arquitecte tècnic](https://superdotats.cat/agents/arquitecte-tecnic/): Arquitecte tècnic i tècnic d'obra
+- [Fontaner](https://superdots.vercel.app/agents/fontaner/): Fontaner i instal·lador de canonades
+- [Electricista](https://superdots.vercel.app/agents/electricista/): Electricista instal·lador
+- [Paleta i reformista](https://superdots.vercel.app/agents/paleta-reformes/): Paleta i cap d'obra
+- [Fuster](https://superdots.vercel.app/agents/fuster/): Fuster i ebenista
+- [Pintor](https://superdots.vercel.app/agents/pintor/): Pintor i decorador
+- [Serraller](https://superdots.vercel.app/agents/serraller/): Serraller i tècnic de seguretat
+- [Tècnic de climatització](https://superdots.vercel.app/agents/tecnic-climatitzacio/): Tècnic de calefacció, aire condicionat i aerotèrmia
+- [Instal·lador solar](https://superdots.vercel.app/agents/installador-solar/): Tècnic d'autoconsum fotovoltaic
+- [Mecànic d'automòbils](https://superdots.vercel.app/agents/mecanic/): Mecànic de l'automòbil
+- [Tècnic d'electrodomèstics](https://superdots.vercel.app/agents/tecnic-electrodomestics/): Tècnic de reparació d'electrodomèstics
+- [Jardiner](https://superdots.vercel.app/agents/jardiner/): Jardiner i paisatgista
+- [Arquitecte tècnic](https://superdots.vercel.app/agents/arquitecte-tecnic/): Arquitecte tècnic i tècnic d'obra
 
 ## Negoci i màrqueting
 
-- [Creador d'stickers](https://superdotats.cat/agents/creador-stickers/): Dissenyador de stickers per a WhatsApp
-- [Recepcionista](https://superdotats.cat/agents/recepcionista/): Recepcionista virtual per a negocis
-- [Agent d'atenció al client](https://superdotats.cat/agents/atencio-client/): Especialista en atenció al client
-- [Comercial](https://superdotats.cat/agents/comercial-vendes/): Especialista en vendes B2B i B2C
-- [Estrateg de màrqueting](https://superdotats.cat/agents/marqueting-digital/): Especialista en màrqueting digital
-- [Community manager](https://superdotats.cat/agents/community-manager/): Community manager i creador de continguts
-- [Redactor SEO](https://superdotats.cat/agents/redactor-seo/): Redactor de continguts i SEO
-- [Comptable](https://superdotats.cat/agents/comptable/): Comptable i controller financer
-- [Especialista en RR. HH.](https://superdotats.cat/agents/recursos-humans/): Responsable de recursos humans i selecció
-- [Cap de projectes](https://superdotats.cat/agents/cap-projectes/): Project manager
-- [Analista de dades](https://superdotats.cat/agents/analista-dades/): Analista i científic de dades
-- [Consultor d'emprenedoria](https://superdotats.cat/agents/consultor-emprenedoria/): Mentor d'startups i pimes
-- [Traductor](https://superdotats.cat/agents/traductor/): Traductor i intèrpret
-- [Expert en botigues online](https://superdotats.cat/agents/botiga-online/): Especialista en e-commerce
-- [Agent immobiliari](https://superdotats.cat/agents/agent-immobiliari/): Agent immobiliari
-- [Agent de viatges](https://superdotats.cat/agents/agent-viatges/): Agent de viatges i planificador d'escapades
+- [Creador d'stickers](https://superdots.vercel.app/agents/creador-stickers/): Dissenyador de stickers per a WhatsApp
+- [Recepcionista](https://superdots.vercel.app/agents/recepcionista/): Recepcionista virtual per a negocis
+- [Agent d'atenció al client](https://superdots.vercel.app/agents/atencio-client/): Especialista en atenció al client
+- [Comercial](https://superdots.vercel.app/agents/comercial-vendes/): Especialista en vendes B2B i B2C
+- [Estrateg de màrqueting](https://superdots.vercel.app/agents/marqueting-digital/): Especialista en màrqueting digital
+- [Community manager](https://superdots.vercel.app/agents/community-manager/): Community manager i creador de continguts
+- [Redactor SEO](https://superdots.vercel.app/agents/redactor-seo/): Redactor de continguts i SEO
+- [Comptable](https://superdots.vercel.app/agents/comptable/): Comptable i controller financer
+- [Especialista en RR. HH.](https://superdots.vercel.app/agents/recursos-humans/): Responsable de recursos humans i selecció
+- [Cap de projectes](https://superdots.vercel.app/agents/cap-projectes/): Project manager
+- [Analista de dades](https://superdots.vercel.app/agents/analista-dades/): Analista i científic de dades
+- [Consultor d'emprenedoria](https://superdots.vercel.app/agents/consultor-emprenedoria/): Mentor d'startups i pimes
+- [Traductor](https://superdots.vercel.app/agents/traductor/): Traductor i intèrpret
+- [Expert en botigues online](https://superdots.vercel.app/agents/botiga-online/): Especialista en e-commerce
+- [Agent immobiliari](https://superdots.vercel.app/agents/agent-immobiliari/): Agent immobiliari
+- [Agent de viatges](https://superdots.vercel.app/agents/agent-viatges/): Agent de viatges i planificador d'escapades
 
 ## Hostaleria i alimentació
 
-- [Cuiner](https://superdotats.cat/agents/cuiner/): Cuiner i xef
-- [Sommelier](https://superdotats.cat/agents/sommelier/): Sommelier i expert en begudes
-- [Gestor de restaurant](https://superdotats.cat/agents/gestor-restaurant/): Gestor i director de restaurant
-- [Hoteler](https://superdotats.cat/agents/hotelier/): Director d'hotel i allotjament turístic
-- [Fornera i pastissera](https://superdotats.cat/agents/panader-pastisser/): Fornera i pastissera artesana
-- [Tècnic de seguretat alimentària](https://superdotats.cat/agents/seguretat-alimentaria/): Especialista en higiene i APPCC
+- [Cuiner](https://superdots.vercel.app/agents/cuiner/): Cuiner i xef
+- [Sommelier](https://superdots.vercel.app/agents/sommelier/): Sommelier i expert en begudes
+- [Gestor de restaurant](https://superdots.vercel.app/agents/gestor-restaurant/): Gestor i director de restaurant
+- [Hoteler](https://superdots.vercel.app/agents/hotelier/): Director d'hotel i allotjament turístic
+- [Fornera i pastissera](https://superdots.vercel.app/agents/panader-pastisser/): Fornera i pastissera artesana
+- [Tècnic de seguretat alimentària](https://superdots.vercel.app/agents/seguretat-alimentaria/): Especialista en higiene i APPCC
 
 ## Tecnologia
 
-- [Programador](https://superdotats.cat/agents/programador/): Desenvolupador de programari sènior
-- [Enginyer DevOps](https://superdotats.cat/agents/devops/): Enginyer DevOps i cloud
-- [Tècnic de suport informàtic](https://superdotats.cat/agents/suport-informatic/): Tècnic de suport TI
-- [Expert en ciberseguretat](https://superdotats.cat/agents/ciberseguretat/): Especialista en ciberseguretat defensiva
-- [Dissenyador UX/UI](https://superdotats.cat/agents/dissenyador-ux/): Dissenyador de producte
-- [Especialista en IA aplicada](https://superdotats.cat/agents/dades-ia/): Enginyer d'IA i automatització
-- [Creador de webs](https://superdotats.cat/agents/wordpress-web/): Desenvolupador web i WordPress
-- [Creador de Dots](https://superdotats.cat/agents/creador-de-dots/): Dissenyador d'agents
+- [Programador](https://superdots.vercel.app/agents/programador/): Desenvolupador de programari sènior
+- [Enginyer DevOps](https://superdots.vercel.app/agents/devops/): Enginyer DevOps i cloud
+- [Tècnic de suport informàtic](https://superdots.vercel.app/agents/suport-informatic/): Tècnic de suport TI
+- [Expert en ciberseguretat](https://superdots.vercel.app/agents/ciberseguretat/): Especialista en ciberseguretat defensiva
+- [Dissenyador UX/UI](https://superdots.vercel.app/agents/dissenyador-ux/): Dissenyador de producte
+- [Especialista en IA aplicada](https://superdots.vercel.app/agents/dades-ia/): Enginyer d'IA i automatització
+- [Creador de webs](https://superdots.vercel.app/agents/wordpress-web/): Desenvolupador web i WordPress
+- [Creador de Dots](https://superdots.vercel.app/agents/creador-de-dots/): Dissenyador d'agents
 
 ## Vida quotidiana
 
-- [Assistent personal](https://superdotats.cat/agents/assistent-personal/): Assistent personal
-- [Assessor de finances personals](https://superdotats.cat/agents/planificador-financer/): Assessor de finances personals
-- [Coach de productivitat](https://superdotats.cat/agents/coach-productivitat/): Coach d'organització i hàbits
-- [Guia de Catalunya](https://superdotats.cat/agents/guia-catalunya/): Guia local i expert en cultura catalana
-- [Escriptor creatiu](https://superdotats.cat/agents/escriptor-creatiu/): Escriptor i editor
-- [Etòleg de mascotes](https://superdotats.cat/agents/cuidador-mascotes/): Etòleg i educador canin i felí
-- [Mestre de bricolatge](https://superdotats.cat/agents/mestre-bricolatge/): Manetes i decorador d'interiors
-- [Assessor de famílies](https://superdotats.cat/agents/coach-familiar/): Orientador de criança i vida familiar
-- [Acompanyant de gent gran](https://superdotats.cat/agents/cuidador-gent-gran/): Especialista en cures i autonomia de gent gran
+- [Assistent personal](https://superdots.vercel.app/agents/assistent-personal/): Assistent personal
+- [Assessor de finances personals](https://superdots.vercel.app/agents/planificador-financer/): Assessor de finances personals
+- [Coach de productivitat](https://superdots.vercel.app/agents/coach-productivitat/): Coach d'organització i hàbits
+- [Guia de Catalunya](https://superdots.vercel.app/agents/guia-catalunya/): Guia local i expert en cultura catalana
+- [Escriptor creatiu](https://superdots.vercel.app/agents/escriptor-creatiu/): Escriptor i editor
+- [Etòleg de mascotes](https://superdots.vercel.app/agents/cuidador-mascotes/): Etòleg i educador canin i felí
+- [Mestre de bricolatge](https://superdots.vercel.app/agents/mestre-bricolatge/): Manetes i decorador d'interiors
+- [Assessor de famílies](https://superdots.vercel.app/agents/coach-familiar/): Orientador de criança i vida familiar
+- [Acompanyant de gent gran](https://superdots.vercel.app/agents/cuidador-gent-gran/): Especialista en cures i autonomia de gent gran
 
 ## Administració i tràmits
 
-- [Guia de tràmits](https://superdotats.cat/agents/tramits-generalitat/): Especialista en tràmits amb l'Administració
-- [Assessor d'ajuts](https://superdotats.cat/agents/ajuts-subvencions/): Assessor d'ajuts i subvencions
-- [Expert en Seguretat Social](https://superdotats.cat/agents/seguretat-social/): Expert en Seguretat Social i prestacions
-- [Especialista en estrangeria](https://superdotats.cat/agents/estrangeria/): Orientador d'immigració i estrangeria
+- [Guia de tràmits](https://superdots.vercel.app/agents/tramits-generalitat/): Especialista en tràmits amb l'Administració
+- [Assessor d'ajuts](https://superdots.vercel.app/agents/ajuts-subvencions/): Assessor d'ajuts i subvencions
+- [Expert en Seguretat Social](https://superdots.vercel.app/agents/seguretat-social/): Expert en Seguretat Social i prestacions
+- [Especialista en estrangeria](https://superdots.vercel.app/agents/estrangeria/): Orientador d'immigració i estrangeria
 
 ## Camp, indústria i transport
 
-- [Agrònom](https://superdotats.cat/agents/agronom/): Enginyer agrònom i pagès
-- [Responsable de logística](https://superdotats.cat/agents/logistica/): Expert en logística i transport
-- [Tècnic de prevenció](https://superdotats.cat/agents/prl/): Tècnic de prevenció de riscos laborals
-- [Enginyer industrial](https://superdotats.cat/agents/enginyer-industrial/): Enginyer industrial i de processos
+- [Agrònom](https://superdots.vercel.app/agents/agronom/): Enginyer agrònom i pagès
+- [Responsable de logística](https://superdots.vercel.app/agents/logistica/): Expert en logística i transport
+- [Tècnic de prevenció](https://superdots.vercel.app/agents/prl/): Tècnic de prevenció de riscos laborals
+- [Enginyer industrial](https://superdots.vercel.app/agents/enginyer-industrial/): Enginyer industrial i de processos
