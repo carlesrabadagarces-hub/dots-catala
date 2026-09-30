@@ -1,4 +1,4 @@
-# Dots Català — Open Dots + WhatsApp
+# superDOTats — Open Dots + WhatsApp
 
 Fork of [Anil-matcha/Open-Dots](https://github.com/Anil-matcha/Open-Dots) (MIT) that adds **WhatsApp integration**: create agents freely and connect each one to your own WhatsApp number. See [docs/WHATSAPP.md](docs/WHATSAPP.md). A visual landing page with interactive Dots lives in [`site/`](site/index.html) (static, host it anywhere, e.g. GitHub Pages; regenerate with `sh site/build.sh`).
 

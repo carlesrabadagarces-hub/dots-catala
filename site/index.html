@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <style>html,body{margin:0}</style>
-<title>Dots Català</title>
+<title>superDOTats</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap">
@@ -64,9 +64,8 @@ nav .links a{text-decoration:none}nav .links a:hover{color:var(--fg)}
 .stage .hint{position:absolute;left:50%;transform:translateX(-50%);bottom:14px;font-family:var(--mono);font-size:11px;color:var(--muted);pointer-events:none}
 .pop{position:absolute;padding:8px 13px;border-radius:16px;background:var(--fg);color:var(--bg);font-size:13px;font-weight:500;pointer-events:none;animation:pop 2.6s forwards;max-width:190px}
 @keyframes pop{0%{transform:translateY(12px) scale(.6);opacity:0}12%{transform:none;opacity:1}80%{opacity:1}100%{transform:translateY(-16px);opacity:0}}
-.reel{padding-block:0 24px}
-.reel video{width:100%;display:block;border-radius:28px;background:var(--bg2);aspect-ratio:16/9;object-fit:cover}
-.reel p{font-family:var(--mono);font-size:12px;color:var(--muted);margin-top:12px;text-align:center}
+.reel[hidden]{display:none}
+.reel video{width:100%;display:block;border-radius:32px;background:var(--bg2);aspect-ratio:16/9;object-fit:contain;box-shadow:0 40px 90px -40px var(--shadow)}
 /* marquee */
 .marq{overflow:hidden;border-block:1px solid var(--line);padding-block:18px;mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);-webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
 .track{display:flex;gap:14px;width:max-content;animation:mq 42s linear infinite}
@@ -162,7 +161,7 @@ footer{border-top:1px solid var(--line);padding-block:32px 48px;color:var(--mute
 
 <div class="wrap">
 <div class="navbar" id="navbar"><nav>
-  <a class="logo" href="#"><i></i>Dots Català</a>
+  <a class="logo" href="#"><i></i>super<b style="font-weight:700;letter-spacing:.02em">DOT</b>ats</a>
   <div class="links"><a href="#crea">Crea</a><a href="#demo">Demo</a><a href="#flux">Com funciona</a><a href="#funcions">Funcions</a></div>
   <a class="btn sm" href="https://github.com/carlesrabadagarces-hub/dots-catala">GitHub</a>
 </nav></div>
@@ -181,10 +180,7 @@ footer{border-top:1px solid var(--line);padding-block:32px 48px;color:var(--mute
   </div>
 </header>
 
-<div class="reel" id="reel" hidden>
-  <video id="hv" muted loop playsinline preload="metadata" poster="media/hero.png"><source src="media/hero.mp4" type="video/mp4"></video>
-  <p>Barcelona, un dia qualsevol. Els Dots ja et segueixen.</p>
-</div>
+
 
 <div class="marq" aria-hidden="true"><div class="track" id="track"></div></div>
 
@@ -224,6 +220,13 @@ footer{border-top:1px solid var(--line);padding-block:32px 48px;color:var(--mute
   </div>
 </section>
 
+<section class="reel" id="reel" hidden>
+  <div class="eyebrow rv">Barcelona</div>
+  <h2 class="rv">Una ciutat sencera de superDOTats</h2>
+  <p class="sub rv">Corre pel carrer i els Dots et segueixen, amb la Sagrada Família de fons. Així de fàcil és tenir tot un equip al teu costat.</p>
+  <video id="hv" class="rv" muted loop playsinline preload="metadata" controlslist="nodownload"><source src="media/hero.mp4" type="video/mp4"><source src="https://d8j0ntlcm91z4.cloudfront.net/user_384dtuaRPjdFihDaUTg24SaMFeK/hf_20260930_081514_fba8d6e2-6919-4c04-a565-9af4c108992f.mp4" type="video/mp4"></video>
+</section>
+
 <section id="flux">
   <div class="eyebrow rv">Com funciona</div>
   <h2 class="rv">Del teu mòbil a l'agent i tornada</h2>
@@ -259,7 +262,7 @@ footer{border-top:1px solid var(--line);padding-block:32px 48px;color:var(--mute
 </section>
 
 <footer>
-  <span>Fork d'<a href="https://github.com/Anil-matcha/Open-Dots">Open-Dots</a> (llicència MIT). Projecte independent, sense relació amb OpenAI.</span>
+  <span>superDOTats · fork d'<a href="https://github.com/Anil-matcha/Open-Dots">Open-Dots</a> (llicència MIT). Projecte independent, sense relació amb OpenAI.</span>
   <a href="https://github.com/carlesrabadagarces-hub/dots-catala">Codi a GitHub</a>
 </footer>
 </div>
@@ -440,7 +443,7 @@ footer{border-top:1px solid var(--line);padding-block:32px 48px;color:var(--mute
     var hit=dots.filter(function(d){return Math.hypot(d.x-mouse.x,d.y-mouse.y)<d.r+6})[0];
     if(hit){say(hit.i,SOLO[Math.floor(Math.random()*SOLO.length)],2400);hit.vx+=(Math.random()-.5)*3;hit.vy-=2.5}});
   stage.addEventListener("keydown",function(e){if(e.key==="Enter"||e.key===" "){e.preventDefault();talk()}});
-  hv.addEventListener("loadeddata",function(){reel.hidden=false;var p=hv.play();if(p&&p.catch)p.catch(function(){})});
+  var showReel=function(){reel.hidden=false;var p=hv.play();if(p&&p.catch)p.catch(function(){})};hv.addEventListener("loadeddata",showReel);hv.addEventListener("loadedmetadata",showReel);
   if(reduce){talk();draw()}else requestAnimationFrame(frame);
   /* dibuixa un orbe petit que segueix el ratolí i parpelleja */
   var minis=[];
