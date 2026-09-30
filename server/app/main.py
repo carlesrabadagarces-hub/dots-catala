@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
 from app.config import settings
-from app.routers import auth, bots, models, chat, approvals, upload, settings as settings_router, connectors, audit, computers, whatsapp
+from app.routers import auth, bots, models, chat, approvals, upload, settings as settings_router, connectors, audit, computers, whatsapp, catalog
 from app.services.auth_service import auth_service
 from app.services.context import current_owner
 from app.services.computer_provider import computer_provider
@@ -80,6 +80,7 @@ app.include_router(connectors.router)
 app.include_router(audit.router)
 app.include_router(computers.router)
 app.include_router(whatsapp.router)
+app.include_router(catalog.router)
 
 
 @app.get("/api/v1/health")

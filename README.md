@@ -1,6 +1,8 @@
 # superDOTats — Open Dots + WhatsApp
 
-Fork of [Anil-matcha/Open-Dots](https://github.com/Anil-matcha/Open-Dots) (MIT) that adds **WhatsApp integration**: create agents freely and connect each one to your own WhatsApp number. See [docs/WHATSAPP.md](docs/WHATSAPP.md). Multi-user sign-in with Google and Apple: [docs/AUTH.md](docs/AUTH.md). A visual landing page with interactive Dots lives in [`site/`](site/index.html) (static, host it anywhere, e.g. GitHub Pages; regenerate with `sh site/build.sh`).
+<p align="center"><img src="brand/mark.svg" width="96" alt="superDOTats"></p>
+
+Fork of [Anil-matcha/Open-Dots](https://github.com/Anil-matcha/Open-Dots) (MIT) that adds **WhatsApp integration**: create agents freely and connect each one to your own WhatsApp number. See [docs/WHATSAPP.md](docs/WHATSAPP.md). Catalogue of 80+ ready-made Dots plus AI-assisted creation: [docs/CATALOG.md](docs/CATALOG.md). Multi-user sign-in with Google and Apple: [docs/AUTH.md](docs/AUTH.md). A visual landing page with interactive Dots lives in [`site/`](site/index.html) (static, host it anywhere, e.g. GitHub Pages; regenerate with `sh site/build.sh`).
 
 # Open Dots: Open-Source Alternative to OpenAI Dots
 

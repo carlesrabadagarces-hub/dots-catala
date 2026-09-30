@@ -339,3 +339,35 @@ export async function executeComputerAction(botId, requestId) {
   if (!res.ok) throw new Error(payload.detail || 'Computer action execution failed');
   return payload;
 }
+
+export async function fetchCatalogSectors() {
+  const res = await apiFetch(`${API_BASE_URL}/catalog/sectors`);
+  if (!res.ok) return [];
+  return res.json();
+}
+
+export async function fetchCatalog(sector = '', q = '') {
+  const params = new URLSearchParams();
+  if (sector) params.set('sector', sector);
+  if (q) params.set('q', q);
+  const res = await apiFetch(`${API_BASE_URL}/catalog?${params.toString()}`);
+  if (!res.ok) return [];
+  return res.json();
+}
+
+export async function installCatalogAgent(agentId) {
+  const res = await apiFetch(`${API_BASE_URL}/catalog/${encodeURIComponent(agentId)}/install`, { method: 'POST' });
+  if (!res.ok) throw new Error('No s\'ha pogut afegir el Dot.');
+  return res.json();
+}
+
+export async function generateAgent(description) {
+  const res = await apiFetch(`${API_BASE_URL}/catalog/generate`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ description }),
+  });
+  const payload = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(payload.detail || 'No s\'ha pogut crear el Dot.');
+  return payload;
+}

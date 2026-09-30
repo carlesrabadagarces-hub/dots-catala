@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 190 100" role="img" aria-label="superDOTats">
+  <path d="M40 14 C47 14 52 19 70 58 C75 69 68 80 57 80 H23 C12 80 5 69 10 58 C28 19 33 14 40 14Z" fill="#ff4d7d"/>
+  <rect x="26" y="46" width="6" height="14" rx="3" fill="#14171c"/><rect x="43" y="46" width="6" height="14" rx="3" fill="#14171c"/>
+  <circle cx="94" cy="52" r="36" fill="#7a4cf0"/>
+  <rect x="78" y="40" width="7" height="17" rx="3.5" fill="#14171c"/><rect x="100" y="40" width="7" height="17" rx="3.5" fill="#14171c"/>
+  <g transform="translate(30 0)"><path d="M128 12 C134 30 156 42 156 60 A28 28 0 0 1 100 60 C100 42 122 30 128 12Z" fill="#2f7bff"/>
+  <rect x="116" y="52" width="6" height="14" rx="3" fill="#14171c"/><rect x="134" y="52" width="6" height="14" rx="3" fill="#14171c"/></g>
+</svg>
