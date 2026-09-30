@@ -11,7 +11,7 @@ from pathlib import Path
 from playwright.sync_api import sync_playwright
 
 here = Path(__file__).resolve().parent
-FPS, DURATION = 30, 16
+FPS, DURATION = 30, 10
 ffmpeg = shutil.which("ffmpeg") or glob.glob("/tmp/claude-0/venv/lib/python*/site-packages/imageio_ffmpeg/binaries/ffmpeg-*")[0]
 frames = here / "frames"
 shutil.rmtree(frames, ignore_errors=True)
@@ -27,8 +27,8 @@ with sync_playwright() as p:
         page.screenshot(path=str(frames / f"f{i:04d}.jpg"), type="jpeg", quality=93)
     browser.close()
 media = here.parent / "media"
-subprocess.run([ffmpeg, "-y", "-loglevel", "error", "-framerate", str(FPS), "-i", str(frames / "f%04d.jpg"), "-c:v", "libx264", "-crf", "20", "-preset", "slow", "-pix_fmt", "yuv420p", "-movflags", "+faststart", str(media / "teulades.mp4")], check=True)
-subprocess.run([ffmpeg, "-y", "-loglevel", "error", "-framerate", str(FPS), "-i", str(frames / "f%04d.jpg"), "-c:v", "libvpx-vp9", "-crf", "34", "-b:v", "0", "-cpu-used", "5", "-row-mt", "1", str(media / "teulades.webm")], check=True)
-shutil.copy(frames / f"f{int(5.0 * FPS):04d}.jpg", media / "teulades-poster.jpg")
+subprocess.run([ffmpeg, "-y", "-loglevel", "error", "-framerate", str(FPS), "-i", str(frames / "f%04d.jpg"), "-c:v", "libx264", "-crf", "25", "-preset", "slow", "-pix_fmt", "yuv420p", "-movflags", "+faststart", str(media / "teulades.mp4")], check=True)
+subprocess.run([ffmpeg, "-y", "-loglevel", "error", "-framerate", str(FPS), "-i", str(frames / "f%04d.jpg"), "-c:v", "libvpx-vp9", "-crf", "37", "-b:v", "0", "-cpu-used", "5", "-row-mt", "1", str(media / "teulades.webm")], check=True)
+shutil.copy(frames / f"f{int(3.0 * FPS):04d}.jpg", media / "teulades-poster.jpg")
 shutil.rmtree(frames)
 print("ok")

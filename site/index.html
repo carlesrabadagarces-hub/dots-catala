@@ -215,7 +215,7 @@ pre .k{color:var(--c-amber)}pre .s{color:var(--c-green)}
 .fq .qa>div{overflow:hidden}
 .fq .qa p{margin:0;padding:0 22px 20px 82px;color:var(--muted);font-size:1rem;line-height:1.55}
 @media (max-width:980px){.faq{grid-template-columns:minmax(0,1fr);gap:28px;padding-block:64px 48px}.faq-l{position:static}.play{height:200px}.fq .qa p{padding-left:22px}}
-.roofs{padding:0;margin-top:40px}.roofs video{display:block;width:100%;aspect-ratio:16/9;max-height:80vh;object-fit:cover;border-radius:32px;background:#000;box-shadow:0 30px 70px -40px rgba(0,0,0,.5)}
+.roofs{padding:0;margin-top:40px;position:relative}.rtag{position:absolute;left:0;right:0;top:6%;text-align:center;color:#fff;text-shadow:0 4px 30px rgba(120,30,0,.7);z-index:2;pointer-events:none}.rtag b{display:block;font-size:clamp(2rem,7vw,5.5rem);letter-spacing:-.05em;line-height:1}.rtag span{font-size:clamp(.9rem,2vw,1.6rem);font-weight:500}.roofs video{display:block;width:100%;aspect-ratio:16/9;max-height:80vh;object-fit:cover;border-radius:32px;background:#000;box-shadow:0 30px 70px -40px rgba(0,0,0,.5)}
 /* street + footer */
 .street{position:relative;height:150px;margin-top:20px;overflow:hidden;mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent);-webkit-mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent)}
 .walker{position:absolute;bottom:-6px;left:0;will-change:transform}
@@ -385,7 +385,7 @@ pre .k{color:var(--c-amber)}pre .s{color:var(--c-green)}
 
 <div class="companion" id="companion"><div class="cbubble" id="cbubble" role="status" aria-live="polite"></div><div id="cdot" aria-label="Un superDOTat que viu a la pàgina. Toca'l."></div></div>
 
-<section class="roofs" aria-label="Dots saltant per les teulades de Barcelona"><video id="rv" muted loop playsinline preload="metadata" poster="media/teulades-poster.jpg"><source src="media/teulades.mp4" type="video/mp4"><source src="media/teulades.webm" type="video/webm"></video></section>
+<section class="roofs" aria-label="Dots saltant per les teulades de Barcelona"><div class="rtag"><b>superDOTats</b><span>Barcelona ja n'està plena.</span></div><video id="rv" muted loop playsinline preload="metadata" poster="media/teulades-poster.jpg"><source src="media/teulades.mp4" type="video/mp4"><source src="media/teulades.webm" type="video/webm"></video></section>
 <div class="street" id="street" aria-hidden="true"></div>
 <footer class="mega">
   <div class="mg-top">
