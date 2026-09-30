@@ -168,6 +168,26 @@ pre .k{color:var(--c-amber)}pre .s{color:var(--c-green)}
 .hintf{font-family:var(--mono);font-size:12px;color:var(--muted);margin:-4px 0 14px}
 .final h2{font-size:clamp(2.4rem,6.5vw,4.8rem)}
 .final .cta{justify-content:center;margin-top:30px}
+/* vida */
+.life{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:18px;align-items:start;margin-top:28px}
+.lstage{position:relative;border-radius:28px;overflow:hidden;background:#111;aspect-ratio:16/9;box-shadow:0 30px 70px -40px rgba(0,0,0,.45)}
+.lstage img,.lstage video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .7s;transform:scale(1.02)}
+.lstage .on{opacity:1;animation:kb 9s ease-out forwards}
+@keyframes kb{from{transform:scale(1.02)}to{transform:scale(1.08)}}
+.lstage video.on{animation:none;transform:none}
+.lmsg{position:absolute;left:18px;bottom:18px;right:18px;display:flex;flex-direction:column;gap:8px;align-items:flex-start;z-index:2;pointer-events:none}
+.lmsg div{max-width:min(420px,88%);padding:9px 14px;border-radius:16px;font-size:14px;line-height:1.35;box-shadow:0 8px 24px rgba(0,0,0,.25);animation:evin .45s cubic-bezier(.2,.8,.3,1) both}
+.lmsg .q{background:#d9fdd3;color:#111;align-self:flex-end}.lmsg .a{background:#fff;color:#111;animation-delay:.9s}
+.lstage::after{content:"";position:absolute;left:0;right:0;bottom:0;height:45%;background:linear-gradient(transparent,rgba(0,0,0,.5));z-index:1;pointer-events:none}
+.lrail{display:flex;flex-direction:column;gap:6px;max-height:100%;overflow:auto;scrollbar-width:thin}
+.lrail button{all:unset;cursor:pointer;display:flex;align-items:center;gap:12px;padding:10px 14px;border:1px solid var(--line);border-radius:16px;background:var(--panel);font-size:14.5px;color:var(--muted);transition:border-color .2s,color .2s,transform .2s}
+.lrail button:hover{transform:translateX(3px);color:var(--fg)}
+.lrail button[aria-selected=true]{color:var(--fg);border-color:var(--fg);background:var(--bg)}
+.lrail button b{display:block;font-weight:600;font-size:15px;color:inherit}.lrail button small{display:block;font-size:12.5px;color:var(--muted)}
+.lrail .em{font-size:22px;flex:none;width:28px;text-align:center}
+@media (max-width:980px){.life{grid-template-columns:minmax(0,1fr)}.lrail{flex-direction:row;overflow-x:auto;padding-bottom:4px}.lrail button{flex:none}.lrail small{display:none}}
+@media (max-width:560px){.lmsg{left:10px;right:10px;bottom:10px}.lmsg .q{display:none}.lmsg div{font-size:12px;padding:7px 11px}}
+@media (prefers-reduced-motion:reduce){.lstage .on{animation:none}}
 /* street */
 .street{position:relative;height:190px;overflow:hidden;margin-top:8px;mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent);-webkit-mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent)}
 .street::after{content:"";position:absolute;left:0;right:0;bottom:22px;border-top:2px dashed var(--line)}
@@ -202,7 +222,7 @@ footer{border-top:1px solid var(--line);padding-block:32px 48px;color:var(--mute
 <div class="wrap">
 <div class="navbar" id="navbar"><nav>
   <a class="logo" href="#"><img src="dots/logo.png" width="38" height="38" alt=""><span>super<b style="font-weight:700">DOT</b>ats</span></a>
-  <div class="links"><a href="#video">Vídeo</a><a href="#cataleg">Catàleg</a><a href="#demo">Demo</a><a href="#flux">Com funciona</a><a href="#funcions">Funcions</a><a href="https://github.com/carlesrabadagarces-hub/dots-catala">GitHub</a></div>
+  <div class="links"><a href="#video">Vídeo</a><a href="#vida">Al teu dia</a><a href="#cataleg">Catàleg</a><a href="#demo">Demo</a><a href="#flux">Com funciona</a><a href="#funcions">Funcions</a><a href="https://github.com/carlesrabadagarces-hub/dots-catala">GitHub</a></div>
   <a class="btn sm app-link" id="enter" href="http://127.0.0.1:3000">Entra</a>
 </nav></div>
 
@@ -230,6 +250,17 @@ footer{border-top:1px solid var(--line);padding-block:32px 48px;color:var(--mute
   <p class="sub rv">Tries un Dot, li escrius pel WhatsApp i et respon en català. I quan el tema el supera, et diu a qui has d&apos;anar.</p>
   <div class="vwrap rv" style="aspect-ratio:16/9"><video id="ev" controls muted loop playsinline preload="metadata" poster="media/explainer-poster.jpg"><source src="media/explainer.mp4" type="video/mp4"><source src="media/explainer.webm" type="video/webm"></video></div>
   <p class="note" style="margin-top:12px">Exemples il·lustratius: les respostes reals depenen del model que triïs.</p>
+</section>
+
+<section id="vida">
+  <div class="eyebrow rv">Al teu dia</div>
+  <h2 class="rv">Un Dot al teu costat, a tot arreu</h2>
+  <p class="sub rv">Al metro, a la cuina, a l&apos;oficina o a l&apos;hora dels deures. Escrius pel WhatsApp i el Dot ja hi és.</p>
+  <div class="life rv">
+    <div class="lstage" id="lstage" aria-live="polite"></div>
+    <div class="lrail" id="lrail" role="tablist" aria-label="Situacions"></div>
+  </div>
+  <p class="note" style="margin-top:12px">Imatges creades amb IA. Les converses són d&apos;exemple.</p>
 </section>
 
 <section id="cataleg">
@@ -882,6 +913,43 @@ var dotSprite = __sprite.dotSprite, spriteParts = __sprite.spriteParts, spriteLa
     setTimeout(function(){say(talk[0])},2600);
     var last=scrollY,lt=0;window.addEventListener("scroll",function(){var d=Math.abs(scrollY-last);last=scrollY;var n=Date.now();if(d>260&&n-lt>1800){lt=n;host.dataset.state="happy";setTimeout(function(){if(host.dataset.state==="happy")host.dataset.state="idle"},600)}},{passive:true});
     setInterval(function(){if(host.dataset.state==="sleepy"){if(!bub.classList.contains("on"))say("zzz…")}},5000);
+  })();
+
+  /* ---------- Al teu dia: escenes ---------- */
+  (function(){
+    var stage=$("lstage"),rail=$("lrail");if(!stage||!rail)return;
+    var SC=[
+      {id:"passeig",em:"🚶",t:"Pel carrer",d:"Camina amb tu",q:"Quin és el camí més ràpid a la Sagrada Família?",a:"A 12 minuts a peu. Segueix Passeig de Gràcia i gira a Provença.",video:1},
+      {id:"metro",em:"🚇",t:"Al metro",d:"Ruta i horaris",q:"Quina línia agafo per anar a Sants?",a:"L3 fins a Espanya i canvia a la L1. Uns 25 minuts."},
+      {id:"cuina",em:"🍳",t:"A la cuina",d:"Receptes amb el que tens",q:"Tinc ous, pebrots i patates. Què cuino?",a:"Truita amb pebrots i patata al forn. T'ho explico pas a pas."},
+      {id:"deures",em:"✏️",t:"Els deures",d:"Explica, no fa la feina",q:"No entenc les fraccions.",a:"Imagina una pizza en 4 trossos: en menges 1, i això és 1/4. Ho provem?"},
+      {id:"oficina",em:"💼",t:"A l'oficina",d:"Papers i gestions",q:"Com presento el model 303?",a:"Es fa a la Seu de l'Agència Tributària. Et deixo la llista de dades que necessites."},
+      {id:"metge",em:"🩺",t:"Salut",d:"Orienta i deriva",q:"Em fa mal el cap des d'ahir.",a:"Beu aigua i descansa. Si empitjora o tens febre alta, truca al 061."},
+      {id:"boqueria",em:"🍊",t:"Al mercat",d:"Llista de la compra",q:"Què compro per a 6 persones?",a:"Et preparo una llista amb quantitats i preus aproximats."},
+      {id:"parkguell",em:"🌇",t:"De passeig",d:"Guia de la ciutat",q:"On veig la posta de sol?",a:"Al Park Güell, cap a les 19:30. Arriba 20 minuts abans."},
+      {id:"cinema",em:"🎬",t:"Al cinema",d:"Què vaig a veure?",q:"Què em recomanes per aquest vespre?",a:"Si t'agrada la comèdia, mira les sessions de les 20:15 a prop teu."},
+      {id:"escola",em:"🏫",t:"A l'escola",d:"Agenda i famílies",q:"A quina hora surten demà?",a:"Demà surten a les 16:30. T'ho recordo al matí."}
+    ];
+    var els={},bt=[],cur=-1,timer=null,msg=document.createElement("div");msg.className="lmsg";
+    SC.forEach(function(c,i){
+      var el;
+      if(c.video){el=document.createElement("video");el.muted=true;el.loop=true;el.playsInline=true;el.preload="metadata";el.poster="scenes/"+c.id+".jpg";el.innerHTML='<source src="scenes/'+c.id+'.mp4" type="video/mp4"><source src="scenes/'+c.id+'.webm" type="video/webm">';el.setAttribute("aria-label",c.t)}
+      else{el=document.createElement("img");el.loading="lazy";el.alt=c.t;el.src="scenes/"+c.id+".jpg"}
+      stage.appendChild(el);els[i]=el;
+      var b=document.createElement("button");b.setAttribute("role","tab");b.innerHTML='<span class="em">'+c.em+'</span><span><b>'+c.t+'</b><small>'+c.d+'</small></span>';
+      b.onclick=function(){show(i,true)};rail.appendChild(b);bt.push(b)});
+    stage.appendChild(msg);
+    function show(i,manual){
+      if(i===cur)return;cur=i;var c=SC[i];
+      Object.keys(els).forEach(function(k){var e=els[k];if(+k===i){e.classList.remove("on");void e.offsetWidth;e.classList.add("on");if(e.play&&!reduce)try{e.currentTime=0;e.play()}catch(x){}}else{e.classList.remove("on");if(e.pause)e.pause()}});
+      bt.forEach(function(b,j){b.setAttribute("aria-selected",j===i?"true":"false")});
+      msg.innerHTML='<div class="q"></div><div class="a"></div>';msg.firstChild.textContent=c.q;msg.lastChild.textContent=c.a;
+      if(manual){clearInterval(timer);timer=null}
+      if(!timer&&!reduce&&!manual)timer=setInterval(function(){show((cur+1)%SC.length)},6500);
+    }
+    function fit(){rail.style.maxHeight=innerWidth>980?stage.offsetHeight+"px":"none"}fit();addEventListener("resize",fit);
+    show(0);
+    var seen=false;new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting&&!seen){seen=true;if(!reduce&&!timer)timer=setInterval(function(){show((cur+1)%SC.length)},6500)}})},{threshold:.4}).observe(stage);
   })();
 
   /* ---------- Carrer: Dots que passegen i activitat en directe ---------- */

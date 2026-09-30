@@ -284,6 +284,43 @@
     setInterval(function(){if(host.dataset.state==="sleepy"){if(!bub.classList.contains("on"))say("zzz…")}},5000);
   })();
 
+  /* ---------- Al teu dia: escenes ---------- */
+  (function(){
+    var stage=$("lstage"),rail=$("lrail");if(!stage||!rail)return;
+    var SC=[
+      {id:"passeig",em:"🚶",t:"Pel carrer",d:"Camina amb tu",q:"Quin és el camí més ràpid a la Sagrada Família?",a:"A 12 minuts a peu. Segueix Passeig de Gràcia i gira a Provença.",video:1},
+      {id:"metro",em:"🚇",t:"Al metro",d:"Ruta i horaris",q:"Quina línia agafo per anar a Sants?",a:"L3 fins a Espanya i canvia a la L1. Uns 25 minuts."},
+      {id:"cuina",em:"🍳",t:"A la cuina",d:"Receptes amb el que tens",q:"Tinc ous, pebrots i patates. Què cuino?",a:"Truita amb pebrots i patata al forn. T'ho explico pas a pas."},
+      {id:"deures",em:"✏️",t:"Els deures",d:"Explica, no fa la feina",q:"No entenc les fraccions.",a:"Imagina una pizza en 4 trossos: en menges 1, i això és 1/4. Ho provem?"},
+      {id:"oficina",em:"💼",t:"A l'oficina",d:"Papers i gestions",q:"Com presento el model 303?",a:"Es fa a la Seu de l'Agència Tributària. Et deixo la llista de dades que necessites."},
+      {id:"metge",em:"🩺",t:"Salut",d:"Orienta i deriva",q:"Em fa mal el cap des d'ahir.",a:"Beu aigua i descansa. Si empitjora o tens febre alta, truca al 061."},
+      {id:"boqueria",em:"🍊",t:"Al mercat",d:"Llista de la compra",q:"Què compro per a 6 persones?",a:"Et preparo una llista amb quantitats i preus aproximats."},
+      {id:"parkguell",em:"🌇",t:"De passeig",d:"Guia de la ciutat",q:"On veig la posta de sol?",a:"Al Park Güell, cap a les 19:30. Arriba 20 minuts abans."},
+      {id:"cinema",em:"🎬",t:"Al cinema",d:"Què vaig a veure?",q:"Què em recomanes per aquest vespre?",a:"Si t'agrada la comèdia, mira les sessions de les 20:15 a prop teu."},
+      {id:"escola",em:"🏫",t:"A l'escola",d:"Agenda i famílies",q:"A quina hora surten demà?",a:"Demà surten a les 16:30. T'ho recordo al matí."}
+    ];
+    var els={},bt=[],cur=-1,timer=null,msg=document.createElement("div");msg.className="lmsg";
+    SC.forEach(function(c,i){
+      var el;
+      if(c.video){el=document.createElement("video");el.muted=true;el.loop=true;el.playsInline=true;el.preload="metadata";el.poster="scenes/"+c.id+".jpg";el.innerHTML='<source src="scenes/'+c.id+'.mp4" type="video/mp4"><source src="scenes/'+c.id+'.webm" type="video/webm">';el.setAttribute("aria-label",c.t)}
+      else{el=document.createElement("img");el.loading="lazy";el.alt=c.t;el.src="scenes/"+c.id+".jpg"}
+      stage.appendChild(el);els[i]=el;
+      var b=document.createElement("button");b.setAttribute("role","tab");b.innerHTML='<span class="em">'+c.em+'</span><span><b>'+c.t+'</b><small>'+c.d+'</small></span>';
+      b.onclick=function(){show(i,true)};rail.appendChild(b);bt.push(b)});
+    stage.appendChild(msg);
+    function show(i,manual){
+      if(i===cur)return;cur=i;var c=SC[i];
+      Object.keys(els).forEach(function(k){var e=els[k];if(+k===i){e.classList.remove("on");void e.offsetWidth;e.classList.add("on");if(e.play&&!reduce)try{e.currentTime=0;e.play()}catch(x){}}else{e.classList.remove("on");if(e.pause)e.pause()}});
+      bt.forEach(function(b,j){b.setAttribute("aria-selected",j===i?"true":"false")});
+      msg.innerHTML='<div class="q"></div><div class="a"></div>';msg.firstChild.textContent=c.q;msg.lastChild.textContent=c.a;
+      if(manual){clearInterval(timer);timer=null}
+      if(!timer&&!reduce&&!manual)timer=setInterval(function(){show((cur+1)%SC.length)},6500);
+    }
+    function fit(){rail.style.maxHeight=innerWidth>980?stage.offsetHeight+"px":"none"}fit();addEventListener("resize",fit);
+    show(0);
+    var seen=false;new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting&&!seen){seen=true;if(!reduce&&!timer)timer=setInterval(function(){show((cur+1)%SC.length)},6500)}})},{threshold:.4}).observe(stage);
+  })();
+
   /* ---------- Carrer: Dots que passegen i activitat en directe ---------- */
   (function(){
     var st=$("street"),feed=$("feed");if(!st||!feed)return;
