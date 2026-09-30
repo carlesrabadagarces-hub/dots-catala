@@ -465,8 +465,8 @@ const FOLDER = { hat: 'hats', glasses: 'glasses', accessory: 'accessories' };
 
 // [width as a share of the head width, how far the hat sinks into the head as a share of body height]
 const HAT = {
-  cap: [1.0, 0.1], beanie: [1.02, 0.09], tophat: [0.82, 0.1], crown: [0.74, 0.07], party: [0.58, 0.06], cowboy: [1.32, 0.16],
-  wizard: [1.0, 0.09], chef: [0.94, 0.1], graduation: [1.08, 0.13], hardhat: [1.0, 0.09], antenna: [0.3, 0.05], flower: [0.4, -0.02],
+  cap: [1.0, 0.2], beanie: [1.02, 0.2], tophat: [0.82, 0.12], crown: [0.74, 0.12], party: [0.58, 0.08], cowboy: [1.32, 0.18],
+  wizard: [1.0, 0.11], chef: [0.94, 0.15], graduation: [1.08, 0.18], hardhat: [1.0, 0.2], antenna: [0.3, 0.06], flower: [0.4, -0.02],
 };
 
 function normalizeSpriteLook(look) {
@@ -528,7 +528,7 @@ function spriteParts(look) {
   add('body', `${l.body}-${l.tone}`, { x: g.left, y: g.top, w: g.bw, h: g.bh }, 2, 'body');
   const A = {
     bowtie: () => place('accessory', 'bowtie', hw * 0.44, 0.5, g.bh * 0.3),
-    tie: () => place('accessory', 'tie', hw * 0.28, 0, g.bh * 0.2),
+    tie: () => place('accessory', 'tie', hw * 0.28, 0, g.bh * 0.17),
     mustache: () => place('accessory', 'mustache', hw * 0.44, 0.5, g.bh * 0.12),
   };
   if (A[l.accessory]) add('accessory', l.accessory, A[l.accessory](), 4, 'acc');
