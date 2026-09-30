@@ -364,88 +364,79 @@
 
   /* ---------- Carrer: Dots que passegen i activitat en directe ---------- */
   (function(){
-    var st=$("street"),feed=$("feed");if(!st||!feed)return;
-    /* Dues persones caminen mirant el mòbil i una colla de Dots els persegueix.
-       Les persones són fotos retallades en tors i cames (people/, fetes per tools/rig_people.py):
-       les cames giren al maluc i la passa va lligada a la distància recorreguda, així el peu
-       no rellisca mai. Si les imatges no hi són, es dibuixen unes siluetes senzilles. */
-    var small=innerWidth<640,PH=small?128:176,M=220,W=0,SP;
+    var st=$("street");if(!st)return;
+    /* Dos avatars caminen mirant el mòbil i una colla de Dots els persegueix.
+       Les cames tenen maluc, genoll i turmell, i el pas va lligat a la distància
+       recorreguda: així el peu que trepitja es queda quiet i el caminar no coixeja. */
+    var small=innerWidth<640,PH=small?132:184,M=small?120:220,W=0,SP,AH=240;
     function size(){W=st.clientWidth;SP=W+2*M}size();addEventListener("resize",size);
-    var AMP=21,SRC_H=420;
-    function pose(t){                       // angle del maluc, en graus (positiu = cama endavant)
+
+    // Cicle de caminar: angles en graus, positius cap endavant. Cada fila és
+    // [moment del cicle, maluc, genoll, turmell].
+    var STEP=[[0,26,-6,4],[.125,15,-22,-2],[.25,2,-12,-5],[.375,-11,-6,-9],
+              [.5,-24,-16,-18],[.625,-14,-55,4],[.75,4,-46,8],[.875,19,-16,8]];
+    var HIP=[62,130],KNEE=186,ANKLE=234,LEG=104,SWING=26;
+    function pose(t){
       t=((t%1)+1)%1;
-      if(t<.62)return AMP*(1-2*(t/.62));    // recolzament: escombrada enrere constant
-      var u=(t-.62)/.38;u=u*u*(3-2*u);      // oscil·lació: torna endavant, més ràpida
-      return AMP*(2*u-1);
+      var n=STEP.length,i=Math.floor(t*n),u=t*n-i,k=STEP[i],m=STEP[(i+1)%n];
+      u=u*u*(3-2*u);
+      return [k[1]+(m[1]-k[1])*u,k[2]+(m[2]-k[2])*u,k[3]+(m[3]-k[3])*u];
     }
-    function rise(t,L){                     // el cos puja quan una cama passa vertical
-      var s=Math.min(Math.abs(pose(t)),Math.abs(pose(t+.5)));
-      return L*(Math.cos(s*Math.PI/180)-Math.cos(AMP*Math.PI/180));
-    }
-    function fallbackPerson(c){
+    function avatar(c){
+      var rot=function(cls,extra){return '<g class="'+cls+'"'+(extra||"")+'>'},
+          leg=function(side){
+            return '<g class="'+side+'">'
+              +'<rect x="53" y="128" width="18" height="62" rx="9" fill="'+c.leg+'"/>'
+              +'<g class="'+side+'k">'
+              +'<rect x="55" y="182" width="14" height="54" rx="7" fill="'+c.leg+'"/>'
+              +'<g class="'+side+'a"><rect x="53" y="230" width="28" height="10" rx="5" fill="'+c.shoe+'"/></g>'
+              +'</g></g>';
+          };
       var d=document.createElement("div");d.className="person";
-      d.innerHTML='<svg viewBox="0 0 100 200" width="'+PH*.5+'" height="'+PH+'" aria-hidden="true">'
-        +'<ellipse cx="50" cy="197" rx="27" ry="4" fill="rgba(0,0,0,.22)"/>'
-        +'<g class="lf"><rect x="43.5" y="108" width="13" height="82" rx="6.5" fill="'+c.pantsD+'"/><rect x="42" y="187" width="23" height="9" rx="4.5" fill="'+c.shoes+'"/></g>'
-        +(c.long?'<rect x="34" y="20" width="16" height="40" rx="8" fill="'+c.hair+'"/>':'')
-        +'<rect x="35" y="40" width="30" height="76" rx="13" fill="'+c.top+'"/>'
-        +'<g class="hd"><circle cx="49" cy="23" r="14.5" fill="'+c.hair+'"/><circle cx="53" cy="26" r="12.5" fill="'+c.sk+'"/><path d="M40 19 q12 -12 25 0 q-12 -3 -25 0z" fill="'+c.hair+'"/></g>'
-        +'<g class="ln"><rect x="43.5" y="108" width="13" height="82" rx="6.5" fill="'+c.pants+'"/><rect x="42" y="187" width="23" height="9" rx="4.5" fill="'+c.shoes+'"/></g>'
-        +'<path d="M50 52 L55 80 L71 67" stroke="'+c.top+'" stroke-width="9.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>'
-        +'<circle cx="71" cy="67" r="5" fill="'+c.sk+'"/>'
-        +'<g transform="rotate(-14 73 60)"><rect x="68" y="50" width="11" height="19" rx="2.4" fill="#0d0d10"/><rect class="scr" x="69.3" y="51.5" width="8.4" height="16" rx="1.6" fill="#8fd0ff"/></g></svg>';
-      d.stride=PH*.55;d.lift=0;d.anchor=PH*.25;
-      d.step=function(ph){var a=Math.sin(ph*Math.PI*2)*24;
-        d.querySelector(".ln").setAttribute("transform","rotate("+a+" 50 108)");
-        d.querySelector(".lf").setAttribute("transform","rotate("+(-a)+" 50 108)")};
-      d.glow=function(on){d.querySelector(".scr").setAttribute("fill",on?"#fff":"#8fd0ff")};
-      return d;
-    }
-    function rigPerson(key,r){
-      var s=PH/SRC_H,d=document.createElement("div");d.className="person";
-      d.style.width=(r.w*s)+"px";d.style.height=(r.h*s)+"px";
-      var inner=document.createElement("div");
-      inner.style.cssText="position:absolute;left:0;top:0;width:"+r.w+"px;height:"+r.h+"px;transform-origin:0 0;transform:scale("+s+")";
-      var body=document.createElement("div");
-      body.style.cssText="position:absolute;inset:0";
-      var legs=[];
-      function limb(front){
-        var clip=document.createElement("div");
-        clip.style.cssText="position:absolute;left:0;top:"+r.split+"px;width:"+r.w+"px;height:"+(r.h-r.split)+"px;overflow:hidden";
-        var pivot=document.createElement("div");
-        pivot.style.cssText="position:absolute;left:0;top:"+(-r.split)+"px;width:"+r.w+"px;height:"+r.h+"px;transform-origin:"+r.hip[0]+"px "+r.hip[1]+"px";
-        var img=new Image();img.src="people/"+key+"-"+(front?"front":"back")+".webp";img.alt="";
-        img.style.cssText="position:absolute;inset:0;width:100%;height:100%";
-        pivot.appendChild(img);clip.appendChild(pivot);legs.push({el:pivot,a:r.legs[front?1:0].angle});
-        return clip;
+      d.innerHTML='<svg viewBox="0 0 130 246" width="'+(PH*130/AH)+'" height="'+PH+'" aria-hidden="true">'
+        +'<ellipse class="sh" cx="64" cy="242" rx="30" ry="4.5" fill="rgba(0,0,0,.22)"/>'
+        +'<g class="bd">'
+        +  '<g class="arm"><rect x="57" y="74" width="11" height="54" rx="5.5" fill="'+c.topDark+'"/></g>'
+        +  leg("far")
+        +  '<rect x="56" y="50" width="14" height="22" rx="7" fill="'+c.skin+'"/>'
+        +  '<rect x="40" y="64" width="46" height="72" rx="21" fill="'+c.top+'"/>'
+        +  '<circle cx="65" cy="32" r="23" fill="'+c.skin+'"/>'
+        +  c.hair
+        +  leg("near")
+        +  '<path d="M66 80 L76 108 L92 98" fill="none" stroke="'+c.top+'" stroke-width="11" stroke-linecap="round" stroke-linejoin="round"/>'
+        +  '<circle cx="93" cy="97" r="6" fill="'+c.skin+'"/>'
+        +  '<g transform="rotate(-14 96 88)"><rect x="89" y="74" width="15" height="24" rx="3" fill="#15161a"/>'
+        +  '<rect class="scr" x="90.5" y="76" width="12" height="20" rx="2" fill="#a8d5ff"/></g>'
+        +'</g></svg>';
+      var q=function(s){return d.querySelector(s)};
+      var body=q(".bd"),arm=q(".arm"),shadow=q(".sh"),
+          near=[q(".near"),q(".neark"),q(".neara")],far=[q(".far"),q(".fark"),q(".fara")];
+      function limb(g,p){
+        g[0].setAttribute("transform","rotate("+(-p[0])+" "+HIP[0]+" "+HIP[1]+")");
+        g[1].setAttribute("transform","rotate("+(-p[1])+" "+HIP[0]+" "+KNEE+")");
+        g[2].setAttribute("transform","rotate("+(-p[2])+" "+HIP[0]+" "+ANKLE+")");
       }
-      var torso=new Image();torso.src="people/"+key+"-torso.webp";torso.alt="";
-      torso.style.cssText="position:absolute;inset:0;width:100%;height:100%";
-      var back=limb(false),front=limb(true);
-      body.appendChild(back);body.appendChild(torso);body.appendChild(front);
-      var shadow=document.createElement("div");
-      shadow.style.cssText="position:absolute;left:"+(r.hip[0]-70)+"px;top:"+(r.ground-8)+"px;width:140px;height:22px;"
-        +"background:radial-gradient(closest-side,rgba(0,0,0,.30),transparent)";
-      inner.appendChild(shadow);inner.appendChild(body);d.appendChild(inner);
-      d.stride=4*r.len*Math.sin(AMP*Math.PI/180)*s;      // avanç per cicle complet
-      d.lift=(r.h-r.ground)*s;   // baixa la figura fins que els peus toquen terra
-      d.anchor=r.hip[0]*s;
+      d.stride=4*LEG*Math.sin(SWING*Math.PI/180)*(PH/AH);
+      d.anchor=HIP[0]*(PH/AH);d.lift=0;
       d.step=function(ph){
-        body.style.transform="translateY("+(-rise(ph,r.len))+"px)";
-        legs[0].el.style.transform="rotate("+(legs[0].a-pose(ph+.5))+"deg)";
-        legs[1].el.style.transform="rotate("+(legs[1].a-pose(ph))+"deg)";
+        var n=pose(ph),f=pose(ph+.5),lift=3.4*(1-Math.cos(4*Math.PI*ph))/2;
+        limb(near,n);limb(far,f);
+        arm.setAttribute("transform","rotate("+(n[0]*.5)+" "+HIP[0]+" 78)");
+        body.setAttribute("transform","translate(0 "+(-lift)+")");
+        shadow.setAttribute("rx",30-lift*.9);
       };
-      d.glow=function(){};
+      d.glow=function(on){q(".scr").setAttribute("fill",on?"#fff":"#a8d5ff")};
       return d;
     }
+    var HAIR_A='<path d="M42 30a23 23 0 0 1 44-9q-14-6-28 1-9 5-10 17z" fill="#2b2118"/>'
+              +'<ellipse cx="45" cy="34" rx="10" ry="15" fill="#2b2118"/><circle cx="35" cy="24" r="9" fill="#2b2118"/>';
+    var HAIR_B='<path d="M43 28a23 23 0 0 1 43-6q-13-9-27-3-12 4-16 9z" fill="#3a2a1d"/>'
+              +'<path d="M43 28q-3 10 1 17 3-11 6-14z" fill="#3a2a1d"/>';
     var P=[];
-    [["a",{sk:"#e2b895",hair:"#2a1c15",top:"#f0e4d2",topD:"#d8c9b3",pants:"#3d64a3",pantsD:"#2f4f85",shoes:"#f6f6f6",long:true},0,0],
-     ["b",{sk:"#c98f6b",hair:"#3f2a1e",top:"#66753f",topD:"#546131",pants:"#2c2e34",pantsD:"#202228",shoes:"#8b9098",beard:true},118,.37]].forEach(function(p){
-      var el=fallbackPerson(p[1]);st.appendChild(el);
-      var o={el:el,v:74,x0:p[2],ph0:p[3]};P.push(o);
-      if(typeof RIG!=="undefined"&&RIG[p[0]]){
-        var r=rigPerson(p[0],RIG[p[0]]);st.replaceChild(r,o.el);o.el=r;
-      }
+    [[{skin:"#f0c9a4",top:"#e8e2d6",topDark:"#d3ccbe",leg:"#3f5f96",shoe:"#f2f2f2",hair:HAIR_A},0,0],
+     [{skin:"#d9a077",top:"#6b7a46",topDark:"#5a6839",leg:"#2f323a",shoe:"#9aa0a8",hair:HAIR_B},128,.42]].forEach(function(p){
+      var el=avatar(p[0]);st.appendChild(el);
+      P.push({el:el,v:100,x0:p[1],ph0:p[2]});
     });
     var CAST=[
       [{body:"blob",tone:"orange",hat:"hardhat",accessory:"mustache"},"Fontaner"],
@@ -506,15 +497,6 @@
       requestAnimationFrame(step);
     }
     requestAnimationFrame(step);
-    /* activitat */
-    var EV=[["Fontaner","ha ajudat a arreglar una cisterna que perdia aigua",""],["Metge","ha explicat quan cal anar a urgències",""],["Traductor","ha traduït una carta al francès",""],["Cuiner","ha proposat un sopar amb quatre ingredients",""],["Assessor","ha explicat com fer la declaració",""],["Mestra","ha inventat un joc de sumes",""],["Recepcionista","ha confirmat una cita de dijous",""],["Professor","ha resolt una equació pas a pas",""],["Creador d'stickers","ha dissenyat 8 stickers",""]];
-    var n=0;
-    function ev(){var e=EV[Math.floor(Math.random()*EV.length)],d=document.createElement("div");d.className="ev";
-      d.innerHTML='<i></i><div><b>'+e[0]+'</b> '+e[1]+'</div><span>ara</span>';feed.insertBefore(d,feed.firstChild);
-      while(feed.children.length>3)feed.removeChild(feed.lastChild);
-      [].slice.call(feed.children).forEach(function(c,i){if(i)c.lastChild.textContent="fa "+(i*4+Math.floor(Math.random()*3))+" s"});}
-    ev();ev();ev();
-    if(!reduce)setInterval(ev,2600);
   })();
 
   if(reduce)packets(0);else requestAnimationFrame(packets);
