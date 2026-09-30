@@ -231,6 +231,15 @@ pre .k{color:var(--c-amber)}pre .s{color:var(--c-green)}
 .dir ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:5px}
 .dir li a{color:var(--muted);text-decoration:none;font-size:14.5px}.dir li a:hover{color:var(--fg);text-decoration:underline}
 .dir .sw{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:8px;vertical-align:baseline}
+.dirsec{padding-block:24px 8px}
+section[id]{scroll-margin-top:84px}
+.dirbox{border:1px solid var(--line);border-radius:22px;background:var(--panel);padding:0 22px}
+.dirbox summary{list-style:none;cursor:pointer;display:flex;align-items:baseline;gap:14px;padding:18px 0;font-size:1.15rem;font-weight:600;letter-spacing:-.02em}
+.dirbox summary::-webkit-details-marker{display:none}
+.dirbox summary small{color:var(--muted);font-weight:400;font-size:.9rem}
+.dirbox summary i{margin-left:auto;font-style:normal;font-size:22px;color:var(--muted);transition:transform .25s}
+.dirbox[open] summary i{transform:rotate(45deg)}
+.dirbox .sub{margin:0 0 6px}.dirbox .dir{padding-bottom:22px}
 /* faq */
 .faq{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);gap:48px;align-items:start;padding-block:88px 8px}
 .faq-l{position:sticky;top:96px}
@@ -441,11 +450,11 @@ pre .k{color:var(--c-amber)}pre .s{color:var(--c-green)}
 <!--FAQ_END--></div>
 </section>
 
-<section id="directori" aria-labelledby="dir-t">
-  <div class="eyebrow rv">Directori</div>
-  <h2 id="dir-t" class="rv">Tots els Dots, per sector</h2>
-  <p class="sub rv">Cada Dot té la seva pàgina amb què fa, què no fa i quan et derivarà a un professional.</p>
-  <div class="dir rv"><!--DIR_START-->
+<section id="directori" aria-labelledby="dir-t" class="dirsec">
+  <details class="dirbox rv">
+    <summary><span id="dir-t">Tots els Dots, per sector</span><small>88 Dots · 10 àmbits</small><i aria-hidden="true">+</i></summary>
+    <p class="sub">Cada Dot té la seva pàgina amb què fa, què no fa i quan t&apos;aconsellarà anar a un professional.</p>
+    <div class="dir"><!--DIR_START-->
 <div><h3><span class="sw" style="background:#ffc21a"></span><a href="sectors/educacio/">Educació</a></h3><ul><li><a href="agents/mestra-infantil-primaria/">Mestra d&#x27;infantil i primària</a></li><li><a href="agents/professor-matematiques/">Professor de matemàtiques</a></li><li><a href="agents/professor-llengues/">Professor de llengua i literatura</a></li><li><a href="agents/professor-ciencies/">Professor de ciències</a></li><li><a href="agents/professor-idiomes/">Professor d&#x27;idiomes</a></li><li><a href="agents/orientador-educatiu/">Orientador educatiu</a></li><li><a href="agents/preparador-oposicions/">Preparador d&#x27;oposicions</a></li><li><a href="agents/tutor-tfg/">Tutor de treballs acadèmics</a></li><li><a href="agents/professor-musica/">Professor de música</a></li><li><a href="agents/psicopedagog/">Psicopedagog</a></li></ul></div>
 <div><h3><span class="sw" style="background:#ff4d7d"></span><a href="sectors/salut/">Salut i benestar</a></h3><ul><li><a href="agents/metge-capcalera/">Metge de capçalera</a></li><li><a href="agents/infermer/">Infermer/a</a></li><li><a href="agents/pediatre/">Pediatre</a></li><li><a href="agents/psicoleg/">Psicòleg</a></li><li><a href="agents/nutricionista/">Nutricionista</a></li><li><a href="agents/entrenador-personal/">Entrenador personal</a></li><li><a href="agents/fisioterapeuta/">Fisioterapeuta</a></li><li><a href="agents/farmaceutic/">Farmacèutic</a></li><li><a href="agents/dentista/">Dentista</a></li><li><a href="agents/veterinari/">Veterinari</a></li><li><a href="agents/coach-son-benestar/">Coach de son i benestar</a></li></ul></div>
 <div><h3><span class="sw" style="background:#52657a"></span><a href="sectors/legal/">Legal i fiscal</a></h3><ul><li><a href="agents/jurista-generalista/">Jurista</a></li><li><a href="agents/assessor-fiscal/">Assessor fiscal</a></li><li><a href="agents/laboralista/">Laboralista</a></li><li><a href="agents/advocat-arrendaments/">Advocat d&#x27;habitatge i lloguers</a></li><li><a href="agents/proteccio-dades/">Delegat de protecció de dades</a></li><li><a href="agents/jurista-penal/">Jurista penal</a></li><li><a href="agents/gestor-administratiu/">Gestor administratiu</a></li><li><a href="agents/mediador-conflictes/">Mediador de conflictes</a></li></ul></div>
@@ -457,6 +466,7 @@ pre .k{color:var(--c-amber)}pre .s{color:var(--c-green)}
 <div><h3><span class="sw" style="background:#6b7cff"></span><a href="sectors/public/">Administració i tràmits</a></h3><ul><li><a href="agents/tramits-generalitat/">Guia de tràmits</a></li><li><a href="agents/ajuts-subvencions/">Assessor d&#x27;ajuts</a></li><li><a href="agents/seguretat-social/">Expert en Seguretat Social</a></li><li><a href="agents/estrangeria/">Especialista en estrangeria</a></li></ul></div>
 <div><h3><span class="sw" style="background:#7cb342"></span><a href="sectors/industria/">Camp, indústria i transport</a></h3><ul><li><a href="agents/agronom/">Agrònom</a></li><li><a href="agents/logistica/">Responsable de logística</a></li><li><a href="agents/prl/">Tècnic de prevenció</a></li><li><a href="agents/enginyer-industrial/">Enginyer industrial</a></li></ul></div>
 <!--DIR_END--></div>
+  </details>
 </section>
 
 </main>
