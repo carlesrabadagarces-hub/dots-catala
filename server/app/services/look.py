@@ -90,6 +90,7 @@ SECTOR_BASES = {
 
 
 PLUSH_ITEMS = {
+    "hat": {"none", "tophat", "crown", "party", "cowboy", "wizard", "chef", "graduation", "hardhat", "antenna", "flower"},
     "glasses": {"none", "shades"},
     "accessory": {"none", "bowtie", "tie", "mustache"},
 }
@@ -104,5 +105,6 @@ def look_for_agent(agent_id: str, sector: str) -> Dict[str, str]:
     # Only accessories that look good on the plush bodies are used for catalogue Dots.
     for key, allowed in PLUSH_ITEMS.items():
         if look[key] not in allowed:
-            look[key] = "none"
+            # caps and beanies were dropped; trades keep a hard hat, the rest go bare-headed
+            look[key] = "hardhat" if key == "hat" and sector in ("oficis", "industria") and look[key] in ("cap", "beanie") else "none"
     return look

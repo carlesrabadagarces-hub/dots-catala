@@ -8,7 +8,7 @@ import { BODIES, TONES, TONE_COLORS, SPRITE_ITEMS, normalizeSpriteLook, isSprite
 const LABELS = {
   body: { blob: 'Gota', arch: 'Arc', cube: 'Cub' },
   tone: { pink: 'Rosa', orange: 'Taronja', yellow: 'Groc', green: 'Verd', teal: 'Verd atzur', blue: 'Blau', violet: 'Violeta', slate: 'Pissarra' },
-  hat: { none: 'Cap', cap: 'Gorra', beanie: 'Gorro', tophat: 'Barret de copa', crown: 'Corona', party: 'Festa', cowboy: 'Vaquer', wizard: 'Mag', chef: 'Cuiner', graduation: 'Birret', hardhat: 'Casc', antenna: 'Antena', flower: 'Flor' },
+  hat: { none: 'Cap', tophat: 'Barret de copa', crown: 'Corona', party: 'Festa', cowboy: 'Vaquer', wizard: 'Mag', chef: 'Cuiner', graduation: 'Birret', hardhat: 'Casc', antenna: 'Antena', flower: 'Flor' },
   glasses: { none: 'Cap', shades: 'De sol' },
   accessory: { none: 'Cap', bowtie: 'Pajarita', tie: 'Corbata', mustache: 'Bigoti' },
 };

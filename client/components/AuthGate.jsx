@@ -6,12 +6,12 @@ import DotAvatar from './DotAvatar';
 import { getAuthStatus, oauthStartUrl, loginWithToken, loginWithPassword, logout } from '../lib/api';
 
 const CAST = [
-  { look: { body: 'arch', tone: 'pink', hat: 'cap', accessory: 'bowtie' }, size: 150, style: { left: '6%', top: '12%' } },
-  { look: { body: 'blob', tone: 'blue', hat: 'beanie' }, size: 170, style: { right: '7%', top: '9%' }, delay: 1 },
+  { look: { body: 'arch', tone: 'pink', hat: 'tophat', accessory: 'bowtie' }, size: 150, style: { left: '6%', top: '12%' } },
+  { look: { body: 'blob', tone: 'blue', glasses: 'shades' }, size: 170, style: { right: '7%', top: '9%' }, delay: 1 },
   { look: { body: 'cube', tone: 'teal', hat: 'chef', accessory: 'mustache' }, size: 140, style: { left: '10%', bottom: '10%' }, delay: 2 },
   { look: { body: 'blob', tone: 'violet', hat: 'wizard' }, size: 160, style: { right: '10%', bottom: '11%' }, delay: 0.5 },
   { look: { body: 'arch', tone: 'yellow', hat: 'crown', accessory: 'bowtie' }, size: 120, style: { left: '21%', top: '3%' }, delay: 1.5 },
-  { look: { body: 'cube', tone: 'slate', glasses: 'shades', hat: 'cap' }, size: 110, style: { right: '27%', bottom: '3%' }, delay: 2.5 },
+  { look: { body: 'cube', tone: 'slate', glasses: 'shades' }, size: 110, style: { right: '27%', bottom: '3%' }, delay: 2.5 },
   { look: { body: 'blob', tone: 'orange', hat: 'hardhat' }, size: 70, style: { left: '3%', top: '52%' }, delay: 1 },
   { look: { body: 'arch', tone: 'green' }, size: 70, style: { right: '3%', top: '46%' }, delay: 2 },
 ];

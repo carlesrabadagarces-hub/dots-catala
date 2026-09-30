@@ -8,7 +8,7 @@ export const BODIES = ['blob', 'arch', 'cube'];
 export const TONES = ['pink', 'orange', 'yellow', 'green', 'teal', 'blue', 'violet', 'slate'];
 export const TONE_COLORS = { pink: '#ff4d7d', orange: '#ff8a3d', yellow: '#ffc21a', green: '#7cd13b', teal: '#19c3a6', blue: '#2f7bff', violet: '#7a4cf0', slate: '#52657a' };
 export const SPRITE_ITEMS = {
-  hat: ['none', 'cap', 'beanie', 'tophat', 'crown', 'party', 'cowboy', 'wizard', 'chef', 'graduation', 'hardhat', 'antenna', 'flower'],
+  hat: ['none', 'tophat', 'crown', 'party', 'cowboy', 'wizard', 'chef', 'graduation', 'hardhat', 'antenna', 'flower'],
   glasses: ['none', 'shades'],
   accessory: ['none', 'bowtie', 'tie', 'mustache'],
 };
@@ -17,7 +17,7 @@ const FOLDER = { hat: 'hats', glasses: 'glasses', accessory: 'accessories' };
 
 // [width as a share of the head width, how far the hat sinks into the head as a share of body height]
 const HAT = {
-  cap: [1.0, 0.2], beanie: [1.02, 0.2], tophat: [0.82, 0.12], crown: [0.74, 0.12], party: [0.58, 0.08], cowboy: [1.32, 0.18],
+  tophat: [0.82, 0.12], crown: [0.74, 0.12], party: [0.58, 0.08], cowboy: [1.32, 0.18],
   wizard: [1.0, 0.11], chef: [0.94, 0.15], graduation: [1.08, 0.18], hardhat: [1.0, 0.2], antenna: [0.3, 0.06], flower: [0.4, -0.02],
 };
 

@@ -47,7 +47,7 @@ class LookTests(unittest.IsolatedAsyncioTestCase):
         for spec in CATALOG + META:
             look = look_for_agent(spec["id"], spec["sector"])
             self.assertEqual(look, sanitize_look(look), spec["id"])
-        self.assertEqual(look_for_agent("fontaner", "oficis")["hat"], "cap")
+        self.assertEqual(look_for_agent("fontaner", "oficis")["hat"], "hardhat")
 
     async def test_bot_look_round_trip_and_catalogue_install(self):
         with tempfile.TemporaryDirectory() as d:

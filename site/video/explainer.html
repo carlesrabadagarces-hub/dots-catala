@@ -1,0 +1,308 @@
+<!doctype html>
+<html lang="ca"><head><meta charset="utf-8"><title>superDOTats · com funciona</title>
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;background:#fff}
+#st{position:relative;width:1280px;height:720px;overflow:hidden;background:#fff;color:#0a0a0a;font-family:"Helvetica Neue",Arial,sans-serif}
+.abs{position:absolute}
+#cap{position:absolute;left:70px;top:90px;width:520px}
+#capstep{font:600 22px "Courier New",monospace;letter-spacing:.14em;color:#6c6c6c;text-transform:uppercase}
+#capt{margin:14px 0 0;font-weight:700;font-size:64px;line-height:1.02;letter-spacing:-.04em}
+#capsub{margin:22px 0 0;font-size:26px;line-height:1.35;color:#6c6c6c}
+.card{position:absolute;width:186px;height:220px;border:2px solid #e8e8e6;border-radius:32px;background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding-bottom:18px}
+.card b{font-size:18px;letter-spacing:-.02em}
+.card span.r{font-size:13px;color:#6c6c6c;margin-top:2px;text-align:center;padding:0 12px}
+.card .sp{position:absolute;left:50%;top:-6px;transform:translateX(-50%)}
+.tick{position:absolute;right:16px;top:16px;width:38px;height:38px;border-radius:50%;background:#0a0a0a;color:#fff;font-size:22px;display:flex;align-items:center;justify-content:center}
+#phone{position:absolute;width:390px;height:620px;left:760px;top:50px;border-radius:52px;background:#fff;border:2px solid #e8e8e6;padding:12px;box-shadow:0 40px 80px -30px rgba(0,0,0,.25)}
+#scr{position:relative;width:100%;height:100%;border-radius:40px;overflow:hidden;background:#efeae2}
+#hdr{position:absolute;left:0;right:0;top:0;height:74px;background:#f3f3f1;display:flex;align-items:center;gap:12px;padding:0 16px;z-index:3}
+#hdr .av{width:52px;height:52px;flex:none}
+#hname{font-weight:700;font-size:20px;line-height:1.1}
+#hstat{color:#19a974;font-size:14px}
+#msgs{position:absolute;left:0;right:0;top:74px;bottom:70px;padding:16px;display:flex;flex-direction:column;gap:12px;justify-content:flex-start}
+.b{max-width:86%;padding:11px 14px 8px;border-radius:18px;font-size:19px;line-height:1.3;background:#fff;color:#111;box-shadow:0 1px 0 rgba(0,0,0,.06)}
+.b.out{align-self:flex-end;background:#d9fdd3}
+.b.alert{background:#ffe4e1;border:2px solid #ff4d4d}
+.b small{display:block;text-align:right;font-size:11px;color:#777;margin-top:3px}
+#inp{position:absolute;left:0;right:0;bottom:0;height:70px;background:#f3f3f1;display:flex;align-items:center;padding:0 14px}
+#box{flex:1;height:44px;border-radius:22px;background:#fff;padding:0 16px;display:flex;align-items:center;font-size:18px;color:#111;white-space:nowrap;overflow:hidden}
+#dotbig{position:absolute;left:400px;top:400px}
+#pill{position:absolute;left:70px;top:340px;background:#ff4d4d;color:#fff;font-weight:700;font-size:24px;padding:12px 22px;border-radius:999px}
+#note{position:absolute;left:70px;bottom:56px;font:500 16px "Courier New",monospace;color:#8a8a86}
+#prog{position:absolute;left:70px;right:70px;bottom:22px;height:8px;display:flex;gap:10px}
+#prog i{flex:1;background:#eee;border-radius:99px;overflow:hidden;position:relative}
+#prog i b{position:absolute;left:0;top:0;bottom:0;background:#0a0a0a;width:0}
+#fin{position:absolute;left:0;right:0;top:0;bottom:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+#fin h2{margin:0;font-size:112px;letter-spacing:-.05em;line-height:1}
+#fin p{margin:18px 0 0;font-size:34px;color:#6c6c6c}
+.dsp{position:relative}
+</style></head><body>
+<div id="st">
+  <div id="cap"><div id="capstep"></div><h1 id="capt"></h1><p id="capsub"></p></div>
+  <div id="s1"></div>
+  <div id="phone"><div id="scr"><div id="hdr"><div class="av" id="hav"></div><div><div id="hname"></div><div id="hstat">en línia</div></div></div><div id="msgs"></div><div id="inp"><div id="box"></div></div></div></div>
+  <div id="dotbig"></div>
+  <div id="pill">Deriva a urgències</div>
+  <div id="crowd"></div>
+  <div id="fin"><div id="finlogo"></div><h2 id="finh">superDOTats</h2><p id="finp">Els teus agents, al teu WhatsApp.</p></div>
+  <div id="note"></div>
+  <div id="prog"><i><b></b></i><i><b></b></i><i><b></b></i><i><b></b></i></div>
+</div>
+<script>
+const MANIFEST = {"bodies":{"blob":{"w":480,"h":434,"eyeL":0.3645,"eyeR":0.631,"eyeY":0.423,"headW":0.8042,"headL":0.0958},"arch":{"w":480,"h":618,"eyeL":0.3607,"eyeR":0.6376,"eyeY":0.3675,"headW":0.7708,"headL":0.1125},"cube":{"w":480,"h":479,"eyeL":0.3358,"eyeR":0.6634,"eyeY":0.4228,"headW":0.8083,"headL":0.0938}},"items":{"hats-antenna":{"w":192,"h":420},"hats-chef":{"w":420,"h":343},"hats-cowboy":{"w":420,"h":258},"hats-crown":{"w":420,"h":346},"hats-flower":{"w":420,"h":406},"hats-graduation":{"w":420,"h":292},"hats-hardhat":{"w":420,"h":347},"hats-party":{"w":296,"h":420},"hats-tophat":{"w":420,"h":351},"hats-wizard":{"w":408,"h":420},"glasses-shades":{"w":420,"h":151},"accessories-bowtie":{"w":420,"h":239},"accessories-mustache":{"w":420,"h":139},"accessories-tie":{"w":197,"h":420}},"tones":["pink","orange","yellow","green","teal","blue","violet","slate"]};
+
+
+
+const BODIES = ['blob', 'arch', 'cube'];
+const TONES = ['pink', 'orange', 'yellow', 'green', 'teal', 'blue', 'violet', 'slate'];
+const TONE_COLORS = { pink: '#ff4d7d', orange: '#ff8a3d', yellow: '#ffc21a', green: '#7cd13b', teal: '#19c3a6', blue: '#2f7bff', violet: '#7a4cf0', slate: '#52657a' };
+const SPRITE_ITEMS = {
+  hat: ['none', 'tophat', 'crown', 'party', 'cowboy', 'wizard', 'chef', 'graduation', 'hardhat', 'antenna', 'flower'],
+  glasses: ['none', 'shades'],
+  accessory: ['none', 'bowtie', 'tie', 'mustache'],
+};
+const DEFAULT_SPRITE_LOOK = { body: 'blob', tone: 'violet', hat: 'none', glasses: 'none', accessory: 'none' };
+const FOLDER = { hat: 'hats', glasses: 'glasses', accessory: 'accessories' };
+
+// [width as a share of the head width, how far the hat sinks into the head as a share of body height]
+const HAT = {
+  tophat: [0.82, 0.12], crown: [0.74, 0.12], party: [0.58, 0.08], cowboy: [1.32, 0.18],
+  wizard: [1.0, 0.11], chef: [0.94, 0.15], graduation: [1.08, 0.18], hardhat: [1.0, 0.2], antenna: [0.3, 0.06], flower: [0.4, -0.02],
+};
+
+function normalizeSpriteLook(look) {
+  const l = look || {};
+  const pick = (v, list, d) => (list.includes(v) ? v : d);
+  return {
+    body: pick(l.body, BODIES, DEFAULT_SPRITE_LOOK.body),
+    tone: pick(l.tone, TONES, DEFAULT_SPRITE_LOOK.tone),
+    hat: pick(l.hat, SPRITE_ITEMS.hat, 'none'),
+    glasses: pick(l.glasses, SPRITE_ITEMS.glasses, 'none'),
+    accessory: pick(l.accessory, SPRITE_ITEMS.accessory, 'none'),
+  };
+}
+
+function isSpriteLook(look) {
+  return !!look && BODIES.includes(look.body);
+}
+
+const pct = (v) => `${(v * 100).toFixed(2)}%`;
+
+/** Layout of a Dot inside a square frame (all numbers are shares of the frame). */
+function spriteLayout(look) {
+  const l = normalizeSpriteLook(look);
+  const B = MANIFEST.bodies[l.body];
+  let bh = 0.58;
+  let bw = (bh * B.w) / B.h;
+  if (bw > 0.84) { bw = 0.84; bh = (bw * B.h) / B.w; }
+  const left = (1 - bw) / 2;
+  const top = 1 - 0.05 - bh;
+  const fx = (f) => left + f * bw;
+  const fy = (f) => top + f * bh;
+  return { l, B, bw, bh, left, top, fx, fy, eyeCx: fx((B.eyeL + B.eyeR) / 2), eyeY: fy(B.eyeY), eyeGap: (B.eyeR - B.eyeL) * bw, headW: B.headW * bw };
+}
+
+function itemBox(cat, name, w) {
+  const meta = MANIFEST.items[`${FOLDER[cat]}-${name}`];
+  if (!meta) return null;
+  return { w, h: (w * meta.h) / meta.w, x: 0, y: 0 };
+}
+
+/** Every layer of a Dot as {src, x, y, w, h, z, cls}; positions are shares of the square frame. */
+function spriteParts(look) {
+  const g = spriteLayout(look);
+  const { l } = g;
+  const out = [];
+  const add = (cat, name, box, z, cls) => {
+    if (box) out.push({ src: cat === 'body' ? `bodies/${name}.webp` : `items/${FOLDER[cat]}-${name}.webp`, x: box.x, y: box.y, w: box.w, h: box.h, z, cls });
+  };
+  const cx = g.eyeCx;
+  const ey = g.eyeY;
+  const hw = g.headW;
+  const place = (cat, name, w, anchorY, dy, dx = 0) => {
+    const b = itemBox(cat, name, w);
+    if (!b) return null;
+    b.x = cx + dx - w / 2;
+    b.y = ey + dy - b.h * anchorY;
+    return b;
+  };
+  add('body', `${l.body}-${l.tone}`, { x: g.left, y: g.top, w: g.bw, h: g.bh }, 2, 'body');
+  const A = {
+    bowtie: () => place('accessory', 'bowtie', hw * 0.44, 0.5, g.bh * 0.3),
+    tie: () => place('accessory', 'tie', hw * 0.28, 0, g.bh * 0.17),
+    mustache: () => place('accessory', 'mustache', hw * 0.44, 0.5, g.bh * 0.12),
+  };
+  if (A[l.accessory]) add('accessory', l.accessory, A[l.accessory](), 4, 'acc');
+  if (l.glasses !== 'none') {
+    const gap = g.eyeGap;
+    const mk = (w, anchorY, dx) => place('glasses', l.glasses, w, anchorY, 0, dx);
+    let box;
+    box = mk(gap * 2.15, 0.5, 0);
+    add('glasses', l.glasses, box, 5, 'gl');
+  }
+  if (l.hat !== 'none') {
+    const [wf, sink] = HAT[l.hat];
+    const w = hw * wf;
+    const b = itemBox('hat', l.hat, w);
+    if (b) {
+      const flower = l.hat === 'flower';
+      b.x = cx + (flower ? hw * 0.3 : 0) - w / 2;
+      b.y = g.top + sink * g.bh + (flower ? g.bh * 0.1 : 0) - b.h;
+      add('hat', l.hat, b, 6, 'hat');
+    }
+  }
+  return { parts: out, g };
+}
+
+/** HTML for a plush Dot. `size` is the frame size in px; `base` is where /dots/ is served. */
+function dotSprite(look, size = 96, label = 'Dot', base = '/dots/') {
+  const { parts, g } = spriteParts(look);
+  const html = parts.map((p) => `<img class="dsp-${p.cls}" src="${base}${p.src}" alt="" draggable="false" style="left:${pct(p.x)};top:${pct(p.y)};width:${pct(p.w)};height:${pct(p.h)};z-index:${p.z}">`).join('');
+  const safe = String(label).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  return `<span class="dsp" role="img" aria-label="${safe}" style="--s:${size}px"><span class="dsp-all">${html}</span><span class="dsp-shadow" style="left:${pct(g.left + g.bw * 0.1)};width:${pct(g.bw * 0.8)};top:${pct(g.top + g.bh - 0.012)}"></span></span>`;
+}
+
+const SPRITE_CSS = `
+.dsp{position:relative;display:inline-block;width:var(--s,96px);height:var(--s,96px);flex:none;line-height:0}
+.dsp-all{position:absolute;inset:0;display:block;transform-origin:50% 95%}
+.dsp img{position:absolute;pointer-events:none;user-select:none;-webkit-user-drag:none;max-width:none}
+.dsp-shadow{position:absolute;height:5%;border-radius:50%;background:radial-gradient(closest-side,rgba(0,0,0,.28),rgba(0,0,0,0));z-index:0}
+.dl .dsp-all{animation:dl-breathe var(--dl-speed,3.6s) ease-in-out var(--dl-delay,0s) infinite}
+.dl[data-state=happy] .dsp-all{animation:dl-hop .55s cubic-bezier(.2,.8,.3,1)}
+.dl[data-state=sleepy] .dsp-all{animation:dl-breathe 6s ease-in-out infinite}
+.dl[data-state=talking] .dsp-all{animation:dl-talk-body .32s ease-in-out infinite}
+.dl[data-state=thinking] .dsp-all{animation:dl-think 2.4s ease-in-out infinite}
+@keyframes dl-talk-body{0%,100%{transform:scale(1,1)}50%{transform:scale(1.03,.97)}}
+@keyframes dl-think{0%,100%{transform:rotate(-3deg)}50%{transform:rotate(3deg)}}
+`;
+
+function ensureSpriteStyles() {
+  if (typeof document === 'undefined' || document.getElementById('dot-sprite-css')) return;
+  const style = document.createElement('style');
+  style.id = 'dot-sprite-css';
+  style.textContent = SPRITE_CSS;
+  document.head.appendChild(style);
+}
+
+function randomSpriteLook() {
+  const pick = (a) => a[Math.floor(Math.random() * a.length)];
+  return {
+    body: pick(BODIES), tone: pick(TONES),
+    hat: Math.random() < 0.85 ? pick(SPRITE_ITEMS.hat.slice(1)) : 'none',
+    glasses: Math.random() < 0.5 ? pick(SPRITE_ITEMS.glasses.slice(1)) : 'none',
+    accessory: Math.random() < 0.6 ? pick(SPRITE_ITEMS.accessory.slice(1)) : 'none',
+  };
+}
+
+(function(){
+var BASE="../dots/";ensureSpriteStyles();
+var $=function(i){return document.getElementById(i)};
+var clamp=function(x,a,b){return Math.max(a,Math.min(b,x))},seg=function(t,a,b){return clamp((t-a)/(b-a),0,1)};
+var easeOut=function(x){return 1-Math.pow(1-x,3)},easeBack=function(x){var c=1.9;return 1+(c+1)*Math.pow(x-1,3)+c*Math.pow(x-1,2)},easeIO=function(x){return x<.5?2*x*x:1-Math.pow(-2*x+2,2)/2};
+function sp(look,size,label){return dotSprite(look,size,label||"Dot",BASE)}
+
+var LOOK={
+  fontaner:{body:"blob",tone:"orange",hat:"hardhat",accessory:"mustache"},
+  metge:{body:"cube",tone:"pink",accessory:"tie",glasses:"shades"},
+  assessor:{body:"blob",tone:"slate",accessory:"tie"},
+  mestra:{body:"blob",tone:"yellow",hat:"flower"},
+  cuiner:{body:"arch",tone:"teal",hat:"chef",accessory:"mustache"},
+  prof:{body:"cube",tone:"yellow",hat:"graduation"},
+  logo:{body:"blob",tone:"blue"}
+};
+var CARDS=[["fontaner","Fontaner","Fuites i canonades"],["metge","Metge de capçalera","Salut, en general"],["assessor","Assessor fiscal","IRPF, IVA i models"],["mestra","Mestra de primària","Activitats i deures"],["cuiner","Cuiner","Receptes amb el que tens"],["prof","Professor de mates","Explica pas a pas"]];
+
+// scene 1 cards
+var s1=$("s1"),cards=[];
+CARDS.forEach(function(c,i){var d=document.createElement("div");d.className="card";var col=i%3,row=Math.floor(i/3);
+  d.style.left=(640+col*(250+14)-0)+"px";d.style.top=(110+row*(220+20))+"px";d.style.left=(640+col*198)+"px";
+  d.innerHTML='<div class="sp">'+sp(LOOK[c[0]],160,c[1])+'</div><b>'+c[1]+'</b><span class="r">'+c[2]+'</span>';
+  s1.appendChild(d);cards.push(d)});
+var tick=document.createElement("div");tick.className="tick";tick.textContent="✓";cards[0].appendChild(tick);
+
+// phone
+var hav=$("hav"),msgs=$("msgs"),box=$("box"),phone=$("phone"),hname=$("hname"),dotbig=$("dotbig"),pill=$("pill"),note=$("note");
+var cur="";
+function setDot(k,name){if(cur===k)return;cur=k;hav.innerHTML=sp(LOOK[k],62,name);dotbig.innerHTML=sp(LOOK[k],270,name);hname.textContent=name}
+function bubble(text,cls,time){var b=document.createElement("div");b.className="b "+(cls||"");b.innerHTML=text+"<small>"+time+(cls==="out"?" ✓✓":"")+"</small>";return b}
+var EX=[
+ {k:"fontaner",n:"Fontaner",t0:5.0,q:"La cisterna perd aigua constantment",a:"Tanca la clau de pas i mira si deixa de rajar. Si és així, canvia el flotador: t'ho explico pas a pas.",cls:""},
+ {k:"metge",n:"Metge de capçalera",t0:9.4,q:"Tinc un dolor fort al pit i em costa respirar",a:"Truca ara al 112. No esperis. Mentre arriben, seu i evita qualsevol esforç.",cls:"alert"}
+];
+var exDom=EX.map(function(){return{}});
+var lastEx=-1;
+function renderChat(ei,t){
+  var e=EX[ei],typeEnd=e.t0+1.4,sendAt=typeEnd+.15,dots0=sendAt+.2,replyAt=dots0+.75,replyEnd=replyAt+1.5;
+  var q=e.q,n=Math.floor(clamp((t-e.t0)/(typeEnd-e.t0),0,1)*q.length);
+  var html="";
+  box.textContent=t<sendAt?(n>0?q.substr(0,n):""):"";
+  if(!n&&t<sendAt)box.innerHTML='<span style="color:#999">Escriu un missatge</span>';
+  if(t>=sendAt){html+=bubble(q,"out","10:2"+ei).outerHTML}
+  if(t>=dots0&&t<replyAt)html+='<div class="b" style="width:74px;letter-spacing:.3em;color:#888">•••</div>';
+  if(t>=replyAt){var words=e.a.split(" "),m=Math.ceil(clamp((t-replyAt)/(replyEnd-replyAt),0,1)*words.length);html+=bubble(words.slice(0,m).join(" "),e.cls,"10:2"+ei).outerHTML}
+  msgs.innerHTML=html;
+}
+
+// crowd
+var crowd=$("crowd"),CR=[];
+var ALL=["fontaner","metge","assessor","mestra","cuiner","prof"];
+var TONES=["pink","orange","yellow","green","teal","blue","violet","slate"],BODIES=["blob","arch","cube"],HATS=["none","crown","party","flower","chef","hardhat","tophat","wizard","cowboy","graduation","antenna"];
+var seed=7;function rnd(){seed=(seed*9301+49297)%233280;return seed/233280}
+for(var i=0;i<22;i++){var ang=i/22*Math.PI*2+rnd()*.3,rx=520+rnd()*70,ry=250+rnd()*60,size=110+rnd()*70;
+  var look=i<6?LOOK[ALL[i]]:{body:BODIES[i%3],tone:TONES[Math.floor(rnd()*8)],hat:HATS[Math.floor(rnd()*HATS.length)]};
+  var d=document.createElement("div");d.className="abs";d.innerHTML=sp(look,size);crowd.appendChild(d);
+  CR.push({el:d,x:640+Math.cos(ang)*rx-size/2,y:390+Math.sin(ang)*ry-size/2+20,size:size,d:i*.06})}
+var flog=$("finlogo");flog.innerHTML=sp(LOOK.logo,200,"superDOTats");
+
+var S=[[0,4.2],[4.2,9.0],[9.0,13.0],[13.0,16]];
+var caps=[["1","Tria el teu Dot","87 oficis: de mestres a fontaners."],["2","Escriu-li pel WhatsApp","Com amb qualsevol contacte, en català."],["3","Sap quan derivar-te","Si cal un professional o urgències, te'ho diu."]];
+window.seek=function(t){
+  // caption
+  var ci=t<4.2?0:t<9.0?1:2;
+  var cx=t<13.0?1:1-seg(t,13.0,13.4);
+  var capIn=[seg(t,.15,.7),seg(t,4.3,4.8),seg(t,9.05,9.5)][ci];
+  $("cap").style.opacity=cx*Math.min(1,capIn);$("cap").style.transform="translateY("+(1-easeOut(capIn))*16+"px)";
+  $("capstep").textContent="Pas "+caps[ci][0];$("capt").textContent=caps[ci][1];$("capsub").textContent=caps[ci][2];
+  // scene 1 cards
+  s1.style.opacity=t<4.2?1:0;
+  var pick=seg(t,2.5,3.0),out1=seg(t,3.7,4.2);
+  cards.forEach(function(c,i){
+    var a=easeBack(seg(t,.35+i*.16,.95+i*.16)),op=clamp(a*2,0,1);
+    var sel=i===0,dim=sel?1:1-.7*pick;
+    var sc=(sel?1+.1*easeOut(pick):1)*Math.max(.01,a);
+    c.style.opacity=op*dim*(1-out1);c.style.transform="scale("+sc+") translateX("+(-out1*120)+"px)";
+    c.style.borderColor=sel&&pick>0?"#0a0a0a":"#e8e8e6";c.style.borderWidth=sel&&pick>0?"4px":"2px"});
+  tick.style.opacity=pick;tick.style.transform="scale("+easeBack(pick)+")";
+  // phone + big dot
+  var pin=easeOut(seg(t,4.2,4.9)),pout=easeIO(seg(t,13.0,13.7));
+  phone.style.opacity=t>=4.2&&t<13.7?1:0;phone.style.transform="translateX("+((1-pin)*560+pout*700)+"px)";
+  var ei=t<9.0?0:1;setDot(EX[ei].k,EX[ei].n);
+  if(t>=4.2&&t<13.7){renderChat(ei,t)}
+  var hop=function(t0){var x=seg(t,t0,t0+.7);return x>0&&x<1?Math.sin(x*Math.PI)*46:0};
+  var bob=Math.sin(t*3.1)*5;
+  var dp=easeBack(seg(t,4.3,5.0)),dsw=t<9.0?1:easeOut(seg(t,9.0,9.5))*0+1;
+  var swap=t>=9.0&&t<9.4?Math.abs(Math.sin((t-9.0)/.4*Math.PI/2)):0;
+  dotbig.style.opacity=t>=4.3&&t<13.4?1:0;
+  var sy=1+Math.sin(seg(t,7.4,7.9)*Math.PI)*.06+Math.sin(seg(t,11.3,11.8)*Math.PI)*.06;
+  dotbig.style.transform="translateY("+(-(hop(4.3)+hop(7.4)+hop(9.4)+hop(11.3))+bob)+"px) scale("+(Math.max(.01,dp)*sy)+","+(Math.max(.01,dp)/sy)+")";
+  dotbig.style.transformOrigin="50% 95%";
+  // pill
+  var pa=easeBack(seg(t,11.6,12.1));pill.style.opacity=t>=11.6&&t<13.4?1:0;pill.style.transform="scale("+Math.max(.01,pa)+")";
+  note.textContent=t>=4.2&&t<13.4?"Exemples il·lustratius. Les respostes reals depenen del model que triïs.":"";
+  note.style.opacity=t>=4.2&&t<13.4?1:0;
+  // crowd
+  var cin=seg(t,13.0,14.6);
+  CR.forEach(function(c){var a=easeBack(seg(t,13.1+c.d,13.75+c.d));c.el.style.opacity=clamp(a*2,0,1)*(t>=13.0?1:0);
+    c.el.style.left=c.x+"px";c.el.style.top=c.y+"px";c.el.style.transform="translateY("+((1-Math.min(1,a))*90+Math.sin(t*2.4+c.d*9)*4)+"px) scale("+Math.max(.01,a)+")"});
+  var fa=easeOut(seg(t,14.3,15.0));
+  $("fin").style.opacity=fa;$("fin").style.transform="translateY("+(1-fa)*24+"px)";
+  $("fin").style.background=fa>0?"radial-gradient(closest-side at 50% 50%,rgba(255,255,255,"+.94*fa+") 0%,rgba(255,255,255,"+.94*fa+") 55%,rgba(255,255,255,0) 100%)":"none";
+  // progress
+  var bars=document.querySelectorAll("#prog i b");
+  S.forEach(function(s,i){bars[i].style.width=(seg(t,s[0],s[1])*100)+"%"});
+};
+Promise.all([].map.call(document.images,function(i){return i.decode?i.decode().catch(function(){}):Promise.resolve()})).then(function(){window.READY=true});
+seek(0);
+})();
+</script></body></html>

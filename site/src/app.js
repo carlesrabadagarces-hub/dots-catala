@@ -4,16 +4,18 @@
   var css=function(v){return getComputedStyle(document.documentElement).getPropertyValue(v).trim()};
   var BASE="dots/";
   ensureSpriteStyles();
+  var APP_URL="http://127.0.0.1:3000";
+  [].forEach.call(document.querySelectorAll(".app-link"),function(a){a.href=APP_URL});
   function av(look,size,label){return dotSprite(look,size,label||"Dot",BASE)}
 
   var AG=[
-    {n:"Aina",r:"Recepcionista",look:{body:"arch",tone:"pink",hat:"cap",accessory:"bowtie"},p:[
+    {n:"Aina",r:"Recepcionista",look:{body:"arch",tone:"pink",hat:"tophat",accessory:"bowtie"},p:[
       ["Tinc hora dijous?","Dijous tens visita a les 10:30 amb la doctora Puig. T'envio un recordatori el dimecres al vespre."],
       ["Puc canviar-la?","Tinc lliure divendres a les 9:00 o a les 12:15. Quina et va millor?"]]},
     {n:"Pau",r:"Cuiner",look:{body:"cube",tone:"yellow",hat:"chef",accessory:"mustache"},p:[
       ["Sopar ràpid amb ous","Truita de patata en 15 minuts: 4 ous, 2 patates fines i ceba opcional. Vols la recepta pas a pas?"],
       ["Sí, sense ceba","Talla les patates ben fines, fregeix-les 8 minuts, barreja-les amb els ous batuts i cuaja 3 minuts per banda."]]},
-    {n:"Laia",r:"Traductora",look:{body:"blob",tone:"blue",hat:"beanie"},p:[
+    {n:"Laia",r:"Traductora",look:{body:"blob",tone:"blue",glasses:"shades"},p:[
       ["Tradueix: bon profit","Anglès: enjoy your meal. Francès: bon appétit. Alemany: guten Appetit."],
       ["I en italià?","Buon appetito. Igual que en castellà: buen provecho."]]},
     {n:"Marc",r:"Comptable",look:{body:"cube",tone:"green",accessory:"tie"},p:[
@@ -22,7 +24,7 @@
     {n:"Núria",r:"Tutora",look:{body:"blob",tone:"violet",hat:"graduation"},p:[
       ["Explica'm les fraccions","Una fracció és una part d'un tot. Si talles una pizza en 4 i te'n menges 1, has menjat 1/4."],
       ["Posa'm un exercici","Quant és 1/2 + 1/4? Pista: converteix-les a quarts."]]},
-    {n:"Jordi",r:"Suport tècnic",look:{body:"arch",tone:"slate",hat:"cap",glasses:"shades"},p:[
+    {n:"Jordi",r:"Suport tècnic",look:{body:"arch",tone:"slate",hat:"hardhat",glasses:"shades"},p:[
       ["El wifi va lent","Reinicia el router 30 segons. Si continua igual, digues-me si va lent a tots els aparells o només a un."],
       ["Només al portàtil","Oblida la xarxa al portàtil i torna-la a connectar. Si no, actualitza el controlador de wifi."]]}
   ];
@@ -67,7 +69,7 @@
         dots.push(d);compose(a.look,d.F).then(function(c){d.comp=c})});
       var CN=small?20:36;
       for(var q=0;q<CN;q++){var R2=(small?8:10)+Math.random()*(small?6:8),p1=free(R2,R2*1.7+12),lk={body:pick(BODIES),tone:pick(TONES)};
-        if(Math.random()<.3)lk.hat=pick(["cap","beanie","crown","party","flower","chef","hardhat"]);
+        if(Math.random()<.3)lk.hat=pick(["crown","party","flower","chef","hardhat","tophat"]);
         var d2={a:{n:""},i:100+q,big:false,r:R2,x:p1[0],y:p1[1],vx:(Math.random()-.5)*1.1,vy:(Math.random()-.5)*1.1,sq:0,walk:Math.random()*6,comp:null,F:Math.round(R2*3.9*2)};
         dots.push(d2);(function(dd,l){compose(l,dd.F).then(function(c){dd.comp=c})})(d2,lk)}
     }
@@ -144,41 +146,6 @@
   hv.addEventListener("loadeddata",showReel);hv.addEventListener("loadedmetadata",showReel);if(hv.readyState>=1)showReel();
   new IntersectionObserver(function(es){es.forEach(function(en){if(en.isIntersecting){var p=hv.play();if(p&&p.catch)p.catch(function(){})}else hv.pause()})},{threshold:.4}).observe(hv);
 
-  /* ---------- Builder ---------- */
-  var LBL={body:{blob:"Gota",arch:"Arc",cube:"Cub"},tone:{pink:"Rosa",orange:"Taronja",yellow:"Groc",green:"Verd",teal:"Verd atzur",blue:"Blau",violet:"Violeta",slate:"Pissarra"},hat:{none:"Cap",cap:"Gorra",beanie:"Gorro",tophat:"Barret de copa",crown:"Corona",party:"Festa",cowboy:"Vaquer",wizard:"Mag",chef:"Cuiner",graduation:"Birret",hardhat:"Casc",antenna:"Antena",flower:"Flor"},glasses:{none:"Cap",shades:"De sol"},accessory:{none:"Cap",bowtie:"Pajarita",tie:"Corbata",mustache:"Bigoti"}};
-  var ROLES={"Recepcionista":{body:"arch",tone:"pink",hat:"cap",accessory:"bowtie"},"Cuiner":{body:"cube",tone:"teal",hat:"chef",accessory:"mustache"},"Traductor":{body:"blob",tone:"blue",hat:"beanie"},"Comptable":{body:"cube",tone:"slate",accessory:"tie"},"Tutor":{body:"arch",tone:"yellow",hat:"graduation"},"Suport tècnic":{body:"blob",tone:"violet",hat:"antenna",glasses:"shades"}};
-  var bs={name:"Aina",role:"Recepcionista",tone:70,model:"gpt-5-mini"},look=normalizeSpriteLook(ROLES["Recepcionista"]);
-  var bname=$("b-name"),broles=$("b-roles"),bcolors=$("b-colors"),btone=$("b-tone"),bmodel=$("b-model"),bcode=$("b-code"),bsay=$("b-say"),bav=$("b-avatar");
-  var sels={};
-  ["body","hat","glasses","accessory"].forEach(function(k){
-    var el=$("o-"+k);sels[k]=el;var list=k==="body"?BODIES:SPRITE_ITEMS[k];
-    list.forEach(function(v){var o=document.createElement("option");o.value=v;o.textContent=LBL[k][v];el.appendChild(o)});
-    el.onchange=function(){look[k]=el.value;upd()}});
-  TONES.forEach(function(t){var b=document.createElement("button");b.type="button";b.className="sw";b.style.background=TONE_COLORS[t];b.setAttribute("aria-label",LBL.tone[t]);b.title=LBL.tone[t];b.dataset.c=t;
-    b.onclick=function(){look.tone=t;upd()};bcolors.appendChild(b)});
-  Object.keys(ROLES).forEach(function(r){var b=document.createElement("button");b.type="button";b.className="role";b.textContent=r;b.setAttribute("aria-pressed",r===bs.role);
-    b.onclick=function(){bs.role=r;look=normalizeSpriteLook(ROLES[r]);[].forEach.call(broles.children,function(x){x.setAttribute("aria-pressed",x===b)});upd()};broles.appendChild(b)});
-  $("b-dice").onclick=function(){look=normalizeSpriteLook(randomSpriteLook());upd()};
-  function escH(s){return s.replace(/[&<>]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;"}[c]})}
-  function upd(){
-    var name=(bs.name||"Dot").trim()||"Dot",t=bs.tone,tone=t<35?"de manera formal i respectuosa, tractant de vostè":t>65?"de manera propera i informal, tractant de tu":"amb un to amable i clar";
-    var prompt="Ets "+name+", "+bs.role.toLowerCase()+". Parles català "+tone+". Respostes curtes, en text pla, pensades per WhatsApp.";
-    look=normalizeSpriteLook(look);bav.innerHTML=av(look,300,name);
-    Object.keys(sels).forEach(function(k){sels[k].value=look[k]});
-    [].forEach.call(bcolors.children,function(x){x.setAttribute("aria-pressed",x.dataset.c===look.tone)});
-    var lk=JSON.stringify(look);
-    bcode.innerHTML='<span class="k">POST</span> /api/v1/bots\n{\n  <span class="s">"name"</span>: <span class="s">"'+escH(name.replace(/"/g,""))+'"</span>,\n  <span class="s">"role"</span>: <span class="s">"'+bs.role+'"</span>,\n  <span class="s">"model"</span>: <span class="s">"'+escH((bs.model||"").replace(/"/g,""))+'"</span>,\n  <span class="s">"look"</span>: '+escH(lk)+',\n  <span class="s">"system_prompt"</span>: <span class="s">"'+escH(prompt.replace(/"/g,"'"))+'"</span>\n}';
-    bcode.dataset.raw="POST /api/v1/bots\n"+JSON.stringify({name:name,role:bs.role,model:bs.model,look:look,system_prompt:prompt},null,2);
-    bsay.textContent=t<35?"Bon dia. Sóc "+name+". En què el puc ajudar?":t>65?"Ei! Sóc "+name+". Què necessites?":"Hola, sóc "+name+". En què t'ajudo?";
-  }
-  bname.oninput=function(){bs.name=bname.value;upd()};btone.oninput=function(){bs.tone=+btone.value;upd()};bmodel.oninput=function(){bs.model=bmodel.value;upd()};
-  var cb=$("b-copy");
-  cb.onclick=function(){var txt=bcode.dataset.raw;
-    var ok=function(){cb.textContent="Copiat";setTimeout(function(){cb.textContent="Copia"},1600)};
-    var fb=function(){var r=document.createRange();r.selectNodeContents(bcode);var s=getSelection();s.removeAllRanges();s.addRange(r);cb.textContent="Selecciona i copia"};
-    if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(txt).then(ok,fb);else fb()};
-  upd();attachLife(bav);
-
   /* ---------- Demo de mòbil ---------- */
   var tabs=$("tabs"),msgs=$("msgs"),chips=$("chips"),pav=$("pav"),pname=$("pname"),cur=0,busy=false,timer=null;
   AG.forEach(function(a,i){
@@ -208,7 +175,7 @@
   select(0);
 
   /* ---------- Flux ---------- */
-  var FLOW=[{body:"arch",tone:"green",hat:"antenna"},{body:"blob",tone:"blue",hat:"cap"},{body:"cube",tone:"yellow",hat:"hardhat"},{body:"arch",tone:"pink",hat:"crown"},{body:"blob",tone:"violet",hat:"wizard"}];
+  var FLOW=[{body:"arch",tone:"green",hat:"antenna"},{body:"blob",tone:"blue",hat:"party"},{body:"cube",tone:"yellow",hat:"hardhat"},{body:"arch",tone:"pink",hat:"crown"},{body:"blob",tone:"violet",hat:"wizard"}];
   [].slice.call(document.querySelectorAll("#flow .node")).forEach(function(n,i){var h=n.querySelector(".nv");h.innerHTML=av(FLOW[i],110,"");attachLife(h)});
   var flow=$("flow"),pks=[1,2,3].map(function(n){return $("pk"+n)});
   function packets(t){
@@ -307,7 +274,7 @@
   /* ---------- Company: un Dot que viu a la pàgina ---------- */
   (function(){
     var host=$("cdot"),bub=$("cbubble");if(!host||!bub)return;
-    var looks=[{body:"blob",tone:"blue",hat:"cap"},{body:"arch",tone:"yellow",hat:"hardhat"},{body:"cube",tone:"violet",hat:"wizard"},{body:"blob",tone:"teal",hat:"chef",accessory:"mustache"},{body:"arch",tone:"pink",hat:"crown",accessory:"bowtie"}];
+    var looks=[{body:"blob",tone:"blue",hat:"tophat"},{body:"arch",tone:"yellow",hat:"hardhat"},{body:"cube",tone:"violet",hat:"wizard"},{body:"blob",tone:"teal",hat:"chef",accessory:"mustache"},{body:"arch",tone:"pink",hat:"crown",accessory:"bowtie"}];
     host.innerHTML=av(pick(looks),96,"Dot company");
     var talk=["Hola! Sóc un superDOTat.","Vols crear-ne un de teu?","Tinc un Dot per a cada ofici.","Fes-me un toc, que m'agrada.","Sempre al teu WhatsApp.","Mira el catàleg: en tenim 87."],hide=null,ti=0;
     function say(t){bub.textContent=t;bub.classList.add("on");clearTimeout(hide);hide=setTimeout(function(){bub.classList.remove("on")},3400)}
