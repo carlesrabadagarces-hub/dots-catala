@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { FiX, FiSearch, FiPlus } from 'react-icons/fi';
+import DotAvatar from './DotAvatar';
 import { fetchCatalog, fetchCatalogSectors, installCatalogAgent, generateAgent } from '../lib/api';
 
 export default function CatalogModal({ isOpen, onClose, onCreated }) {
@@ -121,7 +122,7 @@ export default function CatalogModal({ isOpen, onClose, onCreated }) {
                 <div key={a.id} className="flex flex-col justify-between rounded-2xl border border-zinc-800 bg-zinc-900/60 p-4">
                   <div>
                     <div className="flex items-center gap-3">
-                      <span className="flex h-10 w-10 items-center justify-center rounded-full text-xl" style={{ background: `${a.color}33` }}>{a.icon}</span>
+                      <DotAvatar bot={{ id: a.id, name: a.name }} look={a.look || undefined} size={56} alive={false} />
                       <div className="min-w-0">
                         <div className="truncate text-sm font-semibold">{a.name}</div>
                         <div className="truncate text-xs text-zinc-500">{a.sector_name}</div>

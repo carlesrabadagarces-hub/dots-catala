@@ -70,6 +70,7 @@ def public_view(spec: Dict[str, Any]) -> Dict[str, Any]:
         "id": spec["id"], "name": spec["name"], "role": spec["role"], "icon": spec["icon"],
         "sector": spec["sector"], "sector_name": sector["name"], "color": sector["color"],
         "starters": spec["starters"], "tasks": spec["tasks"][:3],
+        "look": look_for_agent(spec["id"], spec["sector"]) if spec["id"] != "custom" else None,
     }
 
 

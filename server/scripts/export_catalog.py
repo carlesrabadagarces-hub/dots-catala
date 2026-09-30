@@ -17,7 +17,7 @@ TARGET = Path(__file__).resolve().parents[2] / "site" / "body.html"
 
 def main() -> None:
     data = {"sectors": catalog_service.sectors(),
-            "agents": [{k: a[k] for k in ("id", "name", "role", "icon", "sector", "color", "starters")}
+            "agents": [{k: a[k] for k in ("id", "name", "role", "icon", "sector", "color", "starters", "look")}
                        for a in catalog_service.list_catalog()]}
     payload = json.dumps(data, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")
     html = TARGET.read_text(encoding="utf-8")

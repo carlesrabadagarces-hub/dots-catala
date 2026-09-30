@@ -1,7 +1,8 @@
 'use client';
 
 import React, { useEffect, useMemo, useRef } from 'react';
-import { dotSvg, normalizeLook, OPTIONS } from '../lib/dotSvg';
+import { renderDot } from '../lib/dot';
+import { BODIES, TONES } from '../lib/dotSprite';
 import { attachLife } from '../lib/dotLife';
 
 function hash(text) {
@@ -13,13 +14,12 @@ function hash(text) {
 /** Look used for Dots created before customisation existed. */
 export function fallbackLook(bot) {
   const id = bot?.id || 'dot';
-  const color = /^#[0-9a-fA-F]{6}$/.test(bot?.accent_color || '') ? bot.accent_color : undefined;
-  return normalizeLook({ shape: OPTIONS.shape[hash(id) % OPTIONS.shape.length], color });
+  return { body: BODIES[hash(id) % BODIES.length], tone: TONES[hash(`${id}!`) % TONES.length], hat: 'none', glasses: 'none', accessory: 'none' };
 }
 
 export default function DotAvatar({ bot, look, size = 40, className = '', alive = true, mood }) {
   const ref = useRef(null);
-  const html = useMemo(() => dotSvg(look || bot?.look || fallbackLook(bot), size, bot?.name || 'Dot'), [look, bot, size]);
+  const html = useMemo(() => renderDot(look || bot?.look || fallbackLook(bot), size, bot?.name || 'Dot'), [look, bot, size]);
   useEffect(() => (alive && ref.current ? attachLife(ref.current) : undefined), [alive]);
   useEffect(() => {
     if (ref.current && mood) ref.current.dataset.state = mood;

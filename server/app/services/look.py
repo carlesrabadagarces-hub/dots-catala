@@ -16,8 +16,13 @@ OPTIONS = {
     "accessory": ["none", "bowtie", "tie", "scarf", "stethoscope", "headphones", "mustache", "blush",
                   "badge", "cape"],
 }
+# Plush Dots (layered art): a body, a fur tone and the same hats, glasses and accessories.
+PLUSH = {
+    "body": ["blob", "arch", "cube"],
+    "tone": ["pink", "orange", "yellow", "green", "teal", "blue", "violet", "slate"],
+}
 DEFAULT = {"shape": "circle", "color": "#7a4cf0", "accent": "#0a0a0a", "eyes": "pill", "mouth": "none",
-           "hat": "none", "glasses": "none", "accessory": "none"}
+           "hat": "none", "glasses": "none", "accessory": "none", "body": "blob", "tone": "violet"}
 _HEX = re.compile(r"^#[0-9a-fA-F]{6}$")
 
 
@@ -25,7 +30,7 @@ def sanitize_look(look: Optional[Dict[str, Any]]) -> Dict[str, str]:
     """Keep only known options and valid colours, so a look can never carry markup."""
     look = look if isinstance(look, dict) else {}
     clean: Dict[str, str] = {}
-    for key, allowed in OPTIONS.items():
+    for key, allowed in {**OPTIONS, **PLUSH}.items():
         value = look.get(key)
         clean[key] = value if value in allowed else DEFAULT[key]
     for key in ("color", "accent"):
@@ -76,14 +81,19 @@ AGENT_LOOKS = {
     "prl": {"hat": "hardhat", "accessory": "badge", "eyes": "wide"},
 }
 SECTOR_BASES = {
-    "educacio": {"shape": "arch", "color": "#ffc21a"}, "salut": {"shape": "tri", "color": "#ff4d7d"},
-    "legal": {"shape": "square", "color": "#52657a"}, "oficis": {"shape": "drop", "color": "#ff8a3d"},
-    "negoci": {"shape": "drop", "color": "#2f7bff"}, "hostaleria": {"shape": "hex", "color": "#19c3a6"},
-    "tecnologia": {"shape": "circle", "color": "#7a4cf0"}, "vida": {"shape": "circle", "color": "#2fb5ff"},
-    "public": {"shape": "square", "color": "#6b7cff"}, "industria": {"shape": "hex", "color": "#7cd13b"},
+    "educacio": {"shape": "arch", "color": "#ffc21a", "tone": "yellow"}, "salut": {"shape": "tri", "color": "#ff4d7d", "tone": "pink"},
+    "legal": {"shape": "square", "color": "#52657a", "tone": "slate"}, "oficis": {"shape": "drop", "color": "#ff8a3d", "tone": "orange"},
+    "negoci": {"shape": "drop", "color": "#2f7bff", "tone": "blue"}, "hostaleria": {"shape": "hex", "color": "#19c3a6", "tone": "teal"},
+    "tecnologia": {"shape": "circle", "color": "#7a4cf0", "tone": "violet"}, "vida": {"shape": "circle", "color": "#2fb5ff", "tone": "blue"},
+    "public": {"shape": "square", "color": "#6b7cff", "tone": "violet"}, "industria": {"shape": "hex", "color": "#7cd13b", "tone": "green"},
 }
 
 
 def look_for_agent(agent_id: str, sector: str) -> Dict[str, str]:
     base = SECTOR_BASES.get(sector, {})
-    return sanitize_look({**base, **AGENT_LOOKS.get(agent_id, {})})
+    merged = {**base, **AGENT_LOOKS.get(agent_id, {})}
+    # Plush body varies by Dot so a sector is not a row of clones.
+    merged.setdefault("body", PLUSH["body"][sum(map(ord, agent_id)) % 3])
+    if merged.get("accessory") == "blush":
+        merged["accessory"] = "none"
+    return sanitize_look(merged)

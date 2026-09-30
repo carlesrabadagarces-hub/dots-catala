@@ -33,6 +33,16 @@ class LookTests(unittest.IsolatedAsyncioTestCase):
             self.assertIsNotNone(match, key)
             self.assertEqual(re.findall(r"'([^']+)'", match.group(1)), values, key)
 
+    def test_plush_options_match_the_sprite_renderer(self):
+        from app.services.look import PLUSH
+        js = (Path(__file__).resolve().parents[2] / "client" / "lib" / "dotSprite.js").read_text(encoding="utf-8")
+        self.assertEqual(re.findall(r"'([a-z]+)'", re.search(r"BODIES = \[(.*?)\]", js).group(1)), PLUSH["body"])
+        self.assertEqual(re.findall(r"'([a-z]+)'", re.search(r"TONES = \[(.*?)\]", js).group(1)), PLUSH["tone"])
+        for key in ("hat", "glasses", "accessory"):
+            block = re.search(rf"{key}: \[(.*?)\]", js[js.index("SPRITE_ITEMS"):], re.S).group(1)
+            sprite = re.findall(r"'([a-z]+)'", block)
+            self.assertTrue(set(sprite) <= set(OPTIONS[key]), key)
+
     def test_every_catalogue_dot_has_a_valid_look(self):
         for spec in CATALOG + META:
             look = look_for_agent(spec["id"], spec["sector"])

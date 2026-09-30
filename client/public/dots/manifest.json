@@ -1,0 +1,143 @@
+{
+ "bodies": {
+  "blob": {
+   "w": 480,
+   "h": 434,
+   "eyeL": 0.3645,
+   "eyeR": 0.631,
+   "eyeY": 0.423,
+   "headW": 0.8042,
+   "headL": 0.0958
+  },
+  "arch": {
+   "w": 480,
+   "h": 618,
+   "eyeL": 0.3607,
+   "eyeR": 0.6376,
+   "eyeY": 0.3675,
+   "headW": 0.7708,
+   "headL": 0.1125
+  },
+  "cube": {
+   "w": 480,
+   "h": 479,
+   "eyeL": 0.3358,
+   "eyeR": 0.6634,
+   "eyeY": 0.4228,
+   "headW": 0.8083,
+   "headL": 0.0938
+  }
+ },
+ "items": {
+  "hats-antenna": {
+   "w": 192,
+   "h": 420
+  },
+  "hats-beanie": {
+   "w": 318,
+   "h": 420
+  },
+  "hats-cap": {
+   "w": 403,
+   "h": 420
+  },
+  "hats-chef": {
+   "w": 420,
+   "h": 343
+  },
+  "hats-cowboy": {
+   "w": 420,
+   "h": 258
+  },
+  "hats-crown": {
+   "w": 420,
+   "h": 346
+  },
+  "hats-flower": {
+   "w": 420,
+   "h": 406
+  },
+  "hats-graduation": {
+   "w": 420,
+   "h": 292
+  },
+  "hats-hardhat": {
+   "w": 420,
+   "h": 347
+  },
+  "hats-party": {
+   "w": 296,
+   "h": 420
+  },
+  "hats-tophat": {
+   "w": 420,
+   "h": 351
+  },
+  "hats-wizard": {
+   "w": 408,
+   "h": 420
+  },
+  "glasses-monocle": {
+   "w": 205,
+   "h": 420
+  },
+  "glasses-round": {
+   "w": 420,
+   "h": 165
+  },
+  "glasses-shades": {
+   "w": 420,
+   "h": 151
+  },
+  "glasses-square": {
+   "w": 420,
+   "h": 165
+  },
+  "glasses-visor": {
+   "w": 420,
+   "h": 170
+  },
+  "accessories-badge": {
+   "w": 405,
+   "h": 420
+  },
+  "accessories-bowtie": {
+   "w": 420,
+   "h": 239
+  },
+  "accessories-cape": {
+   "w": 420,
+   "h": 302
+  },
+  "accessories-headphones": {
+   "w": 392,
+   "h": 420
+  },
+  "accessories-mustache": {
+   "w": 420,
+   "h": 139
+  },
+  "accessories-scarf": {
+   "w": 314,
+   "h": 420
+  },
+  "accessories-stethoscope": {
+   "w": 170,
+   "h": 420
+  },
+  "accessories-tie": {
+   "w": 197,
+   "h": 420
+  }
+ },
+ "tones": [
+  "pink",
+  "orange",
+  "yellow",
+  "green",
+  "teal",
+  "blue",
+  "violet",
+  "slate"
+ ]
+}

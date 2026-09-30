@@ -2,45 +2,27 @@
 
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
+import DotAvatar from './DotAvatar';
 import { getAuthStatus, oauthStartUrl, loginWithToken, loginWithPassword, logout } from '../lib/api';
 
-/* Flat mascots, one silhouette each, two small vertical eyes. */
-const SHAPES = {
-  circle: <circle cx="50" cy="50" r="42" />,
-  tri: <path d="M50 10 C58 10 64 16 88 66 C94 79 86 90 72 90 H28 C14 90 6 79 12 66 C36 16 42 10 50 10Z" />,
-  drop: <path d="M50 6 C58 24 86 40 86 62 A36 36 0 0 1 14 62 C14 40 42 24 50 6Z" />,
-  hex: <path d="M50 8 L86 29 V71 L50 92 L14 71 V29Z" strokeLinejoin="round" strokeWidth="10" stroke="currentColor" />,
-  arch: <path d="M12 92 V50 A38 38 0 0 1 88 50 V92Z" />,
-  square: <rect x="14" y="14" width="72" height="72" rx="22" />,
-};
+const CAST = [
+  { look: { body: 'arch', tone: 'pink', hat: 'cap', accessory: 'bowtie' }, size: 150, style: { left: '6%', top: '12%' } },
+  { look: { body: 'blob', tone: 'blue', glasses: 'round', hat: 'beanie' }, size: 170, style: { right: '7%', top: '9%' }, delay: 1 },
+  { look: { body: 'cube', tone: 'teal', hat: 'chef', accessory: 'mustache' }, size: 140, style: { left: '10%', bottom: '10%' }, delay: 2 },
+  { look: { body: 'blob', tone: 'violet', hat: 'wizard' }, size: 160, style: { right: '10%', bottom: '11%' }, delay: 0.5 },
+  { look: { body: 'arch', tone: 'yellow', hat: 'crown', accessory: 'cape' }, size: 120, style: { left: '21%', top: '3%' }, delay: 1.5 },
+  { look: { body: 'cube', tone: 'slate', glasses: 'shades', accessory: 'headphones' }, size: 110, style: { right: '27%', bottom: '3%' }, delay: 2.5 },
+  { look: { body: 'blob', tone: 'orange', hat: 'hardhat' }, size: 70, style: { left: '3%', top: '52%' }, delay: 1 },
+  { look: { body: 'arch', tone: 'green' }, size: 70, style: { right: '3%', top: '46%' }, delay: 2 },
+];
 
-function Mascot({ kind, color, size, style, eye = '#14171c', delay = 0 }) {
+function Mascot({ look, size, style, delay = 0 }) {
   return (
-    <svg
-      viewBox="0 0 100 100"
-      width={size}
-      height={size}
-      aria-hidden="true"
-      style={{ position: 'absolute', color, fill: color, animation: `sd-float ${5 + delay}s ease-in-out ${delay}s infinite`, ...style }}
-    >
-      {SHAPES[kind]}
-      <rect x="35" y="42" width="7" height="16" rx="3.5" fill={eye} />
-      <rect x="58" y="42" width="7" height="16" rx="3.5" fill={eye} />
-    </svg>
+    <div aria-hidden="true" style={{ position: 'absolute', animation: `sd-float ${5 + delay}s ease-in-out ${delay}s infinite`, ...style }}>
+      <DotAvatar look={look} size={size} alive={false} />
+    </div>
   );
 }
-
-const CAST = [
-  { kind: 'tri', color: '#ff4d7d', size: 92, style: { left: '8%', top: '14%' } },
-  { kind: 'drop', color: '#2f7bff', size: 110, style: { right: '9%', top: '10%' }, delay: 1 },
-  { kind: 'hex', color: '#19c3a6', size: 84, style: { left: '12%', bottom: '14%' }, delay: 2 },
-  { kind: 'circle', color: '#7a4cf0', size: 100, style: { right: '12%', bottom: '16%' }, delay: 0.5 },
-  { kind: 'arch', color: '#ffc21a', size: 70, style: { left: '30%', top: '6%' }, delay: 1.5 },
-  { kind: 'square', color: '#52657a', size: 66, eye: '#fff', style: { right: '28%', bottom: '7%' }, delay: 2.5 },
-  { kind: 'circle', color: '#2f7bff', size: 30, style: { left: '4%', top: '52%' }, delay: 1 },
-  { kind: 'tri', color: '#ffc21a', size: 34, style: { right: '5%', top: '48%' }, delay: 2 },
-  { kind: 'drop', color: '#ff4d7d', size: 30, style: { left: '24%', bottom: '5%' }, delay: 0.7 },
-];
 
 function GoogleMark() {
   return (
