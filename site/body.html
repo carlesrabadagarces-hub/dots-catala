@@ -86,7 +86,7 @@ input[type=range]{width:100%;accent-color:var(--c-coral)}
 .sw[aria-pressed="true"]{border-color:var(--fg);outline:2px solid var(--bg);outline-offset:-5px}
 .scale{display:flex;justify-content:space-between;font-size:13px;color:var(--muted)}
 .preview{display:flex;flex-direction:column;gap:18px}
-.opts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0 12px}
+.opts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 12px}
 @media (max-width:560px){.opts{grid-template-columns:repeat(2,minmax(0,1fr))}}
 .avatar{position:absolute;inset:34px 0 0;display:grid;place-items:center}
 .avatar svg{width:min(100%,250px);height:auto;max-height:100%}
@@ -94,7 +94,7 @@ input[type=range]{width:100%;accent-color:var(--c-coral)}
 .dice{position:absolute;right:12px;bottom:12px;font:500 12px var(--mono);border:1px solid var(--line);background:var(--panel);color:var(--fg);border-radius:99px;padding:6px 12px;cursor:pointer}
 @media (prefers-reduced-motion:reduce){.avatar{animation:none}}
 .pv{height:340px}
-.pv{position:relative;height:230px;border-radius:22px;background:radial-gradient(80% 90% at 50% 30%,var(--panel2),var(--bg2));overflow:hidden}
+.pv{position:relative;height:340px;border-radius:22px;background:radial-gradient(80% 90% at 50% 30%,var(--panel2),var(--bg2));overflow:hidden}
 .pv canvas{width:100%;height:100%;display:block}
 .pv .say{position:absolute;top:16px;left:50%;transform:translateX(-50%);background:var(--fg);color:var(--bg);padding:8px 14px;border-radius:16px;font-size:14px;font-weight:500;max-width:88%;text-align:center}
 pre{margin:0;background:var(--bg2);border:1px solid var(--line);border-radius:18px;padding:18px 20px;overflow-x:auto;font:400 12.5px/1.65 var(--mono);color:var(--fg);white-space:pre}
@@ -114,7 +114,7 @@ pre .k{color:var(--c-amber)}pre .s{color:var(--c-green)}
 .cat-card{background:var(--panel);border:1px solid var(--line);border-radius:22px;padding:18px;display:flex;flex-direction:column;gap:10px;min-width:0;transition:transform .25s,border-color .25s}
 .cat-card:hover{transform:translateY(-3px);border-color:var(--cc)}
 .cat-head{display:flex;gap:12px;align-items:center}
-.cat-ico{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;font-size:22px;background:color-mix(in srgb,var(--cc) 22%,transparent);flex:none}
+.cat-ico{width:64px;height:64px;display:block;flex:none;margin:-6px 0 -8px -4px}
 .cat-card b{font-family:var(--display);font-size:1.05rem;line-height:1.15;display:block}
 .cat-card small{color:var(--muted);font-size:12px}
 .cat-card p{color:var(--muted);font-size:14px;line-height:1.4}
@@ -126,14 +126,14 @@ pre .k{color:var(--c-amber)}pre .s{color:var(--c-green)}
 .tabs{display:flex;flex-direction:column;gap:12px;min-width:0}
 .tab{display:flex;gap:16px;align-items:center;text-align:left;background:var(--panel);border:1px solid var(--line);border-radius:22px;padding:16px 18px;color:var(--fg);font:inherit;cursor:pointer;transition:transform .2s,border-color .2s}
 .tab:hover{transform:translateX(6px)}
-.tab canvas{flex:none;width:52px;height:52px}
+.tab .av{flex:none;width:62px;height:62px;display:block;margin:-10px 0 -4px}
 .tab b{font-family:var(--display);font-size:1.25rem;display:block;line-height:1.1}
 .tab .r{color:var(--muted);font-size:14px}
 .tab[aria-selected="true"]{border-color:var(--fg);background:var(--panel2)}
 .phone{width:100%;max-width:360px;justify-self:center;border-radius:46px;border:1px solid var(--line);background:linear-gradient(160deg,var(--panel2),var(--panel));padding:12px;box-shadow:0 50px 90px -30px var(--shadow)}
 .screen{border-radius:36px;overflow:hidden;background:var(--chat-bg);display:flex;flex-direction:column;height:560px}
 .top{display:flex;align-items:center;gap:10px;padding:14px 16px;background:var(--panel2)}
-.top canvas{width:38px;height:38px;flex:none}
+.top .av{width:46px;height:46px;flex:none;display:block;margin:-6px 0 -6px}
 .top b{display:block;line-height:1.1;font-size:15px}.top small{color:var(--c-green);font-size:12px}
 .msgs{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:8px;font-size:14.5px;scrollbar-width:thin}
 .m{max-width:84%;padding:8px 12px 6px;border-radius:16px;background:var(--bubble-in);white-space:pre-wrap;overflow-wrap:anywhere;animation:in .3s both}
@@ -148,12 +148,12 @@ pre .k{color:var(--c-amber)}pre .s{color:var(--c-green)}
 /* flow */
 .flow{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:0;position:relative}
 .node{position:relative;text-align:center;padding:0 6px}
-.node canvas{width:84px;height:84px;display:block;margin:0 auto 14px}
+.node .nv{width:110px;height:110px;display:block;margin:0 auto 6px}
 .node b{display:block;font-family:var(--display);font-size:1.15rem}
 .node span{display:block;color:var(--muted);font-size:13px;margin-top:2px}
-.node::after{content:"";position:absolute;top:41px;left:calc(50% + 50px);right:calc(-50% + 50px);height:2px;background:repeating-linear-gradient(90deg,var(--line) 0 6px,transparent 6px 12px)}
+.node::after{content:"";position:absolute;top:80px;left:calc(50% + 50px);right:calc(-50% + 50px);height:2px;background:repeating-linear-gradient(90deg,var(--line) 0 6px,transparent 6px 12px)}
 .node:nth-child(5)::after{display:none}
-.packet{position:absolute;top:36px;width:12px;height:12px;border-radius:50%;background:var(--c-amber);box-shadow:0 0 16px var(--c-amber);left:0;opacity:0}
+.packet{position:absolute;top:75px;width:12px;height:12px;border-radius:50%;background:var(--c-amber);box-shadow:0 0 16px var(--c-amber);left:0;opacity:0}
 /* bento */
 .bento{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:16px}
 .tile{background:var(--panel);border:1px solid var(--line);border-radius:28px;padding:28px;min-width:0;position:relative;overflow:hidden;transition:transform .3s,border-color .3s}
@@ -163,7 +163,7 @@ pre .k{color:var(--c-amber)}pre .s{color:var(--c-green)}
 .t1{grid-column:span 4}.t2{grid-column:span 2}.t3{grid-column:span 2}.t4{grid-column:span 2}.t5{grid-column:span 2}.t6{grid-column:span 3}.t7{grid-column:span 3}
 /* cta */
 .final{text-align:center;padding-block:40px 110px}
-#fcv{width:100%;height:min(56vh,440px);min-height:320px;display:block;cursor:pointer;touch-action:manipulation}
+#fcv{width:100%;height:min(66vh,540px);min-height:380px;display:block;cursor:pointer;touch-action:manipulation}
 .hintf{font-family:var(--mono);font-size:12px;color:var(--muted);margin:-6px 0 28px}
 .final h2{font-size:clamp(2.4rem,6.5vw,4.8rem)}
 .final .cta{justify-content:center;margin-top:30px}
@@ -178,7 +178,7 @@ footer{border-top:1px solid var(--line);padding-block:32px 48px;color:var(--mute
   section{padding-block:64px}
   .flow{grid-template-columns:minmax(0,1fr);gap:28px}
   .node{display:flex;align-items:center;gap:16px;text-align:left}
-  .node canvas{margin:0;width:64px;height:64px;flex:none}
+  .node .nv{margin:0;width:80px;height:80px;flex:none}
   .node::after,.packet{display:none}
 }
 @media (max-width:560px){.bento{grid-template-columns:minmax(0,1fr)}.t1,.t2,.t3,.t4,.t5,.t6,.t7{grid-column:span 1}.card{padding:20px}}
@@ -218,16 +218,13 @@ footer{border-top:1px solid var(--line);padding-block:32px 48px;color:var(--mute
     <div class="card">
       <div class="field"><label for="b-name">Nom</label><input id="b-name" type="text" value="Aina" maxlength="20" autocomplete="off"></div>
       <div class="field"><span class="lbl">Ofici</span><div class="row" id="b-roles"></div></div>
-      <div class="field"><span class="lbl">Color</span><div class="row" id="b-colors"></div></div>
+      <div class="field"><span class="lbl">Color del pelatge</span><div class="row" id="b-colors"></div></div>
       <div class="opts">
-        <div class="field"><label for="o-shape">Forma</label><select id="o-shape"></select></div>
-        <div class="field"><label for="o-eyes">Ulls</label><select id="o-eyes"></select></div>
-        <div class="field"><label for="o-mouth">Boca</label><select id="o-mouth"></select></div>
+        <div class="field"><label for="o-body">Cos</label><select id="o-body"></select></div>
         <div class="field"><label for="o-hat">Barret</label><select id="o-hat"></select></div>
         <div class="field"><label for="o-glasses">Ulleres</label><select id="o-glasses"></select></div>
         <div class="field"><label for="o-accessory">Complement</label><select id="o-accessory"></select></div>
       </div>
-      <div class="field"><span class="lbl">Color dels complements</span><div class="row" id="b-accents"></div></div>
       <div class="field"><label for="b-tone">To</label><input id="b-tone" type="range" min="0" max="100" value="70"><div class="scale"><span>Formal</span><span>Proper</span></div></div>
       <div class="field" style="margin-bottom:0"><label for="b-model">Model</label><input id="b-model" type="text" value="gpt-5-mini" autocomplete="off"></div>
     </div>
@@ -249,7 +246,7 @@ footer{border-top:1px solid var(--line);padding-block:32px 48px;color:var(--mute
   <div class="cat-chips rv" id="cat-chips" style="margin-bottom:22px"></div>
   <div class="cat-grid" id="cat-grid"></div>
   <div class="cat-more"><button class="btn ghost" id="cat-more" type="button">Mostra&apos;n més</button></div>
-  <!--CATALOG_START--><script id="catalog-data" type="application/json">{"sectors":[{"id":"educacio","name":"Educació","color":"#ffc21a","count":10},{"id":"salut","name":"Salut i benestar","color":"#ff4d7d","count":11},{"id":"legal","name":"Legal i fiscal","color":"#52657a","count":8},{"id":"oficis","name":"Oficis i llar","color":"#ff8a3d","count":12},{"id":"negoci","name":"Negoci i màrqueting","color":"#2f7bff","count":15},{"id":"hostaleria","name":"Hostaleria i alimentació","color":"#19c3a6","count":6},{"id":"tecnologia","name":"Tecnologia","color":"#7a4cf0","count":8},{"id":"vida","name":"Vida quotidiana","color":"#2fb5ff","count":9},{"id":"public","name":"Administració i tràmits","color":"#6b7cff","count":4},{"id":"industria","name":"Camp, indústria i transport","color":"#7cb342","count":4}],"agents":[{"id":"mestra-infantil-primaria","name":"Mestra d'infantil i primària","role":"Mestra d'educació infantil i primària","icon":"🍎","sector":"educacio","color":"#ffc21a","starters":["Com explico les fraccions a un nen de 8 anys?","Proposa una activitat per treballar la lectura","Com ajudo un infant que es frustra amb els deures?"]},{"id":"professor-matematiques","name":"Professor de matemàtiques","role":"Professor de matemàtiques d'ESO i batxillerat","icon":"📐","sector":"educacio","color":"#ffc21a","starters":["Ajuda'm a entendre les derivades","Posa'm 5 exercicis de sistemes d'equacions","Com preparo les PAU de matemàtiques?"]},{"id":"professor-llengues","name":"Professor de llengua i literatura","role":"Professor de llengua catalana, castellana i literatura","icon":"📚","sector":"educacio","color":"#ffc21a","starters":["Corregeix aquest text i explica'm els errors","Com es fa un comentari de text?","Recomana'm un llibre de literatura catalana"]},{"id":"professor-ciencies","name":"Professor de ciències","role":"Professor de física, química, biologia i geologia","icon":"🔬","sector":"educacio","color":"#ffc21a","starters":["Per què cauen els objectes?","Ajuda'm amb un problema de estequiometria","Proposa un experiment fàcil per a casa"]},{"id":"professor-idiomes","name":"Professor d'idiomes","role":"Professor d'anglès, francès i alemany","icon":"🌍","sector":"educacio","color":"#ffc21a","starters":["Practiquem anglès per a una entrevista de feina","Corregeix aquest email en anglès","Explica'm el present perfect"]},{"id":"orientador-educatiu","name":"Orientador educatiu","role":"Orientador acadèmic i professional","icon":"🧭","sector":"educacio","color":"#ffc21a","starters":["No sé si fer batxillerat o un cicle formatiu","Quines sortides té un grau de biologia?","Ajuda'm a fer un pla d'estudi per a l'estiu"]},{"id":"preparador-oposicions","name":"Preparador d'oposicions","role":"Preparador d'oposicions","icon":"🎯","sector":"educacio","color":"#ffc21a","starters":["Ajuda'm a planificar 8 mesos d'estudi","Fes-me un test del tema 3","Com memoritzo llistes llargues?"]},{"id":"tutor-tfg","name":"Tutor de treballs acadèmics","role":"Tutor de TFG, TFM i treballs de recerca","icon":"🎓","sector":"educacio","color":"#ffc21a","starters":["Ajuda'm a triar tema per al TFG","Fes-me un esquema d'un treball de recerca","Com cito un web en APA?"]},{"id":"professor-musica","name":"Professor de música","role":"Professor de música i llenguatge musical","icon":"🎵","sector":"educacio","color":"#ffc21a","starters":["Com llegeixo una partitura?","Fes-me una rutina de pràctica de 20 minuts","Explica'm els acords de la tonalitat de Do major"]},{"id":"psicopedagog","name":"Psicopedagog","role":"Psicopedagog i especialista en dificultats d'aprenentatge","icon":"🧩","sector":"educacio","color":"#ffc21a","starters":["El meu fill té dificultats amb la lectura, què puc fer?","Com l'ajudo a concentrar-se?","Quines adaptacions es poden demanar a l'escola?"]},{"id":"metge-capcalera","name":"Metge de capçalera","role":"Metge de família (informació de salut)","icon":"🩺","sector":"salut","color":"#ff4d7d","starters":["Tinc mal de cap des de fa tres dies","Què vol dir aquest resultat d'analítica?","Com em preparo per a la visita amb el metge?"]},{"id":"infermer","name":"Infermer/a","role":"Infermer/a d'atenció primària","icon":"💉","sector":"salut","color":"#ff4d7d","starters":["Com cuido una ferida després de punts?","Com prenc bé la tensió a casa?","Quins signes indiquen infecció?"]},{"id":"pediatre","name":"Pediatre","role":"Pediatre (orientació per a famílies)","icon":"🧸","sector":"salut","color":"#ff4d7d","starters":["El meu bebè té febre, què faig?","Quan començo amb la fruita?","Com millorar el son d'un nen de 2 anys?"]},{"id":"psicoleg","name":"Psicòleg","role":"Psicòleg (acompanyament emocional, no clínic)","icon":"🫶","sector":"salut","color":"#ff4d7d","starters":["Últimament estic molt estressat","Com poso límits a la feina?","Com gestiono els pensaments repetitius?"]},{"id":"nutricionista","name":"Nutricionista","role":"Dietista-nutricionista","icon":"🥗","sector":"salut","color":"#ff4d7d","starters":["Fes-me un menú setmanal saludable i barat","Com llegeixo l'etiqueta d'un producte?","Què menjo abans d'entrenar?"]},{"id":"entrenador-personal","name":"Entrenador personal","role":"Entrenador personal i preparador físic","icon":"🏋️","sector":"salut","color":"#ff4d7d","starters":["Fes-me una rutina de força de 3 dies","Com preparo els meus primers 10 km?","Quin escalfament faig?"]},{"id":"fisioterapeuta","name":"Fisioterapeuta","role":"Fisioterapeuta (orientació)","icon":"🦴","sector":"salut","color":"#ff4d7d","starters":["Tinc mal d'esquena a l'oficina","Com em recupero d'un esquinç de turmell?","Exercicis per al coll"]},{"id":"farmaceutic","name":"Farmacèutic","role":"Farmacèutic (informació sobre medicaments)","icon":"💊","sector":"salut","color":"#ff4d7d","starters":["Puc prendre ibuprofè i paracetamol junts?","Què fer si m'oblido una pastilla?","Com guardo aquest medicament?"]},{"id":"dentista","name":"Dentista","role":"Odontòleg (informació de salut bucodental)","icon":"🦷","sector":"salut","color":"#ff4d7d","starters":["Tinc sensibilitat als freds","Com em cuido després d'una extracció?","Quina diferència hi ha entre un implant i un pont?"]},{"id":"veterinari","name":"Veterinari","role":"Veterinari (informació per a propietaris)","icon":"🐾","sector":"salut","color":"#ff4d7d","starters":["El meu gos vomita des d'ahir","Quan vacuno el meu gatet?","Què no pot menjar un gos?"]},{"id":"coach-son-benestar","name":"Coach de son i benestar","role":"Especialista en son, estrès i hàbits","icon":"🌙","sector":"salut","color":"#ff4d7d","starters":["Em costa dormir, què provo?","Fes-me una rutina de vespre","Com faig pauses al teletreball?"]},{"id":"jurista-generalista","name":"Jurista","role":"Advocat generalista (orientació jurídica)","icon":"⚖️","sector":"legal","color":"#52657a","starters":["Em cobren una penalització injusta, què faig?","Ajuda'm a redactar una reclamació","Què significa aquesta clàusula?"]},{"id":"assessor-fiscal","name":"Assessor fiscal","role":"Assessor fiscal i tributari","icon":"🧾","sector":"legal","color":"#52657a","starters":["Quines despeses puc deduir com a autònom?","Quan presento l'IVA trimestral?","Com tributa vendre un pis?"]},{"id":"laboralista","name":"Laboralista","role":"Advocat laboralista i expert en Seguretat Social","icon":"👷","sector":"legal","color":"#52657a","starters":["M'han acomiadat, què faig ara?","Com es calcula el meu finiquit?","Quants dies de vacances em corresponen?"]},{"id":"advocat-arrendaments","name":"Advocat d'habitatge i lloguers","role":"Advocat d'arrendaments i propietat","icon":"🏠","sector":"legal","color":"#52657a","starters":["El propietari no em torna la fiança","Puc pujar el lloguer aquest any?","Què ha de dir un contracte de lloguer?"]},{"id":"proteccio-dades","name":"Delegat de protecció de dades","role":"Expert en RGPD i privacitat","icon":"🔒","sector":"legal","color":"#52657a","starters":["Necessito complir el RGPD a la meva botiga","Com redacto una política de privacitat?","Què faig si he perdut un portàtil amb dades?"]},{"id":"jurista-penal","name":"Jurista penal","role":"Advocat penalista (orientació)","icon":"🛡️","sector":"legal","color":"#52657a","starters":["M'han citat com a investigat, què significa?","Com es posa una denúncia?","Quins drets tinc si em detenen?"]},{"id":"gestor-administratiu","name":"Gestor administratiu","role":"Gestor administratiu","icon":"🗂️","sector":"legal","color":"#52657a","starters":["Vull donar-me d'alta d'autònom","Com faig un canvi de titularitat d'un cotxe?","Quins papers necessito per constituir una SL?"]},{"id":"mediador-conflictes","name":"Mediador de conflictes","role":"Mediador i negociador","icon":"🤝","sector":"legal","color":"#52657a","starters":["Tinc un conflicte amb un veí per sorolls","Com negocio un preu amb un proveïdor?","Ajuda'm a preparar una conversa difícil amb la meva parella"]},{"id":"fontaner","name":"Fontaner","role":"Fontaner i instal·lador de canonades","icon":"🚰","sector":"oficis","color":"#ff8a3d","starters":["La cisterna perd aigua constantment","Tinc una fuita sota la pica","La dutxa té poca pressió"]},{"id":"electricista","name":"Electricista","role":"Electricista instal·lador","icon":"⚡","sector":"oficis","color":"#ff8a3d","starters":["Salta el diferencial cada dia","Puc posar un endoll aquí?","Quina potència necessito?"]},{"id":"paleta-reformes","name":"Paleta i reformista","role":"Paleta i cap d'obra","icon":"🧱","sector":"oficis","color":"#ff8a3d","starters":["Vull reformar un bany, per on començo?","Tinc humitat a la paret","Com comparo dos pressupostos?"]},{"id":"fuster","name":"Fuster","role":"Fuster i ebenista","icon":"🪚","sector":"oficis","color":"#ff8a3d","starters":["Vull fer un prestatge flotant","Com repare una porta que arrossega?","Quin vernís faig servir en exteriors?"]},{"id":"pintor","name":"Pintor","role":"Pintor i decorador","icon":"🎨","sector":"oficis","color":"#ff8a3d","starters":["Quanta pintura necessito per a 40 m²?","Com pinto un sostre sense marques?","Quin color va bé en un menjador petit?"]},{"id":"serraller","name":"Serraller","role":"Serraller i tècnic de seguretat","icon":"🔑","sector":"oficis","color":"#ff8a3d","starters":["Se m'ha encallat la clau","Quin pany és més segur?","Com reforço la porta de casa?"]},{"id":"tecnic-climatitzacio","name":"Tècnic de climatització","role":"Tècnic de calefacció, aire condicionat i aerotèrmia","icon":"🌡️","sector":"oficis","color":"#ff8a3d","starters":["La caldera mostra un error","Val la pena l'aerotèrmia?","Per què no escalfa el radiador?"]},{"id":"installador-solar","name":"Instal·lador solar","role":"Tècnic d'autoconsum fotovoltaic","icon":"☀️","sector":"oficis","color":"#ff8a3d","starters":["Quantes plaques necessito?","Quan es recupera la inversió?","Com funciona la compensació d'excedents?"]},{"id":"mecanic","name":"Mecànic d'automòbils","role":"Mecànic de l'automòbil","icon":"🔧","sector":"oficis","color":"#ff8a3d","starters":["Fa un soroll en frenar","Què vol dir la llum del motor?","Què he de revisar abans de comprar un cotxe usat?"]},{"id":"tecnic-electrodomestics","name":"Tècnic d'electrodomèstics","role":"Tècnic de reparació d'electrodomèstics","icon":"🧺","sector":"oficis","color":"#ff8a3d","starters":["La rentadora no desguassa","La nevera fa soroll","Val la pena reparar aquest forn?"]},{"id":"jardiner","name":"Jardiner","role":"Jardiner i paisatgista","icon":"🌿","sector":"oficis","color":"#ff8a3d","starters":["Les fulles del meu llimoner es tornen grogues","Què sembro al març?","Plantes per a un balcó amb sol"]},{"id":"arquitecte-tecnic","name":"Arquitecte tècnic","role":"Arquitecte tècnic i tècnic d'obra","icon":"📏","sector":"oficis","color":"#ff8a3d","starters":["Quina llicència necessito per reformar?","Què és un certificat energètic?","Tinc aluminosi?"]},{"id":"recepcionista","name":"Recepcionista","role":"Recepcionista virtual per a negocis","icon":"🛎️","sector":"negoci","color":"#2f7bff","starters":["Tinc hora dijous?","Quin és l'horari?","Vull canviar la meva cita"]},{"id":"atencio-client","name":"Agent d'atenció al client","role":"Especialista en atenció al client","icon":"🎧","sector":"negoci","color":"#2f7bff","starters":["Redacta una resposta a una queixa","Com gestiono un client enfadat?","Fes-me un guió de devolucions"]},{"id":"comercial-vendes","name":"Comercial","role":"Especialista en vendes B2B i B2C","icon":"💼","sector":"negoci","color":"#2f7bff","starters":["Escriu-me un correu de prospecció","Com responc a 'és massa car'?","Prepara'm una reunió amb un client nou"]},{"id":"marqueting-digital","name":"Estrateg de màrqueting","role":"Especialista en màrqueting digital","icon":"📣","sector":"negoci","color":"#2f7bff","starters":["Vull captar clients per a la meva botiga","Fes-me un pla de continguts d'un mes","Quins KPI segueixo?"]},{"id":"community-manager","name":"Community manager","role":"Community manager i creador de continguts","icon":"📱","sector":"negoci","color":"#2f7bff","starters":["Dona'm 10 idees de publicacions per a una fleca","Escriu un guió per a un reel","Com responc a un comentari negatiu?"]},{"id":"redactor-seo","name":"Redactor SEO","role":"Redactor de continguts i SEO","icon":"✍️","sector":"negoci","color":"#2f7bff","starters":["Escriu un article sobre 'com triar un colxó'","Millora aquesta descripció de producte","Proposa títols SEO per a aquesta pàgina"]},{"id":"comptable","name":"Comptable","role":"Comptable i controller financer","icon":"📊","sector":"negoci","color":"#2f7bff","starters":["Com calculo el marge del meu producte?","Fes-me un pla de tresoreria a 6 mesos","Què és l'amortització?"]},{"id":"recursos-humans","name":"Especialista en RR. HH.","role":"Responsable de recursos humans i selecció","icon":"🧑‍💼","sector":"negoci","color":"#2f7bff","starters":["Escriu una oferta per a un/a cambrer/a","Preguntes per a una entrevista de vendes","Com faig un feedback difícil?"]},{"id":"cap-projectes","name":"Cap de projectes","role":"Project manager","icon":"🗓️","sector":"negoci","color":"#2f7bff","starters":["Ajuda'm a planificar el llançament d'un web","Fes-me un pla de 6 setmanes","Com estimo el temps de les tasques?"]},{"id":"analista-dades","name":"Analista de dades","role":"Analista i científic de dades","icon":"📈","sector":"negoci","color":"#2f7bff","starters":["Com faig una taula dinàmica?","Escriu una consulta SQL per a les vendes per mes","Com sé si el resultat és significatiu?"]},{"id":"consultor-emprenedoria","name":"Consultor d'emprenedoria","role":"Mentor d'startups i pimes","icon":"🚀","sector":"negoci","color":"#2f7bff","starters":["Tinc una idea de negoci, per on començo?","Fes-me un pla de negoci resumit","Com preparo un pitch d'inversors?"]},{"id":"traductor","name":"Traductor","role":"Traductor i intèrpret","icon":"🌐","sector":"negoci","color":"#2f7bff","starters":["Tradueix aquest paràgraf a l'anglès amb to formal","Com es diu 'bon profit' en alemany?","Revisa aquesta traducció"]},{"id":"botiga-online","name":"Expert en botigues online","role":"Especialista en e-commerce","icon":"🛒","sector":"negoci","color":"#2f7bff","starters":["Com pujo les vendes de la meva botiga?","Millora aquesta descripció","Com calculo el preu amb enviament?"]},{"id":"agent-immobiliari","name":"Agent immobiliari","role":"Agent immobiliari","icon":"🏢","sector":"negoci","color":"#2f7bff","starters":["Vull vendre el meu pis, què necessito?","Redacta un anunci","Quins impostos pago en comprar?"]},{"id":"agent-viatges","name":"Agent de viatges","role":"Agent de viatges i planificador d'escapades","icon":"✈️","sector":"negoci","color":"#2f7bff","starters":["Fes-me un cap de setmana a Lisboa amb 400 euros","Què necessito per viatjar a Japó?","Itinerari de 5 dies pel Pirineu"]},{"id":"cuiner","name":"Cuiner","role":"Cuiner i xef","icon":"👨‍🍳","sector":"hostaleria","color":"#19c3a6","starters":["Què cuino amb ous, patates i ceba?","Escala aquesta recepta per a 8 persones","Com faig un bon sofregit?"]},{"id":"sommelier","name":"Sommelier","role":"Sommelier i expert en begudes","icon":"🍷","sector":"hostaleria","color":"#19c3a6","starters":["Quin vi porto a un sopar de peix?","Què és un Priorat?","Fes-me una carta de vins per a un restaurant petit"]},{"id":"gestor-restaurant","name":"Gestor de restaurant","role":"Gestor i director de restaurant","icon":"🍽️","sector":"hostaleria","color":"#19c3a6","starters":["Com calculo el preu d'aquest plat?","Respon aquesta ressenya negativa","Fes-me un quadrant de torns"]},{"id":"hotelier","name":"Hoteler","role":"Director d'hotel i allotjament turístic","icon":"🏨","sector":"hostaleria","color":"#19c3a6","starters":["Com fixo preus per a l'estiu?","Respon a un hoste que es queixa del soroll","Fes-me un protocol de check-in"]},{"id":"panader-pastisser","name":"Fornera i pastissera","role":"Fornera i pastissera artesana","icon":"🥐","sector":"hostaleria","color":"#19c3a6","starters":["Per què el meu pa no puja?","Recepta de coca de Sant Joan","Com faig una crema pastissera sense grumolls?"]},{"id":"seguretat-alimentaria","name":"Tècnic de seguretat alimentària","role":"Especialista en higiene i APPCC","icon":"🧼","sector":"hostaleria","color":"#19c3a6","starters":["Què necessito per obrir un bar?","Com etiqueto els al·lèrgens?","A quina temperatura guardo el peix?"]},{"id":"programador","name":"Programador","role":"Desenvolupador de programari sènior","icon":"💻","sector":"tecnologia","color":"#7a4cf0","starters":["Tinc aquest error, m'ho mires?","Escriu una API REST amb FastAPI","Com organitzo aquest projecte?"]},{"id":"devops","name":"Enginyer DevOps","role":"Enginyer DevOps i cloud","icon":"☁️","sector":"tecnologia","color":"#7a4cf0","starters":["Com desplego això en un VPS?","Per què cau el contenidor?","Dissenya'm còpies de seguretat"]},{"id":"suport-informatic","name":"Tècnic de suport informàtic","role":"Tècnic de suport TI","icon":"🖥️","sector":"tecnologia","color":"#7a4cf0","starters":["El portàtil va molt lent","No em connecta el wifi","Com faig una còpia de seguretat?"]},{"id":"ciberseguretat","name":"Expert en ciberseguretat","role":"Especialista en ciberseguretat defensiva","icon":"🛡️","sector":"tecnologia","color":"#7a4cf0","starters":["M'han robat el compte, què faig?","Com detecto un correu de phishing?","Seguretat per a la meva empresa de 5 persones"]},{"id":"dissenyador-ux","name":"Dissenyador UX/UI","role":"Dissenyador de producte","icon":"🖌️","sector":"tecnologia","color":"#7a4cf0","starters":["Critica aquest disseny de formulari","Proposa una paleta accessible","Com organitzo la navegació?"]},{"id":"dades-ia","name":"Especialista en IA aplicada","role":"Enginyer d'IA i automatització","icon":"🤖","sector":"tecnologia","color":"#7a4cf0","starters":["Com automatitzo l'atenció al client amb IA?","Millora aquest prompt","Quin model triar per a aquesta tasca?"]},{"id":"wordpress-web","name":"Creador de webs","role":"Desenvolupador web i WordPress","icon":"🌐","sector":"tecnologia","color":"#7a4cf0","starters":["Vull un web per al meu negoci","Per què va lent el meu WordPress?","Com afegeixo un formulari de contacte?"]},{"id":"assistent-personal","name":"Assistent personal","role":"Assistent personal","icon":"🗒️","sector":"vida","color":"#2fb5ff","starters":["Organitza'm la setmana","Redacta un missatge educat per dir que no","Fes-me un resum d'aquest text"]},{"id":"planificador-financer","name":"Assessor de finances personals","role":"Assessor de finances personals","icon":"💶","sector":"vida","color":"#2fb5ff","starters":["Ajuda'm a fer un pressupost mensual","Val la pena amortitzar l'hipoteca?","Què és un fons indexat?"]},{"id":"coach-productivitat","name":"Coach de productivitat","role":"Coach d'organització i hàbits","icon":"⏱️","sector":"vida","color":"#2fb5ff","starters":["Procrastino massa, què faig?","Fes-me un pla per aprendre anglès en 6 mesos","Com organitzo la meva setmana?"]},{"id":"guia-catalunya","name":"Guia de Catalunya","role":"Guia local i expert en cultura catalana","icon":"🏔️","sector":"vida","color":"#2fb5ff","starters":["Un cap de setmana al Pirineu amb nens","Què és la Castanyada?","Ruta senzilla per a diumenge"]},{"id":"escriptor-creatiu","name":"Escriptor creatiu","role":"Escriptor i editor","icon":"📝","sector":"vida","color":"#2fb5ff","starters":["Escriu una felicitació d'aniversari original","Ajuda'm a estructurar una novel·la","Millora aquest paràgraf"]},{"id":"cuidador-mascotes","name":"Etòleg de mascotes","role":"Etòleg i educador canin i felí","icon":"🐕","sector":"vida","color":"#2fb5ff","starters":["El meu gos borda quan marxo de casa","Com presento un gatet a casa?","Com l'ensenyo a caminar sense estirar?"]},{"id":"mestre-bricolatge","name":"Mestre de bricolatge","role":"Manetes i decorador d'interiors","icon":"🛠️","sector":"vida","color":"#2fb5ff","starters":["Com penjo un mirall pesat?","Idees per organitzar una habitació petita","Quines eines necessito per començar?"]},{"id":"coach-familiar","name":"Assessor de famílies","role":"Orientador de criança i vida familiar","icon":"👨‍👩‍👧","sector":"vida","color":"#2fb5ff","starters":["El meu fill no vol dormir sol","Com gestiono els conflictes entre germans?","Quant de temps de pantalla és adequat?"]},{"id":"cuidador-gent-gran","name":"Acompanyant de gent gran","role":"Especialista en cures i autonomia de gent gran","icon":"🧓","sector":"vida","color":"#2fb5ff","starters":["Com sol·licito la dependència per a la meva mare?","Adaptacions per evitar caigudes","Activitats per a algú amb inici d'alzheimer"]},{"id":"tramits-generalitat","name":"Guia de tràmits","role":"Especialista en tràmits amb l'Administració","icon":"🏛️","sector":"public","color":"#6b7cff","starters":["Com demano cita per al DNI?","Què necessito per empadronar-me?","Com faig un recurs d'alçada?"]},{"id":"ajuts-subvencions","name":"Assessor d'ajuts","role":"Assessor d'ajuts i subvencions","icon":"🎁","sector":"public","color":"#6b7cff","starters":["Quins ajuts hi ha per a un autònom nou?","Ajuts per a plaques solars","Com justifico una subvenció?"]},{"id":"seguretat-social","name":"Expert en Seguretat Social","role":"Expert en Seguretat Social i prestacions","icon":"🩹","sector":"public","color":"#6b7cff","starters":["Quan em puc jubilar?","Com demano la prestació d'atur?","Quina baixa em correspon?"]},{"id":"estrangeria","name":"Especialista en estrangeria","role":"Orientador d'immigració i estrangeria","icon":"🌍","sector":"public","color":"#6b7cff","starters":["Com demano l'arrelament social?","Requisits per a la nacionalitat","Com homologuen un títol estranger?"]},{"id":"agronom","name":"Agrònom","role":"Enginyer agrònom i pagès","icon":"🌾","sector":"industria","color":"#7cb342","starters":["Les fulles de l'olivera tenen taques","Quan podo la vinya?","Com sol·licito els ajuts de la PAC?"]},{"id":"logistica","name":"Responsable de logística","role":"Expert en logística i transport","icon":"🚚","sector":"industria","color":"#7cb342","starters":["Com organitzo l'stock d'un magatzem petit?","Què és un incoterm FOB?","Com calculo el cost d'un envio?"]},{"id":"prl","name":"Tècnic de prevenció","role":"Tècnic de prevenció de riscos laborals","icon":"🦺","sector":"industria","color":"#7cb342","starters":["Què ha de tenir un pla de prevenció?","Quins EPI necessito?","Com investigo un accident?"]},{"id":"enginyer-industrial","name":"Enginyer industrial","role":"Enginyer industrial i de processos","icon":"⚙️","sector":"industria","color":"#7cb342","starters":["Com dimensiono un motor per a aquesta cinta?","Aplica lean a aquest procés","Què és un OEE?"]},{"id":"creador-de-dots","name":"Creador de Dots","role":"Dissenyador d'agents","icon":"✨","sector":"tecnologia","color":"#7a4cf0","starters":["Vull un agent per a la meva gestoria","Dissenya'm un Dot per a la meva botiga","Millora aquest Dot"]}]}</script><!--CATALOG_END-->
+  <!--CATALOG_START--><script id="catalog-data" type="application/json">{"sectors":[{"id":"educacio","name":"Educació","color":"#ffc21a","count":10},{"id":"salut","name":"Salut i benestar","color":"#ff4d7d","count":11},{"id":"legal","name":"Legal i fiscal","color":"#52657a","count":8},{"id":"oficis","name":"Oficis i llar","color":"#ff8a3d","count":12},{"id":"negoci","name":"Negoci i màrqueting","color":"#2f7bff","count":15},{"id":"hostaleria","name":"Hostaleria i alimentació","color":"#19c3a6","count":6},{"id":"tecnologia","name":"Tecnologia","color":"#7a4cf0","count":8},{"id":"vida","name":"Vida quotidiana","color":"#2fb5ff","count":9},{"id":"public","name":"Administració i tràmits","color":"#6b7cff","count":4},{"id":"industria","name":"Camp, indústria i transport","color":"#7cb342","count":4}],"agents":[{"id":"mestra-infantil-primaria","name":"Mestra d'infantil i primària","role":"Mestra d'educació infantil i primària","icon":"🍎","sector":"educacio","color":"#ffc21a","starters":["Com explico les fraccions a un nen de 8 anys?","Proposa una activitat per treballar la lectura","Com ajudo un infant que es frustra amb els deures?"],"look":{"shape":"arch","eyes":"happy","mouth":"smile","hat":"flower","glasses":"none","accessory":"none","body":"blob","tone":"yellow","color":"#ffc21a","accent":"#0a0a0a"}},{"id":"professor-matematiques","name":"Professor de matemàtiques","role":"Professor de matemàtiques d'ESO i batxillerat","icon":"📐","sector":"educacio","color":"#ffc21a","starters":["Ajuda'm a entendre les derivades","Posa'm 5 exercicis de sistemes d'equacions","Com preparo les PAU de matemàtiques?"],"look":{"shape":"arch","eyes":"pill","mouth":"none","hat":"graduation","glasses":"square","accessory":"none","body":"cube","tone":"yellow","color":"#ffc21a","accent":"#0a0a0a"}},{"id":"professor-llengues","name":"Professor de llengua i literatura","role":"Professor de llengua catalana, castellana i literatura","icon":"📚","sector":"educacio","color":"#ffc21a","starters":["Corregeix aquest text i explica'm els errors","Com es fa un comentari de text?","Recomana'm un llibre de literatura catalana"],"look":{"shape":"arch","eyes":"happy","mouth":"none","hat":"beanie","glasses":"round","accessory":"none","body":"arch","tone":"yellow","color":"#ffc21a","accent":"#ff4d7d"}},{"id":"professor-ciencies","name":"Professor de ciències","role":"Professor de física, química, biologia i geologia","icon":"🔬","sector":"educacio","color":"#ffc21a","starters":["Per què cauen els objectes?","Ajuda'm amb un problema de estequiometria","Proposa un experiment fàcil per a casa"],"look":{"shape":"arch","eyes":"wide","mouth":"open","hat":"antenna","glasses":"round","accessory":"none","body":"blob","tone":"yellow","color":"#ffc21a","accent":"#0a0a0a"}},{"id":"professor-idiomes","name":"Professor d'idiomes","role":"Professor d'anglès, francès i alemany","icon":"🌍","sector":"educacio","color":"#ffc21a","starters":["Practiquem anglès per a una entrevista de feina","Corregeix aquest email en anglès","Explica'm el present perfect"],"look":{"shape":"arch","eyes":"wink","mouth":"smile","hat":"cap","glasses":"none","accessory":"none","body":"arch","tone":"yellow","color":"#ffc21a","accent":"#2f7bff"}},{"id":"orientador-educatiu","name":"Orientador educatiu","role":"Orientador acadèmic i professional","icon":"🧭","sector":"educacio","color":"#ffc21a","starters":["No sé si fer batxillerat o un cicle formatiu","Quines sortides té un grau de biologia?","Ajuda'm a fer un pla d'estudi per a l'estiu"],"look":{"shape":"arch","eyes":"pill","mouth":"none","hat":"none","glasses":"none","accessory":"none","body":"cube","tone":"yellow","color":"#ffc21a","accent":"#0a0a0a"}},{"id":"preparador-oposicions","name":"Preparador d'oposicions","role":"Preparador d'oposicions","icon":"🎯","sector":"educacio","color":"#ffc21a","starters":["Ajuda'm a planificar 8 mesos d'estudi","Fes-me un test del tema 3","Com memoritzo llistes llargues?"],"look":{"shape":"arch","eyes":"pill","mouth":"none","hat":"none","glasses":"none","accessory":"none","body":"blob","tone":"yellow","color":"#ffc21a","accent":"#0a0a0a"}},{"id":"tutor-tfg","name":"Tutor de treballs acadèmics","role":"Tutor de TFG, TFM i treballs de recerca","icon":"🎓","sector":"educacio","color":"#ffc21a","starters":["Ajuda'm a triar tema per al TFG","Fes-me un esquema d'un treball de recerca","Com cito un web en APA?"],"look":{"shape":"arch","eyes":"pill","mouth":"none","hat":"graduation","glasses":"round","accessory":"none","body":"arch","tone":"yellow","color":"#ffc21a","accent":"#0a0a0a"}},{"id":"professor-musica","name":"Professor de música","role":"Professor de música i llenguatge musical","icon":"🎵","sector":"educacio","color":"#ffc21a","starters":["Com llegeixo una partitura?","Fes-me una rutina de pràctica de 20 minuts","Explica'm els acords de la tonalitat de Do major"],"look":{"shape":"arch","eyes":"happy","mouth":"smile","hat":"none","glasses":"none","accessory":"headphones","body":"cube","tone":"yellow","color":"#ffc21a","accent":"#0a0a0a"}},{"id":"psicopedagog","name":"Psicopedagog","role":"Psicopedagog i especialista en dificultats d'aprenentatge","icon":"🧩","sector":"educacio","color":"#ffc21a","starters":["El meu fill té dificultats amb la lectura, què puc fer?","Com l'ajudo a concentrar-se?","Quines adaptacions es poden demanar a l'escola?"],"look":{"shape":"arch","eyes":"pill","mouth":"none","hat":"none","glasses":"none","accessory":"none","body":"blob","tone":"yellow","color":"#ffc21a","accent":"#0a0a0a"}},{"id":"metge-capcalera","name":"Metge de capçalera","role":"Metge de família (informació de salut)","icon":"🩺","sector":"salut","color":"#ff4d7d","starters":["Tinc mal de cap des de fa tres dies","Què vol dir aquest resultat d'analítica?","Com em preparo per a la visita amb el metge?"],"look":{"shape":"circle","eyes":"pill","mouth":"smile","hat":"none","glasses":"round","accessory":"stethoscope","body":"cube","tone":"pink","color":"#ff4d7d","accent":"#0a0a0a"}},{"id":"infermer","name":"Infermer/a","role":"Infermer/a d'atenció primària","icon":"💉","sector":"salut","color":"#ff4d7d","starters":["Com cuido una ferida després de punts?","Com prenc bé la tensió a casa?","Quins signes indiquen infecció?"],"look":{"shape":"tri","eyes":"pill","mouth":"smile","hat":"cap","glasses":"none","accessory":"stethoscope","body":"arch","tone":"pink","color":"#ff4d7d","accent":"#2fb5ff"}},{"id":"pediatre","name":"Pediatre","role":"Pediatre (orientació per a famílies)","icon":"🧸","sector":"salut","color":"#ff4d7d","starters":["El meu bebè té febre, què faig?","Quan començo amb la fruita?","Com millorar el son d'un nen de 2 anys?"],"look":{"shape":"tri","eyes":"happy","mouth":"smile","hat":"beanie","glasses":"none","accessory":"stethoscope","body":"blob","tone":"pink","color":"#ff4d7d","accent":"#ffc21a"}},{"id":"psicoleg","name":"Psicòleg","role":"Psicòleg (acompanyament emocional, no clínic)","icon":"🫶","sector":"salut","color":"#ff4d7d","starters":["Últimament estic molt estressat","Com poso límits a la feina?","Com gestiono els pensaments repetitius?"],"look":{"shape":"tri","eyes":"sleepy","mouth":"smile","hat":"none","glasses":"round","accessory":"none","body":"cube","tone":"pink","color":"#ff4d7d","accent":"#7a4cf0"}},{"id":"nutricionista","name":"Nutricionista","role":"Dietista-nutricionista","icon":"🥗","sector":"salut","color":"#ff4d7d","starters":["Fes-me un menú setmanal saludable i barat","Com llegeixo l'etiqueta d'un producte?","Què menjo abans d'entrenar?"],"look":{"shape":"tri","eyes":"pill","mouth":"none","hat":"none","glasses":"none","accessory":"none","body":"arch","tone":"pink","color":"#ff4d7d","accent":"#0a0a0a"}},{"id":"entrenador-personal","name":"Entrenador personal","role":"Entrenador personal i preparador físic","icon":"🏋️","sector":"salut","color":"#ff4d7d","starters":["Fes-me una rutina de força de 3 dies","Com preparo els meus primers 10 km?","Quin escalfament faig?"],"look":{"shape":"tri","eyes":"pill","mouth":"none","hat":"none","glasses":"none","accessory":"none","body":"arch","tone":"pink","color":"#ff4d7d","accent":"#0a0a0a"}},{"id":"fisioterapeuta","name":"Fisioterapeuta","role":"Fisioterapeuta (orientació)","icon":"🦴","sector":"salut","color":"#ff4d7d","starters":["Tinc mal d'esquena a l'oficina","Com em recupero d'un esquinç de turmell?","Exercicis per al coll"],"look":{"shape":"tri","eyes":"pill","mouth":"none","hat":"none","glasses":"none","accessory":"none","body":"blob","tone":"pink","color":"#ff4d7d","accent":"#0a0a0a"}},{"id":"farmaceutic","name":"Farmacèutic","role":"Farmacèutic (informació sobre medicaments)","icon":"💊","sector":"salut","color":"#ff4d7d","starters":["Puc prendre ibuprofè i paracetamol junts?","Què fer si m'oblido una pastilla?","Com guardo aquest medicament?"],"look":{"shape":"tri","eyes":"pill","mouth":"none","hat":"none","glasses":"none","accessory":"none","body":"arch","tone":"pink","color":"#ff4d7d","accent":"#0a0a0a"}},{"id":"dentista","name":"Dentista","role":"Odontòleg (informació de salut bucodental)","icon":"🦷","sector":"salut","color":"#ff4d7d","starters":["Tinc sensibilitat als freds","Com em cuido després d'una extracció?","Quina diferència hi ha entre un implant i un pont?"],"look":{"shape":"tri","eyes":"happy","mouth":"open","hat":"cap","glasses":"none","accessory":"none","body":"cube","tone":"pink","color":"#ff4d7d","accent":"#19c3a6"}},{"id":"veterinari","name":"Veterinari","role":"Veterinari (informació per a propietaris)","icon":"🐾","sector":"salut","color":"#ff4d7d","starters":["El meu gos vomita des d'ahir","Quan vacuno el meu gatet?","Què no pot menjar un gos?"],"look":{"shape":"drop","eyes":"round","mouth":"tongue","hat":"none","glasses":"none","accessory":"stethoscope","body":"arch","tone":"pink","color":"#ff4d7d","accent":"#0a0a0a"}},{"id":"coach-son-benestar","name":"Coach de son i benestar","role":"Especialista en son, estrès i hàbits","icon":"🌙","sector":"salut","color":"#ff4d7d","starters":["Em costa dormir, què provo?","Fes-me una rutina de vespre","Com faig pauses al teletreball?"],"look":{"shape":"tri","eyes":"pill","mouth":"none","hat":"none","glasses":"none","accessory":"none","body":"blob","tone":"pink","color":"#ff4d7d","accent":"#0a0a0a"}},{"id":"jurista-generalista","name":"Jurista","role":"Advocat generalista (orientació jurídica)","icon":"⚖️","sector":"legal","color":"#52657a","starters":["Em cobren una penalització injusta, què faig?","Ajuda'm a redactar una reclamació","Què significa aquesta clàusula?"],"look":{"shape":"square","eyes":"pill","mouth":"none","hat":"none","glasses":"square","accessory":"tie","body":"cube","tone":"slate","color":"#52657a","accent":"#0a0a0a"}},{"id":"assessor-fiscal","name":"Assessor fiscal","role":"Assessor fiscal i tributari","icon":"🧾","sector":"legal","color":"#52657a","starters":["Quines despeses puc deduir com a autònom?","Quan presento l'IVA trimestral?","Com tributa vendre un pis?"],"look":{"shape":"square","eyes":"round","mouth":"none","hat":"none","glasses":"square","accessory":"tie","body":"blob","tone":"slate","color":"#52657a","accent":"#19c3a6"}},{"id":"laboralista","name":"Laboralista","role":"Advocat laboralista i expert en Seguretat Social","icon":"👷","sector":"legal","color":"#52657a","starters":["M'han acomiadat, què faig ara?","Com es calcula el meu finiquit?","Quants dies de vacances em corresponen?"],"look":{"shape":"square","eyes":"pill","mouth":"none","hat":"hardhat","glasses":"none","accessory":"tie","body":"cube","tone":"slate","color":"#52657a","accent":"#0a0a0a"}},{"id":"advocat-arrendaments","name":"Advocat d'habitatge i lloguers","role":"Advocat d'arrendaments i propietat","icon":"🏠","sector":"legal","color":"#52657a","starters":["El propietari no em torna la fiança","Puc pujar el lloguer aquest any?","Què ha de dir un contracte de lloguer?"],"look":{"shape":"square","eyes":"pill","mouth":"none","hat":"none","glasses":"none","accessory":"none","body":"blob","tone":"slate","color":"#52657a","accent":"#0a0a0a"}},{"id":"proteccio-dades","name":"Delegat de protecció de dades","role":"Expert en RGPD i privacitat","icon":"🔒","sector":"legal","color":"#52657a","starters":["Necessito complir el RGPD a la meva botiga","Com redacto una política de privacitat?","Què faig si he perdut un portàtil amb dades?"],"look":{"shape":"square","eyes":"pill","mouth":"none","hat":"none","glasses":"none","accessory":"none","body":"cube","tone":"slate","color":"#52657a","accent":"#0a0a0a"}},{"id":"jurista-penal","name":"Jurista penal","role":"Advocat penalista (orientació)","icon":"🛡️","sector":"legal","color":"#52657a","starters":["M'han citat com a investigat, què significa?","Com es posa una denúncia?","Quins drets tinc si em detenen?"],"look":{"shape":"square","eyes":"pill","mouth":"smirk","hat":"none","glasses":"shades","accessory":"tie","body":"cube","tone":"slate","color":"#52657a","accent":"#0a0a0a"}},{"id":"gestor-administratiu","name":"Gestor administratiu","role":"Gestor administratiu","icon":"🗂️","sector":"legal","color":"#52657a","starters":["Vull donar-me d'alta d'autònom","Com faig un canvi de titularitat d'un cotxe?","Quins papers necessito per constituir una SL?"],"look":{"shape":"square","eyes":"pill","mouth":"none","hat":"none","glasses":"none","accessory":"none","body":"cube","tone":"slate","color":"#52657a","accent":"#0a0a0a"}},{"id":"mediador-conflictes","name":"Mediador de conflictes","role":"Mediador i negociador","icon":"🤝","sector":"legal","color":"#52657a","starters":["Tinc un conflicte amb un veí per sorolls","Com negocio un preu amb un proveïdor?","Ajuda'm a preparar una conversa difícil amb la meva parella"],"look":{"shape":"square","eyes":"pill","mouth":"none","hat":"none","glasses":"none","accessory":"none","body":"arch","tone":"slate","color":"#52657a","accent":"#0a0a0a"}},{"id":"fontaner","name":"Fontaner","role":"Fontaner i instal·lador de canonades","icon":"🚰","sector":"oficis","color":"#ff8a3d","starters":["La cisterna perd aigua constantment","Tinc una fuita sota la pica","La dutxa té poca pressió"],"look":{"shape":"drop","eyes":"round","mouth":"none","hat":"cap","glasses":"none","accessory":"mustache","body":"blob","tone":"orange","color":"#ff8a3d","accent":"#2f7bff"}},{"id":"electricista","name":"Electricista","role":"Electricista instal·lador","icon":"⚡","sector":"oficis","color":"#ff8a3d","starters":["Salta el diferencial cada dia","Puc posar un endoll aquí?","Quina potència necessito?"],"look":{"shape":"drop","eyes":"wide","mouth":"open","hat":"hardhat","glasses":"none","accessory":"none","body":"arch","tone":"orange","color":"#ff8a3d","accent":"#0a0a0a"}},{"id":"paleta-reformes","name":"Paleta i reformista","role":"Paleta i cap d'obra","icon":"🧱","sector":"oficis","color":"#ff8a3d","starters":["Vull reformar un bany, per on començo?","Tinc humitat a la paret","Com comparo dos pressupostos?"],"look":{"shape":"drop","eyes":"pill","mouth":"none","hat":"hardhat","glasses":"none","accessory":"mustache","body":"arch","tone":"orange","color":"#ff8a3d","accent":"#0a0a0a"}},{"id":"fuster","name":"Fuster","role":"Fuster i ebenista","icon":"🪚","sector":"oficis","color":"#ff8a3d","starters":["Vull fer un prestatge flotant","Com repare una porta que arrossega?","Quin vernís faig servir en exteriors?"],"look":{"shape":"drop","eyes":"pill","mouth":"none","hat":"cap","glasses":"none","accessory":"mustache","body":"cube","tone":"orange","color":"#ff8a3d","accent":"#c47a3a"}},{"id":"pintor","name":"Pintor","role":"Pintor i decorador","icon":"🎨","sector":"oficis","color":"#ff8a3d","starters":["Quanta pintura necessito per a 40 m²?","Com pinto un sostre sense marques?","Quin color va bé en un menjador petit?"],"look":{"shape":"drop","eyes":"happy","mouth":"none","hat":"beanie","glasses":"none","accessory":"none","body":"cube","tone":"orange","color":"#ff8a3d","accent":"#ff8a3d"}},{"id":"serraller","name":"Serraller","role":"Serraller i tècnic de seguretat","icon":"🔑","sector":"oficis","color":"#ff8a3d","starters":["Se m'ha encallat la clau","Quin pany és més segur?","Com reforço la porta de casa?"],"look":{"shape":"drop","eyes":"pill","mouth":"none","hat":"none","glasses":"none","accessory":"none","body":"blob","tone":"orange","color":"#ff8a3d","accent":"#0a0a0a"}},{"id":"tecnic-climatitzacio","name":"Tècnic de climatització","role":"Tècnic de calefacció, aire condicionat i aerotèrmia","icon":"🌡️","sector":"oficis","color":"#ff8a3d","starters":["La caldera mostra un error","Val la pena l'aerotèrmia?","Per què no escalfa el radiador?"],"look":{"shape":"drop","eyes":"pill","mouth":"none","hat":"none","glasses":"none","accessory":"none","body":"blob","tone":"orange","color":"#ff8a3d","accent":"#0a0a0a"}},{"id":"installador-solar","name":"Instal·lador solar","role":"Tècnic d'autoconsum fotovoltaic","icon":"☀️","sector":"oficis","color":"#ff8a3d","starters":["Quantes plaques necessito?","Quan es recupera la inversió?","Com funciona la compensació d'excedents?"],"look":{"shape":"drop","eyes":"pill","mouth":"none","hat":"none","glasses":"none","accessory":"none","body":"arch","tone":"orange","color":"#ff8a3d","accent":"#0a0a0a"}},{"id":"mecanic","name":"Mecànic d'automòbils","role":"Mecànic de l'automòbil","icon":"🔧","sector":"oficis","color":"#ff8a3d","starters":["Fa un soroll en frenar","Què vol dir la llum del motor?","Què he de revisar abans de comprar un cotxe usat?"],"look":{"shape":"drop","eyes":"pill","mouth":"none","hat":"cap","glasses":"none","accessory":"mustache","body":"blob","tone":"orange","color":"#ff8a3d","accent":"#ff4d7d"}},{"id":"tecnic-electrodomestics","name":"Tècnic d'electrodomèstics","role":"Tècnic de reparació d'electrodomèstics","icon":"🧺","sector":"oficis","color":"#ff8a3d","starters":["La rentadora no desguassa","La nevera fa soroll","Val la pena reparar aquest forn?"],"look":{"shape":"drop","eyes":"pill","mouth":"none","hat":"none","glasses":"none","accessory":"none","body":"cube","tone":"orange","color":"#ff8a3d","accent":"#0a0a0a"}},{"id":"jardiner","name":"Jardiner","role":"Jardiner i paisatgista","icon":"🌿","sector":"oficis","color":"#ff8a3d","starters":["Les fulles del meu llimoner es tornen grogues","Què sembro al març?","Plantes per a un balcó amb sol"],"look":{"shape":"drop","eyes":"happy","mouth":"smile","hat":"cowboy","glasses":"none","accessory":"none","body":"arch","tone":"orange","color":"#ff8a3d","accent":"#7c5a2a"}},{"id":"arquitecte-tecnic","name":"Arquitecte tècnic","role":"Arquitecte tècnic i tècnic d'obra","icon":"📏","sector":"oficis","color":"#ff8a3d","starters":["Quina llicència necessito per reformar?","Què és un certificat energètic?","Tinc aluminosi?"],"look":{"shape":"drop","eyes":"pill","mouth":"none","hat":"none","glasses":"none","accessory":"none","body":"cube","tone":"orange","color":"#ff8a3d","accent":"#0a0a0a"}},{"id":"recepcionista","name":"Recepcionista","role":"Recepcionista virtual per a negocis","icon":"🛎️","sector":"negoci","color":"#2f7bff","starters":["Tinc hora dijous?","Quin és l'horari?","Vull canviar la meva cita"],"look":{"shape":"drop","eyes":"happy","mouth":"smile","hat":"cap","glasses":"none","accessory":"bowtie","body":"cube","tone":"blue","color":"#2f7bff","accent":"#ff4d7d"}},{"id":"atencio-client","name":"Agent d'atenció al client","role":"Especialista en atenció al client","icon":"🎧","sector":"negoci","color":"#2f7bff","starters":["Redacta una resposta a una queixa","Com gestiono un client enfadat?","Fes-me un guió de devolucions"],"look":{"shape":"drop","eyes":"pill","mouth":"none","hat":"none","glasses":"none","accessory":"none","body":"arch","tone":"blue","color":"#2f7bff","accent":"#0a0a0a"}},{"id":"comercial-vendes","name":"Comercial","role":"Especialista en vendes B2B i B2C","icon":"💼","sector":"negoci","color":"#2f7bff","starters":["Escriu-me un correu de prospecció","Com responc a 'és massa car'?","Prepara'm una reunió amb un client nou"],"look":{"shape":"drop","eyes":"pill","mouth":"smirk","hat":"none","glasses":"shades","accessory":"tie","body":"arch","tone":"blue","color":"#2f7bff","accent":"#0a0a0a"}},{"id":"marqueting-digital","name":"Estrateg de màrqueting","role":"Especialista en màrqueting digital","icon":"📣","sector":"negoci","color":"#2f7bff","starters":["Vull captar clients per a la meva botiga","Fes-me un pla de continguts d'un mes","Quins KPI segueixo?"],"look":{"shape":"drop","eyes":"pill","mouth":"none","hat":"none","glasses":"none","accessory":"none","body":"arch","tone":"blue","color":"#2f7bff","accent":"#0a0a0a"}},{"id":"community-manager","name":"Community manager","role":"Community manager i creador de continguts","icon":"📱","sector":"negoci","color":"#2f7bff","starters":["Dona'm 10 idees de publicacions per a una fleca","Escriu un guió per a un reel","Com responc a un comentari negatiu?"],"look":{"shape":"drop","eyes":"pill","mouth":"none","hat":"none","glasses":"none","accessory":"none","body":"blob","tone":"blue","color":"#2f7bff","accent":"#0a0a0a"}},{"id":"redactor-seo","name":"Redactor SEO","role":"Redactor de continguts i SEO","icon":"✍️","sector":"negoci","color":"#2f7bff","starters":["Escriu un article sobre 'com triar un colxó'","Millora aquesta descripció de producte","Proposa títols SEO per a aquesta pàgina"],"look":{"shape":"drop","eyes":"pill","mouth":"none","hat":"none","glasses":"none","accessory":"none","body":"blob","tone":"blue","color":"#2f7bff","accent":"#0a0a0a"}},{"id":"comptable","name":"Comptable","role":"Comptable i controller financer","icon":"📊","sector":"negoci","color":"#2f7bff","starters":["Com calculo el marge del meu producte?","Fes-me un pla de tresoreria a 6 mesos","Què és l'amortització?"],"look":{"shape":"drop","eyes":"pill","mouth":"none","hat":"none","glasses":"none","accessory":"none","body":"blob","tone":"blue","color":"#2f7bff","accent":"#0a0a0a"}},{"id":"recursos-humans","name":"Especialista en RR. HH.","role":"Responsable de recursos humans i selecció","icon":"🧑‍💼","sector":"negoci","color":"#2f7bff","starters":["Escriu una oferta per a un/a cambrer/a","Preguntes per a una entrevista de vendes","Com faig un feedback difícil?"],"look":{"shape":"drop","eyes":"pill","mouth":"none","hat":"none","glasses":"none","accessory":"none","body":"cube","tone":"blue","color":"#2f7bff","accent":"#0a0a0a"}},{"id":"cap-projectes","name":"Cap de projectes","role":"Project manager","icon":"🗓️","sector":"negoci","color":"#2f7bff","starters":["Ajuda'm a planificar el llançament d'un web","Fes-me un pla de 6 setmanes","Com estimo el temps de les tasques?"],"look":{"shape":"drop","eyes":"pill","mouth":"none","hat":"none","glasses":"none","accessory":"none","body":"cube","tone":"blue","color":"#2f7bff","accent":"#0a0a0a"}},{"id":"analista-dades","name":"Analista de dades","role":"Analista i científic de dades","icon":"📈","sector":"negoci","color":"#2f7bff","starters":["Com faig una taula dinàmica?","Escriu una consulta SQL per a les vendes per mes","Com sé si el resultat és significatiu?"],"look":{"shape":"drop","eyes":"pill","mouth":"none","hat":"none","glasses":"none","accessory":"none","body":"cube","tone":"blue","color":"#2f7bff","accent":"#0a0a0a"}},{"id":"consultor-emprenedoria","name":"Consultor d'emprenedoria","role":"Mentor d'startups i pimes","icon":"🚀","sector":"negoci","color":"#2f7bff","starters":["Tinc una idea de negoci, per on començo?","Fes-me un pla de negoci resumit","Com preparo un pitch d'inversors?"],"look":{"shape":"drop","eyes":"wink","mouth":"smile","hat":"crown","glasses":"none","accessory":"none","body":"cube","tone":"blue","color":"#2f7bff","accent":"#0a0a0a"}},{"id":"traductor","name":"Traductor","role":"Traductor i intèrpret","icon":"🌐","sector":"negoci","color":"#2f7bff","starters":["Tradueix aquest paràgraf a l'anglès amb to formal","Com es diu 'bon profit' en alemany?","Revisa aquesta traducció"],"look":{"shape":"drop","eyes":"pill","mouth":"none","hat":"none","glasses":"none","accessory":"none","body":"blob","tone":"blue","color":"#2f7bff","accent":"#0a0a0a"}},{"id":"botiga-online","name":"Expert en botigues online","role":"Especialista en e-commerce","icon":"🛒","sector":"negoci","color":"#2f7bff","starters":["Com pujo les vendes de la meva botiga?","Millora aquesta descripció","Com calculo el preu amb enviament?"],"look":{"shape":"drop","eyes":"pill","mouth":"none","hat":"none","glasses":"none","accessory":"none","body":"blob","tone":"blue","color":"#2f7bff","accent":"#0a0a0a"}},{"id":"agent-immobiliari","name":"Agent immobiliari","role":"Agent immobiliari","icon":"🏢","sector":"negoci","color":"#2f7bff","starters":["Vull vendre el meu pis, què necessito?","Redacta un anunci","Quins impostos pago en comprar?"],"look":{"shape":"drop","eyes":"pill","mouth":"none","hat":"none","glasses":"none","accessory":"none","body":"arch","tone":"blue","color":"#2f7bff","accent":"#0a0a0a"}},{"id":"agent-viatges","name":"Agent de viatges","role":"Agent de viatges i planificador d'escapades","icon":"✈️","sector":"negoci","color":"#2f7bff","starters":["Fes-me un cap de setmana a Lisboa amb 400 euros","Què necessito per viatjar a Japó?","Itinerari de 5 dies pel Pirineu"],"look":{"shape":"drop","eyes":"pill","mouth":"none","hat":"none","glasses":"none","accessory":"none","body":"arch","tone":"blue","color":"#2f7bff","accent":"#0a0a0a"}},{"id":"cuiner","name":"Cuiner","role":"Cuiner i xef","icon":"👨‍🍳","sector":"hostaleria","color":"#19c3a6","starters":["Què cuino amb ous, patates i ceba?","Escala aquesta recepta per a 8 persones","Com faig un bon sofregit?"],"look":{"shape":"hex","eyes":"happy","mouth":"smile","hat":"chef","glasses":"none","accessory":"mustache","body":"arch","tone":"teal","color":"#19c3a6","accent":"#0a0a0a"}},{"id":"sommelier","name":"Sommelier","role":"Sommelier i expert en begudes","icon":"🍷","sector":"hostaleria","color":"#19c3a6","starters":["Quin vi porto a un sopar de peix?","Què és un Priorat?","Fes-me una carta de vins per a un restaurant petit"],"look":{"shape":"hex","eyes":"pill","mouth":"smirk","hat":"none","glasses":"monocle","accessory":"bowtie","body":"arch","tone":"teal","color":"#19c3a6","accent":"#7a1e3c"}},{"id":"gestor-restaurant","name":"Gestor de restaurant","role":"Gestor i director de restaurant","icon":"🍽️","sector":"hostaleria","color":"#19c3a6","starters":["Com calculo el preu d'aquest plat?","Respon aquesta ressenya negativa","Fes-me un quadrant de torns"],"look":{"shape":"hex","eyes":"pill","mouth":"none","hat":"none","glasses":"none","accessory":"none","body":"cube","tone":"teal","color":"#19c3a6","accent":"#0a0a0a"}},{"id":"hotelier","name":"Hoteler","role":"Director d'hotel i allotjament turístic","icon":"🏨","sector":"hostaleria","color":"#19c3a6","starters":["Com fixo preus per a l'estiu?","Respon a un hoste que es queixa del soroll","Fes-me un protocol de check-in"],"look":{"shape":"hex","eyes":"pill","mouth":"none","hat":"none","glasses":"none","accessory":"none","body":"cube","tone":"teal","color":"#19c3a6","accent":"#0a0a0a"}},{"id":"panader-pastisser","name":"Fornera i pastissera","role":"Fornera i pastissera artesana","icon":"🥐","sector":"hostaleria","color":"#19c3a6","starters":["Per què el meu pa no puja?","Recepta de coca de Sant Joan","Com faig una crema pastissera sense grumolls?"],"look":{"shape":"hex","eyes":"happy","mouth":"smile","hat":"chef","glasses":"none","accessory":"none","body":"cube","tone":"teal","color":"#19c3a6","accent":"#0a0a0a"}},{"id":"seguretat-alimentaria","name":"Tècnic de seguretat alimentària","role":"Especialista en higiene i APPCC","icon":"🧼","sector":"hostaleria","color":"#19c3a6","starters":["Què necessito per obrir un bar?","Com etiqueto els al·lèrgens?","A quina temperatura guardo el peix?"],"look":{"shape":"hex","eyes":"pill","mouth":"none","hat":"none","glasses":"none","accessory":"none","body":"blob","tone":"teal","color":"#19c3a6","accent":"#0a0a0a"}},{"id":"programador","name":"Programador","role":"Desenvolupador de programari sènior","icon":"💻","sector":"tecnologia","color":"#7a4cf0","starters":["Tinc aquest error, m'ho mires?","Escriu una API REST amb FastAPI","Com organitzo aquest projecte?"],"look":{"shape":"circle","eyes":"pill","mouth":"none","hat":"none","glasses":"square","accessory":"headphones","body":"blob","tone":"violet","color":"#7a4cf0","accent":"#0a0a0a"}},{"id":"devops","name":"Enginyer DevOps","role":"Enginyer DevOps i cloud","icon":"☁️","sector":"tecnologia","color":"#7a4cf0","starters":["Com desplego això en un VPS?","Per què cau el contenidor?","Dissenya'm còpies de seguretat"],"look":{"shape":"circle","eyes":"pill","mouth":"none","hat":"none","glasses":"none","accessory":"none","body":"blob","tone":"violet","color":"#7a4cf0","accent":"#0a0a0a"}},{"id":"suport-informatic","name":"Tècnic de suport informàtic","role":"Tècnic de suport TI","icon":"🖥️","sector":"tecnologia","color":"#7a4cf0","starters":["El portàtil va molt lent","No em connecta el wifi","Com faig una còpia de seguretat?"],"look":{"shape":"circle","eyes":"pill","mouth":"none","hat":"none","glasses":"none","accessory":"none","body":"arch","tone":"violet","color":"#7a4cf0","accent":"#0a0a0a"}},{"id":"ciberseguretat","name":"Expert en ciberseguretat","role":"Especialista en ciberseguretat defensiva","icon":"🛡️","sector":"tecnologia","color":"#7a4cf0","starters":["M'han robat el compte, què faig?","Com detecto un correu de phishing?","Seguretat per a la meva empresa de 5 persones"],"look":{"shape":"circle","eyes":"pill","mouth":"smirk","hat":"beanie","glasses":"shades","accessory":"none","body":"blob","tone":"violet","color":"#7a4cf0","accent":"#0a0a0a"}},{"id":"dissenyador-ux","name":"Dissenyador UX/UI","role":"Dissenyador de producte","icon":"🖌️","sector":"tecnologia","color":"#7a4cf0","starters":["Critica aquest disseny de formulari","Proposa una paleta accessible","Com organitzo la navegació?"],"look":{"shape":"circle","eyes":"pill","mouth":"none","hat":"none","glasses":"none","accessory":"none","body":"arch","tone":"violet","color":"#7a4cf0","accent":"#0a0a0a"}},{"id":"dades-ia","name":"Especialista en IA aplicada","role":"Enginyer d'IA i automatització","icon":"🤖","sector":"tecnologia","color":"#7a4cf0","starters":["Com automatitzo l'atenció al client amb IA?","Millora aquest prompt","Quin model triar per a aquesta tasca?"],"look":{"shape":"circle","eyes":"pill","mouth":"none","hat":"none","glasses":"none","accessory":"none","body":"arch","tone":"violet","color":"#7a4cf0","accent":"#0a0a0a"}},{"id":"wordpress-web","name":"Creador de webs","role":"Desenvolupador web i WordPress","icon":"🌐","sector":"tecnologia","color":"#7a4cf0","starters":["Vull un web per al meu negoci","Per què va lent el meu WordPress?","Com afegeixo un formulari de contacte?"],"look":{"shape":"circle","eyes":"pill","mouth":"none","hat":"none","glasses":"none","accessory":"none","body":"cube","tone":"violet","color":"#7a4cf0","accent":"#0a0a0a"}},{"id":"assistent-personal","name":"Assistent personal","role":"Assistent personal","icon":"🗒️","sector":"vida","color":"#2fb5ff","starters":["Organitza'm la setmana","Redacta un missatge educat per dir que no","Fes-me un resum d'aquest text"],"look":{"shape":"circle","eyes":"happy","mouth":"smile","hat":"none","glasses":"none","accessory":"headphones","body":"arch","tone":"blue","color":"#2fb5ff","accent":"#0a0a0a"}},{"id":"planificador-financer","name":"Assessor de finances personals","role":"Assessor de finances personals","icon":"💶","sector":"vida","color":"#2fb5ff","starters":["Ajuda'm a fer un pressupost mensual","Val la pena amortitzar l'hipoteca?","Què és un fons indexat?"],"look":{"shape":"circle","eyes":"pill","mouth":"none","hat":"none","glasses":"none","accessory":"none","body":"arch","tone":"blue","color":"#2fb5ff","accent":"#0a0a0a"}},{"id":"coach-productivitat","name":"Coach de productivitat","role":"Coach d'organització i hàbits","icon":"⏱️","sector":"vida","color":"#2fb5ff","starters":["Procrastino massa, què faig?","Fes-me un pla per aprendre anglès en 6 mesos","Com organitzo la meva setmana?"],"look":{"shape":"circle","eyes":"pill","mouth":"none","hat":"none","glasses":"none","accessory":"none","body":"arch","tone":"blue","color":"#2fb5ff","accent":"#0a0a0a"}},{"id":"guia-catalunya","name":"Guia de Catalunya","role":"Guia local i expert en cultura catalana","icon":"🏔️","sector":"vida","color":"#2fb5ff","starters":["Un cap de setmana al Pirineu amb nens","Què és la Castanyada?","Ruta senzilla per a diumenge"],"look":{"shape":"circle","eyes":"happy","mouth":"smile","hat":"cap","glasses":"none","accessory":"scarf","body":"arch","tone":"blue","color":"#2fb5ff","accent":"#ff4d7d"}},{"id":"escriptor-creatiu","name":"Escriptor creatiu","role":"Escriptor i editor","icon":"📝","sector":"vida","color":"#2fb5ff","starters":["Escriu una felicitació d'aniversari original","Ajuda'm a estructurar una novel·la","Millora aquest paràgraf"],"look":{"shape":"circle","eyes":"pill","mouth":"none","hat":"none","glasses":"none","accessory":"none","body":"cube","tone":"blue","color":"#2fb5ff","accent":"#0a0a0a"}},{"id":"cuidador-mascotes","name":"Etòleg de mascotes","role":"Etòleg i educador canin i felí","icon":"🐕","sector":"vida","color":"#2fb5ff","starters":["El meu gos borda quan marxo de casa","Com presento un gatet a casa?","Com l'ensenyo a caminar sense estirar?"],"look":{"shape":"circle","eyes":"pill","mouth":"none","hat":"none","glasses":"none","accessory":"none","body":"cube","tone":"blue","color":"#2fb5ff","accent":"#0a0a0a"}},{"id":"mestre-bricolatge","name":"Mestre de bricolatge","role":"Manetes i decorador d'interiors","icon":"🛠️","sector":"vida","color":"#2fb5ff","starters":["Com penjo un mirall pesat?","Idees per organitzar una habitació petita","Quines eines necessito per començar?"],"look":{"shape":"circle","eyes":"pill","mouth":"none","hat":"none","glasses":"none","accessory":"none","body":"arch","tone":"blue","color":"#2fb5ff","accent":"#0a0a0a"}},{"id":"coach-familiar","name":"Assessor de famílies","role":"Orientador de criança i vida familiar","icon":"👨‍👩‍👧","sector":"vida","color":"#2fb5ff","starters":["El meu fill no vol dormir sol","Com gestiono els conflictes entre germans?","Quant de temps de pantalla és adequat?"],"look":{"shape":"circle","eyes":"pill","mouth":"none","hat":"none","glasses":"none","accessory":"none","body":"blob","tone":"blue","color":"#2fb5ff","accent":"#0a0a0a"}},{"id":"cuidador-gent-gran","name":"Acompanyant de gent gran","role":"Especialista en cures i autonomia de gent gran","icon":"🧓","sector":"vida","color":"#2fb5ff","starters":["Com sol·licito la dependència per a la meva mare?","Adaptacions per evitar caigudes","Activitats per a algú amb inici d'alzheimer"],"look":{"shape":"circle","eyes":"pill","mouth":"none","hat":"none","glasses":"none","accessory":"none","body":"cube","tone":"blue","color":"#2fb5ff","accent":"#0a0a0a"}},{"id":"tramits-generalitat","name":"Guia de tràmits","role":"Especialista en tràmits amb l'Administració","icon":"🏛️","sector":"public","color":"#6b7cff","starters":["Com demano cita per al DNI?","Què necessito per empadronar-me?","Com faig un recurs d'alçada?"],"look":{"shape":"square","eyes":"pill","mouth":"none","hat":"none","glasses":"none","accessory":"none","body":"cube","tone":"violet","color":"#6b7cff","accent":"#0a0a0a"}},{"id":"ajuts-subvencions","name":"Assessor d'ajuts","role":"Assessor d'ajuts i subvencions","icon":"🎁","sector":"public","color":"#6b7cff","starters":["Quins ajuts hi ha per a un autònom nou?","Ajuts per a plaques solars","Com justifico una subvenció?"],"look":{"shape":"square","eyes":"pill","mouth":"none","hat":"none","glasses":"none","accessory":"none","body":"arch","tone":"violet","color":"#6b7cff","accent":"#0a0a0a"}},{"id":"seguretat-social","name":"Expert en Seguretat Social","role":"Expert en Seguretat Social i prestacions","icon":"🩹","sector":"public","color":"#6b7cff","starters":["Quan em puc jubilar?","Com demano la prestació d'atur?","Quina baixa em correspon?"],"look":{"shape":"square","eyes":"pill","mouth":"none","hat":"none","glasses":"none","accessory":"none","body":"arch","tone":"violet","color":"#6b7cff","accent":"#0a0a0a"}},{"id":"estrangeria","name":"Especialista en estrangeria","role":"Orientador d'immigració i estrangeria","icon":"🌍","sector":"public","color":"#6b7cff","starters":["Com demano l'arrelament social?","Requisits per a la nacionalitat","Com homologuen un títol estranger?"],"look":{"shape":"square","eyes":"pill","mouth":"none","hat":"none","glasses":"none","accessory":"none","body":"blob","tone":"violet","color":"#6b7cff","accent":"#0a0a0a"}},{"id":"agronom","name":"Agrònom","role":"Enginyer agrònom i pagès","icon":"🌾","sector":"industria","color":"#7cb342","starters":["Les fulles de l'olivera tenen taques","Quan podo la vinya?","Com sol·licito els ajuts de la PAC?"],"look":{"shape":"hex","eyes":"pill","mouth":"none","hat":"cowboy","glasses":"none","accessory":"none","body":"cube","tone":"green","color":"#7cd13b","accent":"#c4a15a"}},{"id":"logistica","name":"Responsable de logística","role":"Expert en logística i transport","icon":"🚚","sector":"industria","color":"#7cb342","starters":["Com organitzo l'stock d'un magatzem petit?","Què és un incoterm FOB?","Com calculo el cost d'un envio?"],"look":{"shape":"hex","eyes":"pill","mouth":"none","hat":"hardhat","glasses":"none","accessory":"badge","body":"cube","tone":"green","color":"#7cd13b","accent":"#0a0a0a"}},{"id":"prl","name":"Tècnic de prevenció","role":"Tècnic de prevenció de riscos laborals","icon":"🦺","sector":"industria","color":"#7cb342","starters":["Què ha de tenir un pla de prevenció?","Quins EPI necessito?","Com investigo un accident?"],"look":{"shape":"hex","eyes":"wide","mouth":"none","hat":"hardhat","glasses":"none","accessory":"badge","body":"arch","tone":"green","color":"#7cd13b","accent":"#0a0a0a"}},{"id":"enginyer-industrial","name":"Enginyer industrial","role":"Enginyer industrial i de processos","icon":"⚙️","sector":"industria","color":"#7cb342","starters":["Com dimensiono un motor per a aquesta cinta?","Aplica lean a aquest procés","Què és un OEE?"],"look":{"shape":"hex","eyes":"pill","mouth":"none","hat":"none","glasses":"none","accessory":"none","body":"cube","tone":"green","color":"#7cd13b","accent":"#0a0a0a"}},{"id":"creador-de-dots","name":"Creador de Dots","role":"Dissenyador d'agents","icon":"✨","sector":"tecnologia","color":"#7a4cf0","starters":["Vull un agent per a la meva gestoria","Dissenya'm un Dot per a la meva botiga","Millora aquest Dot"],"look":{"shape":"circle","eyes":"heart","mouth":"smile","hat":"wizard","glasses":"none","accessory":"none","body":"cube","tone":"violet","color":"#7a4cf0","accent":"#ffc21a"}}]}</script><!--CATALOG_END-->
 </section>
 
 <section id="demo">
@@ -260,7 +257,7 @@ footer{border-top:1px solid var(--line);padding-block:32px 48px;color:var(--mute
     <div class="tabs" role="tablist" id="tabs"></div>
     <div>
       <div class="phone"><div class="screen">
-        <div class="top"><canvas id="pcv"></canvas><div><b id="pname"></b><small>en línia</small></div></div>
+        <div class="top"><span class="av" id="pav"></span><div><b id="pname"></b><small>en línia</small></div></div>
         <div class="msgs" id="msgs" aria-live="polite"></div>
         <div class="chips" id="chips"></div>
       </div></div>
@@ -283,11 +280,11 @@ footer{border-top:1px solid var(--line);padding-block:32px 48px;color:var(--mute
   <h2 class="rv">Del teu mòbil a l'agent i tornada</h2>
   <p class="sub rv">Cada persona fa servir el seu propi número amb l'API oficial de WhatsApp Cloud. Cada missatge passa per aquests cinc punts.</p>
   <div class="flow rv" id="flow">
-    <div class="node" data-c="--c-green"><canvas></canvas><div><b>El teu mòbil</b><span>Escrius un missatge</span></div></div>
-    <div class="node" data-c="--c-blue"><canvas></canvas><div><b>WhatsApp Cloud</b><span>Meta l'envia al webhook</span></div></div>
-    <div class="node" data-c="--c-amber"><canvas></canvas><div><b>El teu servidor</b><span>Signatura i llista de números</span></div></div>
-    <div class="node" data-c="--c-coral"><canvas></canvas><div><b>L'agent</b><span>Aplica les seves instruccions</span></div></div>
-    <div class="node" data-c="--c-violet"><canvas></canvas><div><b>El model</b><span>Genera la resposta</span></div></div>
+    <div class="node" data-c="--c-green"><div class="nv"></div><div><b>El teu mòbil</b><span>Escrius un missatge</span></div></div>
+    <div class="node" data-c="--c-blue"><div class="nv"></div><div><b>WhatsApp Cloud</b><span>Meta l'envia al webhook</span></div></div>
+    <div class="node" data-c="--c-amber"><div class="nv"></div><div><b>El teu servidor</b><span>Signatura i llista de números</span></div></div>
+    <div class="node" data-c="--c-coral"><div class="nv"></div><div><b>L'agent</b><span>Aplica les seves instruccions</span></div></div>
+    <div class="node" data-c="--c-violet"><div class="nv"></div><div><b>El model</b><span>Genera la resposta</span></div></div>
     <i class="packet" id="pk1"></i><i class="packet" id="pk2"></i><i class="packet" id="pk3"></i>
   </div>
 </section>
@@ -323,399 +320,6 @@ footer{border-top:1px solid var(--line);padding-block:32px 48px;color:var(--mute
 </div>
 
 <script>
-(function(){
-  var reduce=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  var css=function(v){return getComputedStyle(document.documentElement).getPropertyValue(v).trim()};
-  var AG=[
-    {n:"Aina",r:"Recepcionista",c:"--c-coral",p:[
-      ["Tinc hora dijous?","Dijous tens visita a les 10:30 amb la doctora Puig. T'envio un recordatori el dimecres al vespre."],
-      ["Puc canviar-la?","Tinc lliure divendres a les 9:00 o a les 12:15. Quina et va millor?"]]},
-    {n:"Pau",r:"Cuiner",c:"--c-amber",p:[
-      ["Sopar ràpid amb ous","Truita de patata en 15 minuts: 4 ous, 2 patates fines i ceba opcional. Vols la recepta pas a pas?"],
-      ["Sí, sense ceba","Talla les patates ben fines, fregeix-les 8 minuts, barreja-les amb els ous batuts i cuaja 3 minuts per banda."]]},
-    {n:"Laia",r:"Traductora",c:"--c-blue",p:[
-      ["Tradueix: bon profit","Anglès: enjoy your meal. Francès: bon appétit. Alemany: guten Appetit."],
-      ["I en italià?","Buon appetito. Igual que en castellà: buen provecho."]]},
-    {n:"Marc",r:"Comptable",c:"--c-green",p:[
-      ["Quin IVA porta un llibre?","A Espanya els llibres porten el 4% d'IVA. Confirma-ho amb el teu gestor per a casos especials."],
-      ["I un cafè al bar?","La restauració va al 10%."]]},
-    {n:"Núria",r:"Tutora",c:"--c-violet",p:[
-      ["Explica'm les fraccions","Una fracció és una part d'un tot. Si talles una pizza en 4 i te'n menges 1, has menjat 1/4."],
-      ["Posa'm un exercici","Quant és 1/2 + 1/4? Pista: converteix-les a quarts."]]},
-    {n:"Jordi",r:"Suport tècnic",c:"--c-teal",p:[
-      ["El wifi va lent","Reinicia el router 30 segons. Si continua igual, digues-me si va lent a tots els aparells o només a un."],
-      ["Només al portàtil","Oblida la xarxa al portàtil i torna-la a connectar. Si no, actualitza el controlador de wifi."]]}
-  ];
-
-  /* ---------- Orbe 3D compartit ---------- */
-  function rgb(h){h=h.replace("#","");if(h.length===3)h=h.replace(/./g,"$&$&");return[parseInt(h.substr(0,2),16),parseInt(h.substr(2,2),16),parseInt(h.substr(4,2),16)]}
-  function shade(h,a){var c=rgb(h),t=a<0?0:255,p=Math.abs(a);return"rgb("+c.map(function(v){return Math.round(v+(t-v)*p)}).join(",")+")"}
-  var COLS=["--c-coral","--c-amber","--c-blue","--c-green","--c-violet","--c-teal"];
-  var KIND={"--c-coral":"tri","--c-amber":"arch","--c-blue":"drop","--c-green":"hex","--c-violet":"circle","--c-teal":"square"};
-  function poly(c,pts,rad){
-    var n=pts.length,mid=function(p,q){return[(p[0]+q[0])/2,(p[1]+q[1])/2]},m0=mid(pts[0],pts[1]);
-    c.moveTo(m0[0],m0[1]);
-    for(var i=1;i<=n;i++){var p=pts[i%n],nx=mid(p,pts[(i+1)%n]);c.arcTo(p[0],p[1],nx[0],nx[1],rad)}
-    c.closePath();
-  }
-  function ngon(n,R,rot){var a=[];for(var i=0;i<n;i++){var t=rot+i*Math.PI*2/n;a.push([Math.cos(t)*R,Math.sin(t)*R])}return a}
-  function shape(c,k,r){
-    c.beginPath();
-    if(k==="circle")c.arc(0,0,r,0,7);
-    else if(k==="tri")poly(c,ngon(3,r*1.2,-Math.PI/2).map(function(p){return[p[0],p[1]+r*.12]}),r*.42);
-    else if(k==="hex")poly(c,ngon(6,r*1.08,Math.PI/6),r*.3);
-    else if(k==="square")poly(c,[[-r*.88,-r*.88],[r*.88,-r*.88],[r*.88,r*.88],[-r*.88,r*.88]],r*.48);
-    else if(k==="arch"){var w=r*.98,h=r*1.05;c.moveTo(-w,h);c.lineTo(-w,0);c.arc(0,0,w,Math.PI,0);c.lineTo(w,h-r*.2);c.arcTo(w,h,w-r*.2,h,r*.2);c.lineTo(-w+r*.2,h);c.arcTo(-w,h,-w,h-r*.2,r*.2);c.closePath()}
-    else{c.moveTo(0,-r*1.3);c.bezierCurveTo(r*.18,-r*.85,r,-r*.5,r,r*.18);c.arc(0,r*.18,r,0,Math.PI);c.bezierCurveTo(-r,-r*.5,-r*.18,-r*.85,0,-r*1.3);c.closePath()}
-  }
-  /* Personatge pla a l'estil de bot d'agents: silueta pròpia, color viu i dos ulls petits. La vida ve dels ulls, del balanceig i de l'esquitx. */
-  function orb(c,x,y,r,hex,o){
-    o=o||{};var t=(o.t||0)/1000,seed=o.seed||0,lv=o.level||0,sq=o.squash||0,lx=o.lx||0,ly=o.ly||0,k=o.kind||"circle";
-    var rot=Math.sin(t*1.3+seed)*.07+(o.tilt||0),br=1+Math.sin(t*1.7+seed)*.02+lv*.06;
-    c.save();c.translate(x,y);
-    var sh=c.createRadialGradient(0,r*1.25,0,0,r*1.25,r*.9);sh.addColorStop(0,"rgba(0,0,0,.28)");sh.addColorStop(1,"rgba(0,0,0,0)");
-    c.save();c.translate(0,r*1.25);c.scale(1,.22);c.translate(0,-r*1.25);c.fillStyle=sh;c.beginPath();c.arc(0,r*1.25,r*.9,0,7);c.fill();c.restore();
-    if(lv>0){for(var i=0;i<2;i++){var ph=(t*.9+i*.5+seed*.1)%1;c.globalAlpha=(1-ph)*.5*Math.min(1,lv*1.4);c.strokeStyle=hex;c.lineWidth=2;c.save();c.rotate(rot);c.scale(br*(1.1+ph*.6),br*(1.1+ph*.6));shape(c,k,r);c.stroke();c.restore()}c.globalAlpha=1}
-    c.rotate(rot);c.scale((1+sq)*br,(1-sq)*br);
-    var wk=o.walk||0,spd=o.speed||0,dk=shade(hex,-.3);c.fillStyle=dk;
-    [-1,1].forEach(function(sd){
-      var lift=Math.max(0,Math.sin(wk+(sd>0?Math.PI:0)))*r*.2*spd;
-      c.beginPath();c.ellipse(sd*r*.34,r*.9-lift,r*.23,r*.15,0,0,7);c.fill();
-      var sw=Math.sin(wk+(sd>0?0:Math.PI))*.6*spd;
-      c.save();c.translate(sd*r*.98,r*.16);c.rotate(-sd*(.42+sw));c.beginPath();c.ellipse(0,0,r*.15,r*.25,0,0,7);c.fill();c.restore()});
-    shape(c,k,r);
-    var g=c.createLinearGradient(0,-r,0,r*1.1);g.addColorStop(0,shade(hex,.14));g.addColorStop(1,shade(hex,-.16));
-    c.fillStyle=g;c.fill();
-    c.save();c.clip();
-    var hl=c.createRadialGradient(-r*.4,-r*.5,0,-r*.4,-r*.5,r*.9);hl.addColorStop(0,"rgba(255,255,255,.3)");hl.addColorStop(1,"rgba(255,255,255,0)");
-    c.fillStyle=hl;c.fillRect(-2*r,-2*r,4*r,4*r);
-    var ed=c.createLinearGradient(0,r*.3,0,r*1.2);ed.addColorStop(0,"rgba(0,0,0,0)");ed.addColorStop(1,"rgba(0,0,0,.16)");c.fillStyle=ed;c.fillRect(-2*r,-2*r,4*r,4*r);
-    c.restore();
-    var ink=o.ink||"#14171c",ey=(k==="tri"?r*.18:k==="drop"?r*.05:-r*.02)+ly*r*.09,ex=r*.27,ew=r*.085*(1+lv*.3),eh=(o.blink?r*.03:r*.19*(1+lv*.25));
-    c.fillStyle=ink;
-    var wk=o.wink||0;
-    [-1,1].forEach(function(s){var px=s*ex+lx*r*.12,h=eh;
-      if(s===-1&&wk>.02){
-        if(wk>.5){c.strokeStyle=ink;c.lineWidth=ew*1.5;c.lineCap="round";c.beginPath();c.arc(px,ey+ew*2.2,ew*3.1,Math.PI*1.16,Math.PI*1.84);c.stroke();return}
-        h=eh*(1-wk*2)+r*.03}
-      c.beginPath();
-      if(c.roundRect)c.roundRect(px-ew,ey-h,ew*2,h*2,ew);else c.rect(px-ew,ey-h,ew*2,h*2);c.fill()});
-    c.restore();
-  }
-  function hiDPI(cv,w,h){var d=Math.min(window.devicePixelRatio||1,2);cv.width=w*d;cv.height=h*d;var c=cv.getContext("2d");c.setTransform(d,0,0,d,0,0);return c}
-
-  /* ---------- Marquee ---------- */
-  var USES=["Recepcionista","Cuiner","Traductor","Comptable","Tutor","Suport tècnic","Entrenador","Guia de viatges","Redactor","Bibliotecari"],
-      trk=document.getElementById("track"),mh="";
-  for(var k=0;k<2;k++)USES.forEach(function(u,i){mh+='<span style="--dc:var('+COLS[i%6]+')">'+u+'</span>'});
-  trk.innerHTML=mh;
-
-  /* ---------- Camp de Dots (hero) ---------- */
-  var stage=document.getElementById("stage"),cv=document.getElementById("cv"),ctx=cv.getContext("2d"),hero=document.getElementById("hero"),hv=document.getElementById("hv"),reel=document.getElementById("reel");
-  var W=0,H=0,mouse={x:0,y:0,in:false},dots=[],bubbles=[],last=0,nextTalk=1400,colors={},tick=0,hasVideo=false;
-  var CK=["circle","tri","hex","drop","arch","square"];
-  var CHAT=[
-    [[0,"Algú té la reserva de dijous?"],[1,"Sí, a les 21:00 per a quatre."]],
-    [[2,"Com es diu \"bon profit\" en anglès?"],[4,"Enjoy your meal. Ho practiques?"]],
-    [[3,"Falta la factura del trimestre."],[0,"L'envio ara mateix."]],
-    [[5,"Reinicia el router i em dius."],[1,"Fet. Ja va més ràpid."]],
-    [[4,"Repassem les fraccions?"],[2,"Endavant, 1/2 + 1/4?"]]
-  ];
-  var SOLO=["Hola!","Què necessites?","Sóc aquí.","Escriu-me per WhatsApp.","Tinc idees."];
-  function zone(r){return{x:W/2,y:H/2-6,w:Math.min(W*.5,340)+r,h:(W<560?235:215)+r}}
-  function free(R,top){var x,y,n=0,z;do{x=R+Math.random()*(W-2*R);y=(top||R)+Math.random()*(H-2*R-(top||0));z=zone(R);n++}while(n<60&&Math.abs(x-z.x)<z.w&&Math.abs(y-z.y)<z.h);return[x,y]}
-  function layout(){
-    var r=stage.getBoundingClientRect();W=r.width;H=r.height;cv.style.width=W+"px";cv.style.height=H+"px";ctx=hiDPI(cv,W,H);
-    if(!dots.length){
-      dots=AG.map(function(a,i){var R=(W<500?26:34)+(i%3)*4;
-        var p0=free(R,40);return{a:a,i:i,big:true,r:R,x:p0[0],y:p0[1],vx:(Math.random()-.5)*.8,vy:(Math.random()-.5)*.8,sq:0,blink:0}});
-      var CN=W<500?22:38;
-      for(var q=0;q<CN;q++){var R2=(W<500?7:9)+Math.random()*(W<500?6:8),cc=COLS[q%6];
-        var p1=free(R2);dots.push({a:{c:cc,n:""},i:100+q,big:false,r:R2,x:p1[0],y:p1[1],vx:(Math.random()-.5)*1.1,vy:(Math.random()-.5)*1.1,sq:0,blink:0})}
-    }
-    dots.forEach(function(d){d.x=Math.min(Math.max(d.x,d.r),W-d.r);d.y=Math.min(Math.max(d.y,d.r+30),H-d.r-14)});
-    if(reduce)draw();
-  }
-  function say(i,text,ms){bubbles=bubbles.filter(function(b){return b.d!==i});bubbles.push({d:i,t:text,life:ms||2800});if(dots[i])dots[i].sq=.14}
-  function popDOM(text){var p=document.createElement("div");p.className="pop";p.textContent=text;p.style.left=(10+Math.random()*55)+"%";p.style.top=(12+Math.random()*60)+"%";stage.appendChild(p);setTimeout(function(){p.remove()},2700)}
-  function talk(){
-    var s=CHAT[Math.floor(Math.random()*CHAT.length)];
-    if(hasVideo){popDOM(s[0][1]);setTimeout(function(){popDOM(s[1][1])},1400);return}
-    say(s[0][0],s[0][1],2900);setTimeout(function(){say(s[1][0],s[1][1],2900)},1500);
-  }
-  function step(dt){
-    var k=dt/16.7;
-    dots.forEach(function(d,i){
-      for(var j=i+1;j<dots.length;j++){var o=dots[j],dx=o.x-d.x,dy=o.y-d.y,m=d.r+o.r+22,q=dx*dx+dy*dy;
-        if(q<m*m&&q>.01){var l=Math.sqrt(q),f=(m-l)*.03*k;d.vx-=dx/l*f;d.vy-=dy/l*f;o.vx+=dx/l*f;o.vy+=dy/l*f}}
-      if(mouse.in){var mx=d.x-mouse.x,my=d.y-mouse.y,md=Math.sqrt(mx*mx+my*my);
-        if(md<150&&md>1){d.vx+=mx/md*.11*k;d.vy+=my/md*.11*k}}
-      var z=zone(d.r),ddx=d.x-z.x,ddy=d.y-z.y;
-      if(Math.abs(ddx)<z.w&&Math.abs(ddy)<z.h){if(z.h-Math.abs(ddy)<z.w-Math.abs(ddx)){d.vy+=(ddy>=0?1:-1)*.25*k;d.y+=(ddy>=0?1:-1)*2*k}else{d.vx+=(ddx>=0?1:-1)*.25*k;d.x+=(ddx>=0?1:-1)*2*k}}
-      d.vy+=Math.sin(tick/50+i*1.7)*.004*k;
-      d.vx*=.994;d.vy*=.994;var sp=Math.hypot(d.vx,d.vy);if(sp<.22){d.vx+=(Math.random()-.5)*.05;d.vy+=(Math.random()-.5)*.05}if(sp>1.8){d.vx*=.95;d.vy*=.95}
-      d.x+=d.vx*k;d.y+=d.vy*k;d.sq*=.9;d.walk=(d.walk||0)+Math.hypot(d.vx,d.vy)*.34*k;
-      if(d.blink>0)d.blink--;else if(Math.random()<.004)d.blink=7;
-      if(d.x<d.r){d.x=d.r;d.vx=Math.abs(d.vx);d.sq=.08}if(d.x>W-d.r){d.x=W-d.r;d.vx=-Math.abs(d.vx);d.sq=.08}
-      if(d.y<d.r+30){d.y=d.r+30;d.vy=Math.abs(d.vy);d.sq=.08}if(d.y>H-d.r-14){d.y=H-d.r-14;d.vy=-Math.abs(d.vy);d.sq=.08}
-    });
-    bubbles.forEach(function(b){b.life-=dt});bubbles=bubbles.filter(function(b){return b.life>0});
-  }
-  function rr(x,y,w,h,r){ctx.beginPath();ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);ctx.closePath()}
-  function draw(){
-    if(tick%40===0){AG.forEach(function(a){colors[a.c]=css(a.c)});colors.line=css("--line");colors.fg=css("--fg");colors.bg=css("--bg")}
-    tick++;ctx.clearRect(0,0,W,H);
-    var talking=bubbles.map(function(b){return b.d});
-    for(var i=0;i<AG.length;i++)for(var j=i+1;j<AG.length;j++){
-      var a=dots[i],b=dots[j],dist=Math.hypot(a.x-b.x,a.y-b.y),both=talking.indexOf(i)>-1&&talking.indexOf(j)>-1;
-      if(dist<200||both){ctx.globalAlpha=both?.95:(1-dist/200)*.55;
-        var lg=ctx.createLinearGradient(a.x,a.y,b.x,b.y);lg.addColorStop(0,colors[a.a.c]||"#888");lg.addColorStop(1,colors[b.a.c]||"#888");
-        ctx.strokeStyle=lg;ctx.lineWidth=both?3:1.2;ctx.setLineDash(both?[]:[3,6]);ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke();
-        if(both){var pp=(tick%50)/50;ctx.fillStyle=colors.fg;ctx.beginPath();ctx.arc(a.x+(b.x-a.x)*pp,a.y+(b.y-a.y)*pp,4,0,7);ctx.fill()}}}
-    ctx.setLineDash([]);ctx.globalAlpha=1;
-    dots.slice().sort(function(p,q){return (p.big-q.big)||(p.y-q.y)}).forEach(function(d){
-      var tx=mouse.in?mouse.x:d.x+d.vx*30,ty=mouse.in?mouse.y:d.y+d.vy*30,dx=tx-d.x,dy=ty-d.y,l=Math.hypot(dx,dy)||1,e=Math.min(1,l/120);
-      var sp=talking.indexOf(d.i)>-1,lvl=sp?.55+.45*Math.sin(tick/4):0;
-      orb(ctx,d.x,d.y,d.r,colors[d.a.c]||"#888",{kind:d.big?KIND[d.a.c]:CK[d.i%6],ink:d.a.c==="--c-teal"?"#fff":"",t:tick*16.7,seed:d.i*1.9,tilt:d.vx*.05,walk:d.walk,speed:Math.min(1,Math.hypot(d.vx,d.vy)/1.0),blink:d.blink>0,lx:dx/l*e,ly:dy/l*e,squash:d.sq,level:lvl});
-      if(!d.big)return;
-      ctx.font="500 10px "+getComputedStyle(document.body).getPropertyValue("--mono");ctx.textAlign="center";ctx.fillStyle=colors.fg;ctx.globalAlpha=.6;
-      ctx.fillText(d.a.n.toUpperCase().split("").join(String.fromCharCode(8202)),d.x,d.y+d.r+22);ctx.globalAlpha=1;
-    });
-    ctx.font="500 13px "+getComputedStyle(document.body).fontFamily;ctx.textAlign="left";
-    bubbles.forEach(function(b){
-      var d=dots[b.d],words=b.t.split(" "),lines=[],ln="";
-      words.forEach(function(w){var t=ln?ln+" "+w:w;if(ctx.measureText(t).width>150&&ln){lines.push(ln);ln=w}else ln=t});lines.push(ln);
-      var bw=Math.min(180,Math.max.apply(null,lines.map(function(l){return ctx.measureText(l).width}))+24),bh=lines.length*17+16,
-          bx=Math.min(Math.max(d.x-bw/2,8),W-bw-8),by=d.y-d.r-bh-14;if(by<6)by=d.y+d.r+30;
-      var fade=Math.min(1,b.life/300),grow=Math.min(1,(2900-b.life)/180+.4);ctx.globalAlpha=fade;
-      ctx.save();ctx.translate(bx+bw/2,by+bh);ctx.scale(grow,grow);ctx.translate(-(bx+bw/2),-(by+bh));
-      ctx.fillStyle=colors.fg;rr(bx,by,bw,bh,15);ctx.fill();
-      ctx.fillStyle=colors.bg;lines.forEach(function(l,i){ctx.fillText(l,bx+12,by+20+i*17)});ctx.restore();ctx.globalAlpha=1;
-    });
-  }
-  function frame(t){
-    var dt=Math.min(t-last,50);last=t;
-    nextTalk-=dt;if(nextTalk<=0){talk();nextTalk=4200+Math.random()*1800}
-    if(!hasVideo){step(dt);draw()}
-    requestAnimationFrame(frame);
-  }
-  layout();new ResizeObserver(layout).observe(stage);
-  function pos(e){var r=stage.getBoundingClientRect();mouse.x=e.clientX-r.left;mouse.y=e.clientY-r.top}
-  hero.addEventListener("pointermove",function(e){pos(e);mouse.in=true;
-    if(hasVideo){var rx=(mouse.x/W-.5)*-6,ry=(mouse.y/H-.5)*6;stage.style.transform="perspective(900px) rotateY("+rx+"deg) rotateX("+ry+"deg)"}});
-  hero.addEventListener("pointerleave",function(){mouse.in=false;stage.style.transform=""});
-  hero.addEventListener("pointerdown",function(e){pos(e);
-    if(hasVideo){popDOM(SOLO[Math.floor(Math.random()*SOLO.length)]);return}
-    var hit=dots.filter(function(d){return Math.hypot(d.x-mouse.x,d.y-mouse.y)<d.r+6})[0];
-    if(hit){say(hit.i,SOLO[Math.floor(Math.random()*SOLO.length)],2400);hit.vx+=(Math.random()-.5)*3;hit.vy-=2.5}});
-  stage.addEventListener("keydown",function(e){if(e.key==="Enter"||e.key===" "){e.preventDefault();talk()}});
-  var showReel=function(){if(!reel.hidden)return;reel.hidden=false};
-  hv.addEventListener("loadeddata",showReel);hv.addEventListener("loadedmetadata",showReel);if(hv.readyState>=1)showReel();
-  new IntersectionObserver(function(es){es.forEach(function(en){if(en.isIntersecting){var p=hv.play();if(p&&p.catch)p.catch(function(){})}else hv.pause()})},{threshold:.4}).observe(hv);
-  if(reduce){talk();draw()}else requestAnimationFrame(frame);
-  /* dibuixa un orbe petit que segueix el ratolí i parpelleja */
-  var minis=[];
-  function mini(cv,size,hexVar,opts){
-    var c=hiDPI(cv,size,size),m={cv:cv,c:c,size:size,v:hexVar,o:opts||{},blink:0,sq:0};minis.push(m);return m;
-  }
-  var gmx=null,gmy=null;
-  window.addEventListener("pointermove",function(e){gmx=e.clientX;gmy=e.clientY},{passive:true});
-  function drawMinis(t){
-    minis.forEach(function(m){
-      var r=m.cv.getBoundingClientRect();if(r.bottom<0||r.top>innerHeight)return;
-      var cx=r.left+r.width/2,cy=r.top+r.height/2,dx=(gmx===null?0:gmx-cx),dy=(gmy===null?0:gmy-cy),l=Math.hypot(dx,dy)||1,e=Math.min(1,l/200);
-      if(m.blink>0)m.blink--;else if(Math.random()<.006)m.blink=6;
-      m.sq*=.9;var s=m.size,rad=s*(m.o.rad||.4),bob=Math.sin(t/600+(m.o.phase||0))*s*.03;
-      m.c.clearRect(0,0,s,s);
-      var vn=typeof m.v==="function"?m.v():m.v,sp=m.o.speak&&m.o.speak();
-      orb(m.c,s/2,s/2-s*(m.o.up===undefined?.06:m.o.up)+bob,rad,css(vn),{kind:KIND[vn],ink:vn==="--c-teal"?"#fff":"",t:t,seed:m.o.phase||0,walk:t/260,speed:.14,blink:m.blink>0,lx:dx/l*e,ly:dy/l*e,squash:m.sq,level:Math.max(sp?.6:0,(m.o.pop||0)*5)});
-      if(m.o.pop)m.o.pop*=.86;
-    });
-    requestAnimationFrame(drawMinis);
-  }
-
-  /* ---------- Builder ---------- */
-  /*DOTSVG_START*/
-
-const OPTIONS = {
-  shape: ['circle', 'tri', 'drop', 'hex', 'arch', 'square'],
-  eyes: ['pill', 'round', 'happy', 'sleepy', 'wide', 'wink', 'heart'],
-  mouth: ['none', 'smile', 'open', 'smirk', 'tongue'],
-  hat: ['none', 'cap', 'beanie', 'tophat', 'crown', 'party', 'cowboy', 'wizard', 'chef', 'graduation', 'hardhat', 'antenna', 'flower'],
-  glasses: ['none', 'round', 'square', 'shades', 'monocle', 'visor'],
-  accessory: ['none', 'bowtie', 'tie', 'scarf', 'stethoscope', 'headphones', 'mustache', 'blush', 'badge', 'cape'],
-};
-
-const PALETTE = ['#ff4d7d', '#ff8a3d', '#ffc21a', '#7cd13b', '#19c3a6', '#2fb5ff', '#2f7bff', '#7a4cf0', '#c04cf0', '#52657a', '#0a0a0a', '#f4f1ea'];
-
-const DEFAULT_LOOK = { shape: 'circle', color: '#7a4cf0', accent: '#0a0a0a', eyes: 'pill', mouth: 'none', hat: 'none', glasses: 'none', accessory: 'none' };
-
-const SHAPES = {
-  circle: 'M50 8a42 42 0 1 0 0.01 0Z',
-  tri: 'M50 10C58 10 64 16 88 66C94 79 86 90 72 90H28C14 90 6 79 12 66C36 16 42 10 50 10Z',
-  drop: 'M50 6C58 24 86 40 86 62A36 36 0 0 1 14 62C14 40 42 24 50 6Z',
-  hex: 'M50 8L86 29V71L50 92L14 71V29Z',
-  arch: 'M12 92V50A38 38 0 0 1 88 50V92Z',
-  square: 'M36 14H64A22 22 0 0 1 86 36V64A22 22 0 0 1 64 86H36A22 22 0 0 1 14 64V36A22 22 0 0 1 36 14Z',
-};
-const A = { // top of head, eye line, chest line, highlight position
-  circle: { top: 8, eye: 50, chest: 80, hl: [36, 30] }, tri: { top: 14, eye: 58, chest: 84, hl: [47, 38] },
-  drop: { top: 8, eye: 62, chest: 88, hl: [38, 48] }, hex: { top: 8, eye: 50, chest: 80, hl: [38, 28] },
-  arch: { top: 12, eye: 52, chest: 84, hl: [36, 28] }, square: { top: 14, eye: 50, chest: 78, hl: [30, 28] },
-};
-
-// Stubby arms and feet (like the plush-clay toys), per shape: arm centre, foot line
-const LIMBS = {
-  circle: { arm: [9, 58], foot: 91 }, tri: { arm: [17, 74], foot: 88 }, drop: { arm: [14, 68], foot: 96 },
-  hex: { arm: [14, 56], foot: 86 }, arch: { arm: [12, 66], foot: 91 }, square: { arm: [14, 56], foot: 85 },
-};
-let uid = 0;
-
-const clean = (v, list, fallback) => (list.includes(v) ? v : fallback);
-const hex = (v, fallback) => (/^#[0-9a-fA-F]{6}$/.test(v || '') ? v : fallback);
-
-function darken(h, k) {
-  const n = parseInt(h.slice(1), 16);
-  const c = [n >> 16, (n >> 8) & 255, n & 255].map((x) => Math.round(x * (1 - k)));
-  return `rgb(${c.join(',')})`;
-}
-function lighten(h, k) {
-  const n = parseInt(h.slice(1), 16);
-  const c = [n >> 16, (n >> 8) & 255, n & 255].map((x) => Math.round(x + (255 - x) * k));
-  return `rgb(${c.join(',')})`;
-}
-function lum(h) {
-  const n = parseInt(h.slice(1), 16);
-  return (0.299 * (n >> 16) + 0.587 * ((n >> 8) & 255) + 0.114 * (n & 255)) / 255;
-}
-
-function normalizeLook(look) {
-  const l = look || {};
-  return {
-    shape: clean(l.shape, OPTIONS.shape, DEFAULT_LOOK.shape),
-    color: hex(l.color, DEFAULT_LOOK.color),
-    accent: hex(l.accent, DEFAULT_LOOK.accent),
-    eyes: clean(l.eyes, OPTIONS.eyes, DEFAULT_LOOK.eyes),
-    mouth: clean(l.mouth, OPTIONS.mouth, DEFAULT_LOOK.mouth),
-    hat: clean(l.hat, OPTIONS.hat, DEFAULT_LOOK.hat),
-    glasses: clean(l.glasses, OPTIONS.glasses, DEFAULT_LOOK.glasses),
-    accessory: clean(l.accessory, OPTIONS.accessory, DEFAULT_LOOK.accessory),
-  };
-}
-
-function hatSvg(h, t, c) {
-  const cx = 50;
-  switch (h) {
-    case 'cap': return `<path d="M31 ${t + 15}Q31 ${t - 4} 50 ${t - 4}Q69 ${t - 4} 69 ${t + 15}Z" fill="${c}"/><path d="M52 ${t + 12}H82Q88 ${t + 12} 88 ${t + 17}H52Z" fill="${darken(c, .18)}"/>`;
-    case 'beanie': return `<path d="M30 ${t + 16}Q30 ${t - 8} 50 ${t - 8}Q70 ${t - 8} 70 ${t + 16}Z" fill="${c}"/><rect x="28" y="${t + 12}" width="44" height="9" rx="4" fill="${darken(c, .22)}"/><circle cx="50" cy="${t - 10}" r="6" fill="${darken(c, .1)}"/>`;
-    case 'tophat': return `<ellipse cx="50" cy="${t + 10}" rx="27" ry="6" fill="${c}"/><rect x="34" y="${t - 22}" width="32" height="32" rx="4" fill="${c}"/><rect x="34" y="${t + 1}" width="32" height="6" fill="#ff4d7d"/>`;
-    case 'crown': return `<path d="M32 ${t + 12}L30 ${t - 10}L41 ${t - 1}L50 ${t - 14}L59 ${t - 1}L70 ${t - 10}L68 ${t + 12}Z" fill="#ffc21a" stroke="#e0a000" stroke-width="1.5" stroke-linejoin="round"/><circle cx="50" cy="${t + 3}" r="3" fill="#ff4d7d"/>`;
-    case 'party': return `<path d="M50 ${t - 30}L69 ${t + 12}H31Z" fill="${c}"/><path d="M40 ${t - 8}L60 ${t - 8}M36 ${t + 2}L64 ${t + 2}" stroke="#fff" stroke-width="3" opacity=".7"/><circle cx="50" cy="${t - 31}" r="5" fill="#ffc21a"/>`;
-    case 'cowboy': return `<path d="M14 ${t + 12}Q24 ${t + 18} 34 ${t + 8}L66 ${t + 8}Q76 ${t + 18} 86 ${t + 12}Q78 ${t + 20} 50 ${t + 20}Q22 ${t + 20} 14 ${t + 12}Z" fill="${c}"/><path d="M33 ${t + 10}Q30 ${t - 14} 42 ${t - 10}Q50 ${t - 4} 58 ${t - 10}Q70 ${t - 14} 67 ${t + 10}Z" fill="${c}"/><rect x="33" y="${t + 3}" width="34" height="5" fill="${darken(c, .3)}"/>`;
-    case 'wizard': return `<path d="M50 ${t - 40}Q56 ${t - 22} 70 ${t + 12}H30Q44 ${t - 10} 50 ${t - 40}Z" fill="${c}"/><ellipse cx="50" cy="${t + 12}" rx="26" ry="5" fill="${darken(c, .2)}"/><path d="M44 ${t - 6}l2 4 4 .5-3 3 1 4-4-2-4 2 1-4-3-3 4-.5Z" fill="#ffc21a" transform="scale(.8) translate(11 ${t * .25})"/>`;
-    case 'chef': return `<circle cx="38" cy="${t - 4}" r="11" fill="#fff"/><circle cx="62" cy="${t - 4}" r="11" fill="#fff"/><circle cx="50" cy="${t - 9}" r="13" fill="#fff"/><rect x="34" y="${t + 3}" width="32" height="11" rx="3" fill="#fff" stroke="#dcdcdc"/>`;
-    case 'graduation': return `<path d="M50 ${t - 10}L84 ${t + 2}L50 ${t + 14}L16 ${t + 2}Z" fill="${c}"/><path d="M34 ${t + 8}V${t + 20}Q50 ${t + 26} 66 ${t + 20}V${t + 8}L50 ${t + 14}Z" fill="${darken(c, .25)}"/><path d="M80 ${t + 3}V${t + 20}" stroke="#ffc21a" stroke-width="2"/><circle cx="80" cy="${t + 22}" r="3" fill="#ffc21a"/>`;
-    case 'hardhat': return `<path d="M28 ${t + 16}Q28 ${t - 8} 50 ${t - 8}Q72 ${t - 8} 72 ${t + 16}Z" fill="#ffc21a"/><rect x="22" y="${t + 13}" width="56" height="6" rx="3" fill="#e0a000"/><rect x="45" y="${t - 8}" width="10" height="20" fill="#e0a000"/>`;
-    case 'antenna': return `<path d="M50 ${t + 2}V${t - 16}" stroke="${c}" stroke-width="3"/><circle cx="50" cy="${t - 19}" r="6" fill="#ff4d7d"/>`;
-    case 'flower': return `<g transform="translate(58 ${t + 2})"><circle r="4" cx="0" cy="-8" fill="#ff4d7d"/><circle r="4" cx="8" cy="0" fill="#ff4d7d"/><circle r="4" cx="0" cy="8" fill="#ff4d7d"/><circle r="4" cx="-8" cy="0" fill="#ff4d7d"/><circle r="4" fill="#ffc21a"/></g>`;
-    default: return '';
-  }
-}
-
-function eyesSvg(kind, y, ink) {
-  const xs = [37, 63];
-  const pill = (x, h = 16, w = 7) => `<rect x="${x - w / 2}" y="${y - h / 2}" width="${w}" height="${h}" rx="${w / 2}" fill="${ink}"/>`;
-  const arc = (x, d) => `<path d="M${x - 6} ${y + 3}Q${x} ${y - 7} ${x + 6} ${y + 3}" fill="none" stroke="${ink}" stroke-width="3.4" stroke-linecap="round" ${d || ''}/>`;
-  return xs.map((x, i) => {
-    switch (kind) {
-      case 'round': return `<circle cx="${x}" cy="${y}" r="6" fill="${ink}"/><circle cx="${x + 1.6}" cy="${y - 2}" r="1.8" fill="#fff"/>`;
-      case 'happy': return arc(x);
-      case 'sleepy': return `<path d="M${x - 6} ${y}Q${x} ${y + 6} ${x + 6} ${y}" fill="none" stroke="${ink}" stroke-width="3.4" stroke-linecap="round"/>`;
-      case 'wide': return pill(x, 22, 9);
-      case 'wink': return i === 0 ? arc(x) : pill(x);
-      case 'heart': return `<path d="M${x} ${y + 7}C${x - 11} ${y} ${x - 6} ${y - 9} ${x} ${y - 3}C${x + 6} ${y - 9} ${x + 11} ${y} ${x} ${y + 7}Z" fill="#ff2d55"/>`;
-      default: return pill(x);
-    }
-  }).join('');
-}
-
-function mouthSvg(kind, y, ink) {
-  const m = y + 20;
-  switch (kind) {
-    case 'smile': return `<path d="M43 ${m - 2}Q50 ${m + 7} 57 ${m - 2}" fill="none" stroke="${ink}" stroke-width="3" stroke-linecap="round"/>`;
-    case 'open': return `<path d="M43 ${m - 3}Q50 ${m + 12} 57 ${m - 3}Z" fill="${ink}"/><path d="M46 ${m + 4}Q50 ${m + 8} 54 ${m + 4}" fill="#ff6b81"/>`;
-    case 'smirk': return `<path d="M44 ${m}Q52 ${m + 4} 58 ${m - 4}" fill="none" stroke="${ink}" stroke-width="3" stroke-linecap="round"/>`;
-    case 'tongue': return `<path d="M43 ${m - 3}Q50 ${m + 5} 57 ${m - 3}" fill="none" stroke="${ink}" stroke-width="3" stroke-linecap="round"/><path d="M48 ${m + 1}v6a3 3 0 0 0 6 0v-6Z" fill="#ff6b81"/>`;
-    default: return '';
-  }
-}
-
-function glassesSvg(kind, y, c) {
-  switch (kind) {
-    case 'round': return `<g fill="rgba(255,255,255,.18)" stroke="${c}" stroke-width="2.6"><circle cx="37" cy="${y}" r="11"/><circle cx="63" cy="${y}" r="11"/><path d="M48 ${y}H52" fill="none"/></g>`;
-    case 'square': return `<g fill="rgba(255,255,255,.18)" stroke="${c}" stroke-width="2.6"><rect x="25" y="${y - 9}" width="24" height="18" rx="4"/><rect x="51" y="${y - 9}" width="24" height="18" rx="4"/><path d="M49 ${y}H51" fill="none"/></g>`;
-    case 'shades': return `<g fill="${c}"><path d="M24 ${y - 8}H49Q48 ${y + 12} 37 ${y + 12}Q26 ${y + 12} 24 ${y - 8}Z"/><path d="M51 ${y - 8}H76Q74 ${y + 12} 63 ${y + 12}Q52 ${y + 12} 51 ${y - 8}Z"/><rect x="47" y="${y - 7}" width="6" height="3"/></g><path d="M28 ${y - 4}l6 -0" stroke="#fff" stroke-width="2" opacity=".5" stroke-linecap="round"/>`;
-    case 'monocle': return `<circle cx="63" cy="${y}" r="12" fill="rgba(255,255,255,.2)" stroke="${c}" stroke-width="2.6"/><path d="M73 ${y + 9}Q84 ${y + 20} 80 ${y + 36}" fill="none" stroke="${c}" stroke-width="1.6"/>`;
-    case 'visor': return `<rect x="22" y="${y - 10}" width="56" height="20" rx="10" fill="${c}" opacity=".88"/><rect x="28" y="${y - 6}" width="20" height="3" rx="1.5" fill="#fff" opacity=".45"/>`;
-    default: return '';
-  }
-}
-
-function accessorySvg(kind, chest, c, eyeY) {
-  const y = chest;
-  switch (kind) {
-    case 'bowtie': return `<path d="M50 ${y}L34 ${y - 8}V${y + 8}Z M50 ${y}L66 ${y - 8}V${y + 8}Z" fill="${c}"/><circle cx="50" cy="${y}" r="4" fill="${darken(c.startsWith('#') ? c : '#000000', .25)}"/>`;
-    case 'tie': return `<path d="M46 ${y - 4}H54L57 ${y + 4}L50 ${y + 22}L43 ${y + 4}Z" fill="${c}"/><path d="M46 ${y - 4}H54L52 ${y - 8}H48Z" fill="${darken(c, .25)}"/>`;
-    case 'scarf': return `<path d="M22 ${y - 6}Q50 ${y + 8} 78 ${y - 6}V${y + 4}Q50 ${y + 18} 22 ${y + 4}Z" fill="${c}"/><path d="M62 ${y + 6}V${y + 24}H73V${y + 4}Z" fill="${darken(c, .2)}"/>`;
-    case 'stethoscope': return `<path d="M32 ${y - 10}Q30 ${y + 14} 50 ${y + 14}Q70 ${y + 14} 68 ${y - 10}" fill="none" stroke="${c}" stroke-width="3" stroke-linecap="round"/><circle cx="50" cy="${y + 16}" r="5" fill="#c9d1d9" stroke="${c}" stroke-width="2"/>`;
-    case 'headphones': return `<path d="M18 ${eyeY}V${eyeY - 20}Q18 ${eyeY - 44} 50 ${eyeY - 44}Q82 ${eyeY - 44} 82 ${eyeY - 20}V${eyeY}" fill="none" stroke="${c}" stroke-width="5" stroke-linecap="round"/><rect x="10" y="${eyeY - 12}" width="12" height="26" rx="6" fill="${c}"/><rect x="78" y="${eyeY - 12}" width="12" height="26" rx="6" fill="${c}"/>`;
-    case 'mustache': return `<path d="M50 ${eyeY + 15}Q44 ${eyeY + 8} 34 ${eyeY + 14}Q38 ${eyeY + 22} 50 ${eyeY + 17}Q62 ${eyeY + 22} 66 ${eyeY + 14}Q56 ${eyeY + 8} 50 ${eyeY + 15}Z" fill="${c}"/>`;
-    case 'blush': return `<ellipse cx="27" cy="${eyeY + 12}" rx="6" ry="3.4" fill="#ff5f8a" opacity=".55"/><ellipse cx="73" cy="${eyeY + 12}" rx="6" ry="3.4" fill="#ff5f8a" opacity=".55"/>`;
-    case 'badge': return `<circle cx="66" cy="${y}" r="7" fill="#ffc21a" stroke="#e0a000" stroke-width="1.5"/><path d="M66 ${y - 3.5}l1.4 2.9 3.2.4-2.3 2.2.6 3.1-2.9-1.5-2.9 1.5.6-3.1-2.3-2.2 3.2-.4Z" fill="#fff"/>`;
-    default: return '';
-  }
-}
-
-const esc = (v) => String(v).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-
-function dotSvg(look, size = 96, label = 'Dot') {
-  const l = normalizeLook(look);
-  const a = A[l.shape];
-  const lm = LIMBS[l.shape];
-  const gid = `dg${uid++}`;
-  const inkEyes = lum(l.color) > 0.5 ? '#14171c' : '#ffffff';
-  const dark = darken(l.color, 0.2);
-  const cape = l.accessory === 'cape'
-    ? `<path d="M22 ${a.chest - 14}L6 ${a.chest + 26}Q20 ${a.chest + 20} 34 ${a.chest + 24}Z M78 ${a.chest - 14}L94 ${a.chest + 26}Q80 ${a.chest + 20} 66 ${a.chest + 24}Z" fill="#ff4d7d"/>` : '';
-  const chestItems = l.accessory === 'cape'
-    ? `<path d="M30 ${a.chest - 6}Q50 ${a.chest + 6} 70 ${a.chest - 6}" fill="none" stroke="#ff4d7d" stroke-width="5" stroke-linecap="round"/><circle cx="50" cy="${a.chest}" r="4" fill="#ffc21a"/>`
-    : accessorySvg(l.accessory, a.chest, l.accent, a.eye);
-  const headphonesFirst = l.accessory === 'headphones';
-  const defs = `<defs><radialGradient id="${gid}" cx="34%" cy="26%" r="85%"><stop offset="0" stop-color="${lighten(l.color, 0.28)}"/><stop offset=".5" stop-color="${l.color}"/><stop offset="1" stop-color="${darken(l.color, 0.26)}"/></radialGradient></defs>`;
-  const limbs = `<g class="dl-feet"><ellipse cx="37" cy="${lm.foot}" rx="10" ry="6.5" fill="${dark}"/><ellipse cx="63" cy="${lm.foot}" rx="10" ry="6.5" fill="${dark}"/></g>`
-    + `<g class="dl-arms"><ellipse cx="${lm.arm[0]}" cy="${lm.arm[1]}" rx="7" ry="10.5" transform="rotate(24 ${lm.arm[0]} ${lm.arm[1]})" fill="${dark}"/><ellipse cx="${100 - lm.arm[0]}" cy="${lm.arm[1]}" rx="7" ry="10.5" transform="rotate(-24 ${100 - lm.arm[0]} ${lm.arm[1]})" fill="${dark}"/></g>`;
-  const body = `<g class="dl-body"><path d="${SHAPES[l.shape]}" fill="url(#${gid})"/>`
-    + `<ellipse cx="${a.hl[0]}" cy="${a.hl[1]}" rx="13" ry="7" transform="rotate(-28 ${a.hl[0]} ${a.hl[1]})" fill="#fff" opacity=".26"/></g>`;
-  const shadow = `<ellipse class="dl-shadow" cx="50" cy="${lm.foot + 7}" rx="32" ry="5.5" fill="#000" opacity=".16"/>`;
-  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="-10 -34 120 148" width="${size}" height="${size}" role="img" aria-label="${esc(label)}">${defs}${shadow}<g class="dl-all">`
-    + cape + (headphonesFirst ? chestItems : '') + limbs + body
-    + `<g class="dl-eyes">${eyesSvg(l.eyes, a.eye, inkEyes)}</g><g class="dl-mouth">${mouthSvg(l.mouth, a.eye, inkEyes)}</g>`
-    + glassesSvg(l.glasses, a.eye, l.glasses === 'shades' || l.glasses === 'visor' ? '#14171c' : l.accent)
-    + (headphonesFirst ? '' : chestItems)
-    + hatSvg(l.hat, a.top, l.accent)
-    + '</g></svg>';
-}
-
-function randomLook() {
-  const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
-  return normalizeLook({
-    shape: pick(OPTIONS.shape), color: pick(PALETTE.slice(0, 10)), accent: pick(['#0a0a0a', '#ffffff', '#ff4d7d', '#2f7bff', '#ffc21a', '#19c3a6']),
-    eyes: pick(OPTIONS.eyes), mouth: pick(OPTIONS.mouth), hat: pick(OPTIONS.hat), glasses: pick(OPTIONS.glasses), accessory: pick(OPTIONS.accessory),
-  });
-}
-
-  /*DOTSVG_END*/
-  /*DOTLIFE_START*/
 var __life = (function () {
 
 const DOT_LIFE_CSS = `
@@ -839,63 +443,362 @@ function setMood(el, mood) {
   if (el) el.dataset.state = mood;
 }
 
-return { attachLife: attachLife, setMood: setMood };
+return { attachLife: attachLife };
 })();
-var attachLife = __life.attachLife, setMood = __life.setMood;
-  /*DOTLIFE_END*/
-  var LBL={shape:{circle:"Cercle",tri:"Triangle",drop:"Gota",hex:"Hexàgon",arch:"Arc",square:"Quadrat"},eyes:{pill:"Clàssics",round:"Rodons",happy:"Feliços",sleepy:"Adormits",wide:"Grans",wink:"Ullet",heart:"Cors"},mouth:{none:"Cap",smile:"Somriure",open:"Obert",smirk:"Murri",tongue:"Llengua"},hat:{none:"Cap",cap:"Gorra",beanie:"Gorro",tophat:"Barret de copa",crown:"Corona",party:"Festa",cowboy:"Vaquer",wizard:"Mag",chef:"Cuiner",graduation:"Birret",hardhat:"Casc",antenna:"Antena",flower:"Flor"},glasses:{none:"Cap",round:"Rodones",square:"Quadrades",shades:"De sol",monocle:"Monocle",visor:"Visera"},accessory:{none:"Cap",bowtie:"Pajarita",tie:"Corbata",scarf:"Bufanda",stethoscope:"Fonendoscopi",headphones:"Auriculars",mustache:"Bigoti",blush:"Galtes",badge:"Insígnia",cape:"Capa"}};
-  var ROLES={"Recepcionista":{hat:"cap",accessory:"bowtie",eyes:"happy",mouth:"smile",shape:"tri",color:"#ff4d7d"},"Cuiner":{hat:"chef",accessory:"mustache",eyes:"happy",mouth:"smile",shape:"hex",color:"#19c3a6"},"Traductor":{glasses:"round",hat:"beanie",eyes:"wink",mouth:"smile",shape:"drop",color:"#2f7bff"},"Comptable":{accessory:"tie",glasses:"square",eyes:"round",shape:"square",color:"#52657a"},"Tutor":{hat:"graduation",glasses:"round",eyes:"happy",mouth:"smile",shape:"arch",color:"#ffc21a"},"Suport tècnic":{accessory:"headphones",glasses:"square",eyes:"pill",shape:"circle",color:"#7a4cf0"}};
-  var bs={name:"Aina",role:"Recepcionista",tone:70,model:"gpt-5-mini"},look=normalizeLook(ROLES["Recepcionista"]);
-  var bname=document.getElementById("b-name"),broles=document.getElementById("b-roles"),bcolors=document.getElementById("b-colors"),baccents=document.getElementById("b-accents"),
-      btone=document.getElementById("b-tone"),bmodel=document.getElementById("b-model"),bcode=document.getElementById("b-code"),bsay=document.getElementById("b-say"),bav=document.getElementById("b-avatar");
+var attachLife = __life.attachLife;
+var __sprite = (function () {
+const MANIFEST = {"bodies":{"blob":{"w":480,"h":434,"eyeL":0.3645,"eyeR":0.631,"eyeY":0.423,"headW":0.8042,"headL":0.0958},"arch":{"w":480,"h":618,"eyeL":0.3607,"eyeR":0.6376,"eyeY":0.3675,"headW":0.7708,"headL":0.1125},"cube":{"w":480,"h":479,"eyeL":0.3358,"eyeR":0.6634,"eyeY":0.4228,"headW":0.8083,"headL":0.0938}},"items":{"hats-antenna":{"w":192,"h":420},"hats-beanie":{"w":318,"h":420},"hats-cap":{"w":403,"h":420},"hats-chef":{"w":420,"h":343},"hats-cowboy":{"w":420,"h":258},"hats-crown":{"w":420,"h":346},"hats-flower":{"w":420,"h":406},"hats-graduation":{"w":420,"h":292},"hats-hardhat":{"w":420,"h":347},"hats-party":{"w":296,"h":420},"hats-tophat":{"w":420,"h":351},"hats-wizard":{"w":408,"h":420},"glasses-monocle":{"w":205,"h":420},"glasses-round":{"w":420,"h":165},"glasses-shades":{"w":420,"h":151},"glasses-square":{"w":420,"h":165},"glasses-visor":{"w":420,"h":170},"accessories-badge":{"w":405,"h":420},"accessories-bowtie":{"w":420,"h":239},"accessories-cape":{"w":420,"h":302},"accessories-headphones":{"w":392,"h":420},"accessories-mustache":{"w":420,"h":139},"accessories-scarf":{"w":314,"h":420},"accessories-stethoscope":{"w":170,"h":420},"accessories-tie":{"w":197,"h":420}},"tones":["pink","orange","yellow","green","teal","blue","violet","slate"]};
+
+
+
+const BODIES = ['blob', 'arch', 'cube'];
+const TONES = ['pink', 'orange', 'yellow', 'green', 'teal', 'blue', 'violet', 'slate'];
+const TONE_COLORS = { pink: '#ff4d7d', orange: '#ff8a3d', yellow: '#ffc21a', green: '#7cd13b', teal: '#19c3a6', blue: '#2f7bff', violet: '#7a4cf0', slate: '#52657a' };
+const SPRITE_ITEMS = {
+  hat: ['none', 'cap', 'beanie', 'tophat', 'crown', 'party', 'cowboy', 'wizard', 'chef', 'graduation', 'hardhat', 'antenna', 'flower'],
+  glasses: ['none', 'round', 'square', 'shades', 'monocle', 'visor'],
+  accessory: ['none', 'bowtie', 'tie', 'scarf', 'stethoscope', 'headphones', 'mustache', 'badge', 'cape'],
+};
+const DEFAULT_SPRITE_LOOK = { body: 'blob', tone: 'violet', hat: 'none', glasses: 'none', accessory: 'none' };
+const FOLDER = { hat: 'hats', glasses: 'glasses', accessory: 'accessories' };
+
+// [width as a share of the head width, how far the hat sinks into the head as a share of body height]
+const HAT = {
+  cap: [1.0, 0.1], beanie: [1.02, 0.09], tophat: [0.82, 0.1], crown: [0.74, 0.07], party: [0.58, 0.06], cowboy: [1.32, 0.16],
+  wizard: [1.0, 0.09], chef: [0.94, 0.1], graduation: [1.08, 0.13], hardhat: [1.0, 0.09], antenna: [0.3, 0.05], flower: [0.4, -0.02],
+};
+
+function normalizeSpriteLook(look) {
+  const l = look || {};
+  const pick = (v, list, d) => (list.includes(v) ? v : d);
+  return {
+    body: pick(l.body, BODIES, DEFAULT_SPRITE_LOOK.body),
+    tone: pick(l.tone, TONES, DEFAULT_SPRITE_LOOK.tone),
+    hat: pick(l.hat, SPRITE_ITEMS.hat, 'none'),
+    glasses: pick(l.glasses, SPRITE_ITEMS.glasses, 'none'),
+    accessory: pick(l.accessory, SPRITE_ITEMS.accessory, 'none'),
+  };
+}
+
+function isSpriteLook(look) {
+  return !!look && BODIES.includes(look.body);
+}
+
+const pct = (v) => `${(v * 100).toFixed(2)}%`;
+
+/** Layout of a Dot inside a square frame (all numbers are shares of the frame). */
+function spriteLayout(look) {
+  const l = normalizeSpriteLook(look);
+  const B = MANIFEST.bodies[l.body];
+  let bh = 0.58;
+  let bw = (bh * B.w) / B.h;
+  if (bw > 0.84) { bw = 0.84; bh = (bw * B.h) / B.w; }
+  const left = (1 - bw) / 2;
+  const top = 1 - 0.05 - bh;
+  const fx = (f) => left + f * bw;
+  const fy = (f) => top + f * bh;
+  return { l, B, bw, bh, left, top, fx, fy, eyeCx: fx((B.eyeL + B.eyeR) / 2), eyeY: fy(B.eyeY), eyeGap: (B.eyeR - B.eyeL) * bw, headW: B.headW * bw };
+}
+
+function itemBox(cat, name, w) {
+  const meta = MANIFEST.items[`${FOLDER[cat]}-${name}`];
+  if (!meta) return null;
+  return { w, h: (w * meta.h) / meta.w, x: 0, y: 0 };
+}
+
+/** Every layer of a Dot as {src, x, y, w, h, z, cls}; positions are shares of the square frame. */
+function spriteParts(look) {
+  const g = spriteLayout(look);
+  const { l } = g;
+  const out = [];
+  const add = (cat, name, box, z, cls) => {
+    if (box) out.push({ src: cat === 'body' ? `bodies/${name}.webp` : `items/${FOLDER[cat]}-${name}.webp`, x: box.x, y: box.y, w: box.w, h: box.h, z, cls });
+  };
+  const cx = g.eyeCx;
+  const ey = g.eyeY;
+  const hw = g.headW;
+  const place = (cat, name, w, anchorY, dy, dx = 0) => {
+    const b = itemBox(cat, name, w);
+    if (!b) return null;
+    b.x = cx + dx - w / 2;
+    b.y = ey + dy - b.h * anchorY;
+    return b;
+  };
+  if (l.accessory === 'cape') add('accessory', 'cape', place('accessory', 'cape', hw * 1.5, 0, -0.03), 1, 'cape');
+  add('body', `${l.body}-${l.tone}`, { x: g.left, y: g.top, w: g.bw, h: g.bh }, 2, 'body');
+  const A = {
+    bowtie: () => place('accessory', 'bowtie', hw * 0.44, 0.5, g.bh * 0.3),
+    tie: () => place('accessory', 'tie', hw * 0.22, 0, g.bh * 0.22),
+    scarf: () => place('accessory', 'scarf', hw * 0.8, 0.28, g.bh * 0.36),
+    stethoscope: () => place('accessory', 'stethoscope', hw * 0.4, 0, g.bh * 0.12),
+    headphones: () => place('accessory', 'headphones', hw * 1.2, 0.66, 0),
+    mustache: () => place('accessory', 'mustache', hw * 0.36, 0.5, g.bh * 0.13),
+    badge: () => place('accessory', 'badge', hw * 0.21, 0.5, g.bh * 0.32, hw * 0.28),
+  };
+  if (A[l.accessory]) add('accessory', l.accessory, A[l.accessory](), l.accessory === 'headphones' ? 3 : 4, 'acc');
+  if (l.glasses !== 'none') {
+    const gap = g.eyeGap;
+    const mk = (w, anchorY, dx) => place('glasses', l.glasses, w, anchorY, 0, dx);
+    let box;
+    if (l.glasses === 'monocle') box = mk(gap * 0.92, 0.28, gap / 2);
+    else if (l.glasses === 'visor') box = mk(hw * 0.96, 0.5, 0);
+    else box = mk(gap * 2.15, 0.5, 0);
+    add('glasses', l.glasses, box, 5, 'gl');
+  }
+  if (l.hat !== 'none') {
+    const [wf, sink] = HAT[l.hat];
+    const w = hw * wf;
+    const b = itemBox('hat', l.hat, w);
+    if (b) {
+      const flower = l.hat === 'flower';
+      b.x = cx + (flower ? hw * 0.3 : 0) - w / 2;
+      b.y = g.top + sink * g.bh + (flower ? g.bh * 0.1 : 0) - b.h;
+      add('hat', l.hat, b, 6, 'hat');
+    }
+  }
+  return { parts: out, g };
+}
+
+/** HTML for a plush Dot. `size` is the frame size in px; `base` is where /dots/ is served. */
+function dotSprite(look, size = 96, label = 'Dot', base = '/dots/') {
+  const { parts, g } = spriteParts(look);
+  const html = parts.map((p) => `<img class="dsp-${p.cls}" src="${base}${p.src}" alt="" draggable="false" style="left:${pct(p.x)};top:${pct(p.y)};width:${pct(p.w)};height:${pct(p.h)};z-index:${p.z}">`).join('');
+  const safe = String(label).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  return `<span class="dsp" role="img" aria-label="${safe}" style="--s:${size}px"><span class="dsp-all">${html}</span><span class="dsp-shadow" style="left:${pct(g.left + g.bw * 0.1)};width:${pct(g.bw * 0.8)};top:${pct(g.top + g.bh - 0.012)}"></span></span>`;
+}
+
+const SPRITE_CSS = `
+.dsp{position:relative;display:inline-block;width:var(--s,96px);height:var(--s,96px);flex:none;line-height:0}
+.dsp-all{position:absolute;inset:0;display:block;transform-origin:50% 95%}
+.dsp img{position:absolute;pointer-events:none;user-select:none;-webkit-user-drag:none;max-width:none}
+.dsp-shadow{position:absolute;height:5%;border-radius:50%;background:radial-gradient(closest-side,rgba(0,0,0,.28),rgba(0,0,0,0));z-index:0}
+.dl .dsp-all{animation:dl-breathe var(--dl-speed,3.6s) ease-in-out var(--dl-delay,0s) infinite}
+.dl[data-state=happy] .dsp-all{animation:dl-hop .55s cubic-bezier(.2,.8,.3,1)}
+.dl[data-state=sleepy] .dsp-all{animation:dl-breathe 6s ease-in-out infinite}
+.dl[data-state=talking] .dsp-all{animation:dl-talk-body .32s ease-in-out infinite}
+.dl[data-state=thinking] .dsp-all{animation:dl-think 2.4s ease-in-out infinite}
+@keyframes dl-talk-body{0%,100%{transform:scale(1,1)}50%{transform:scale(1.03,.97)}}
+@keyframes dl-think{0%,100%{transform:rotate(-3deg)}50%{transform:rotate(3deg)}}
+`;
+
+function ensureSpriteStyles() {
+  if (typeof document === 'undefined' || document.getElementById('dot-sprite-css')) return;
+  const style = document.createElement('style');
+  style.id = 'dot-sprite-css';
+  style.textContent = SPRITE_CSS;
+  document.head.appendChild(style);
+}
+
+function randomSpriteLook() {
+  const pick = (a) => a[Math.floor(Math.random() * a.length)];
+  return {
+    body: pick(BODIES), tone: pick(TONES),
+    hat: Math.random() < 0.85 ? pick(SPRITE_ITEMS.hat.slice(1)) : 'none',
+    glasses: Math.random() < 0.5 ? pick(SPRITE_ITEMS.glasses.slice(1)) : 'none',
+    accessory: Math.random() < 0.6 ? pick(SPRITE_ITEMS.accessory.slice(1)) : 'none',
+  };
+}
+
+return { dotSprite: dotSprite, spriteParts: spriteParts, spriteLayout: spriteLayout, normalizeSpriteLook: normalizeSpriteLook, BODIES: BODIES, TONES: TONES, TONE_COLORS: TONE_COLORS, SPRITE_ITEMS: SPRITE_ITEMS, ensureSpriteStyles: ensureSpriteStyles, randomSpriteLook: randomSpriteLook };
+})();
+var dotSprite = __sprite.dotSprite, spriteParts = __sprite.spriteParts, spriteLayout = __sprite.spriteLayout, normalizeSpriteLook = __sprite.normalizeSpriteLook, BODIES = __sprite.BODIES, TONES = __sprite.TONES, TONE_COLORS = __sprite.TONE_COLORS, SPRITE_ITEMS = __sprite.SPRITE_ITEMS, ensureSpriteStyles = __sprite.ensureSpriteStyles, randomSpriteLook = __sprite.randomSpriteLook;
+(function(){
+  var reduce=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var $=function(id){return document.getElementById(id)};
+  var css=function(v){return getComputedStyle(document.documentElement).getPropertyValue(v).trim()};
+  var BASE="dots/";
+  ensureSpriteStyles();
+  function av(look,size,label){return dotSprite(look,size,label||"Dot",BASE)}
+
+  var AG=[
+    {n:"Aina",r:"Recepcionista",look:{body:"arch",tone:"pink",hat:"cap",accessory:"bowtie"},p:[
+      ["Tinc hora dijous?","Dijous tens visita a les 10:30 amb la doctora Puig. T'envio un recordatori el dimecres al vespre."],
+      ["Puc canviar-la?","Tinc lliure divendres a les 9:00 o a les 12:15. Quina et va millor?"]]},
+    {n:"Pau",r:"Cuiner",look:{body:"cube",tone:"yellow",hat:"chef",accessory:"mustache"},p:[
+      ["Sopar ràpid amb ous","Truita de patata en 15 minuts: 4 ous, 2 patates fines i ceba opcional. Vols la recepta pas a pas?"],
+      ["Sí, sense ceba","Talla les patates ben fines, fregeix-les 8 minuts, barreja-les amb els ous batuts i cuaja 3 minuts per banda."]]},
+    {n:"Laia",r:"Traductora",look:{body:"blob",tone:"blue",hat:"beanie",glasses:"round"},p:[
+      ["Tradueix: bon profit","Anglès: enjoy your meal. Francès: bon appétit. Alemany: guten Appetit."],
+      ["I en italià?","Buon appetito. Igual que en castellà: buen provecho."]]},
+    {n:"Marc",r:"Comptable",look:{body:"cube",tone:"green",glasses:"square",accessory:"tie"},p:[
+      ["Quin IVA porta un llibre?","A Espanya els llibres porten el 4% d'IVA. Confirma-ho amb el teu gestor per a casos especials."],
+      ["I un cafè al bar?","La restauració va al 10%."]]},
+    {n:"Núria",r:"Tutora",look:{body:"blob",tone:"violet",hat:"graduation",glasses:"round"},p:[
+      ["Explica'm les fraccions","Una fracció és una part d'un tot. Si talles una pizza en 4 i te'n menges 1, has menjat 1/4."],
+      ["Posa'm un exercici","Quant és 1/2 + 1/4? Pista: converteix-les a quarts."]]},
+    {n:"Jordi",r:"Suport tècnic",look:{body:"arch",tone:"slate",accessory:"headphones",glasses:"square"},p:[
+      ["El wifi va lent","Reinicia el router 30 segons. Si continua igual, digues-me si va lent a tots els aparells o només a un."],
+      ["Només al portàtil","Oblida la xarxa al portàtil i torna-la a connectar. Si no, actualitza el controlador de wifi."]]}
+  ];
+
+  /* ---------- Imatges i composició per al canvas ---------- */
+  var IMG={};
+  function loadImg(src){return IMG[src]||(IMG[src]=new Promise(function(res){var i=new Image();i.onload=function(){res(i)};i.onerror=function(){res(null)};i.src=BASE+src}))}
+  function compose(look,F){
+    var sp=spriteParts(look).parts.slice().sort(function(a,b){return a.z-b.z});
+    return Promise.all(sp.map(function(p){return loadImg(p.src)})).then(function(imgs){
+      var c=document.createElement("canvas");c.width=F;c.height=F;var x=c.getContext("2d");
+      sp.forEach(function(p,i){if(imgs[i])x.drawImage(imgs[i],p.x*F,p.y*F,p.w*F,p.h*F)});return c});
+  }
+  function hiDPI(cv,w,h){var d=Math.min(window.devicePixelRatio||1,2);cv.width=w*d;cv.height=h*d;var c=cv.getContext("2d");c.setTransform(d,0,0,d,0,0);return c}
+
+  /* ---------- Marquee ---------- */
+  var USES=["Recepcionista","Cuiner","Traductor","Comptable","Tutor","Suport tècnic","Entrenador","Guia de viatges","Redactor","Bibliotecari"],
+      COLS=["#ff4d7d","#ffc21a","#2f7bff","#19c3a6","#7a4cf0","#ff8a3d"],mh="";
+  for(var k=0;k<2;k++)USES.forEach(function(u,i){mh+='<span style="--dc:'+COLS[i%6]+'">'+u+'</span>'});
+  $("track").innerHTML=mh;
+
+  /* ---------- Camp de Dots (hero) ---------- */
+  var stage=$("stage"),cv=$("cv"),ctx=cv.getContext("2d"),hero=$("hero"),hv=$("hv"),reel=$("reel");
+  var W=0,H=0,mouse={x:0,y:0,in:false},dots=[],bubbles=[],last=0,nextTalk=1400,tick=0,colors={};
+  var CHAT=[
+    [[0,"Algú té la reserva de dijous?"],[1,"Sí, a les 21:00 per a quatre."]],
+    [[2,"Com es diu \"bon profit\" en anglès?"],[4,"Enjoy your meal. Ho practiques?"]],
+    [[3,"Falta la factura del trimestre."],[0,"L'envio ara mateix."]],
+    [[5,"Reinicia el router i em dius."],[1,"Fet. Ja va més ràpid."]],
+    [[4,"Repassem les fraccions?"],[2,"Endavant, 1/2 + 1/4?"]]
+  ];
+  var SOLO=["Hola!","Què necessites?","Sóc aquí.","Escriu-me per WhatsApp.","Tinc idees."];
+  function zone(r){return{x:W/2,y:H/2-6,w:Math.min(W*.5,340)+r,h:(W<560?235:215)+r}}
+  function free(R,top){var x,y,n=0,z;do{x=R+Math.random()*(W-2*R);y=(top||R)+Math.random()*(H-2*R-(top||0));z=zone(R);n++}while(n<60&&Math.abs(x-z.x)<z.w&&Math.abs(y-z.y)<z.h);return[x,y]}
+  function pick(a){return a[Math.floor(Math.random()*a.length)]}
+  function layout(){
+    var r=stage.getBoundingClientRect();W=r.width;H=r.height;cv.style.width=W+"px";cv.style.height=H+"px";ctx=hiDPI(cv,W,H);
+    if(!dots.length){
+      var small=W<500;
+      AG.forEach(function(a,i){var R=(small?26:34)+(i%3)*4,p0=free(R,R*2.4+24);
+        var d={a:a,i:i,big:true,r:R,x:p0[0],y:p0[1],vx:(Math.random()-.5)*.8,vy:(Math.random()-.5)*.8,sq:0,walk:Math.random()*6,comp:null,F:Math.round(R*3.9*2)};
+        dots.push(d);compose(a.look,d.F).then(function(c){d.comp=c})});
+      var CN=small?20:36;
+      for(var q=0;q<CN;q++){var R2=(small?8:10)+Math.random()*(small?6:8),p1=free(R2,R2*1.7+12),lk={body:pick(BODIES),tone:pick(TONES)};
+        if(Math.random()<.3)lk.hat=pick(["cap","beanie","crown","party","flower","chef","hardhat"]);
+        var d2={a:{n:""},i:100+q,big:false,r:R2,x:p1[0],y:p1[1],vx:(Math.random()-.5)*1.1,vy:(Math.random()-.5)*1.1,sq:0,walk:Math.random()*6,comp:null,F:Math.round(R2*3.9*2)};
+        dots.push(d2);(function(dd,l){compose(l,dd.F).then(function(c){dd.comp=c})})(d2,lk)}
+    }
+    dots.forEach(function(d){d.top=d.big?d.r*2.4+24:d.r*1.7+12;d.x=Math.min(Math.max(d.x,d.r),W-d.r);d.y=Math.min(Math.max(d.y,d.top),H-d.r-14)});
+    if(reduce)draw();
+  }
+  function say(i,text,ms){bubbles=bubbles.filter(function(b){return b.d!==i});bubbles.push({d:i,t:text,life:ms||2800});if(dots[i])dots[i].sq=.12}
+  function talk(){
+    var s=pick(CHAT);say(s[0][0],s[0][1],2900);setTimeout(function(){say(s[1][0],s[1][1],2900)},1500);
+  }
+  function step(dt){
+    var k=dt/16.7;
+    dots.forEach(function(d,i){
+      for(var j=i+1;j<dots.length;j++){var o=dots[j],dx=o.x-d.x,dy=o.y-d.y,m=d.r+o.r+18,q=dx*dx+dy*dy;
+        if(q<m*m&&q>.01){var l=Math.sqrt(q),f=(m-l)*.03*k;d.vx-=dx/l*f;d.vy-=dy/l*f;o.vx+=dx/l*f;o.vy+=dy/l*f}}
+      if(mouse.in){var mx=d.x-mouse.x,my=d.y-mouse.y,md=Math.sqrt(mx*mx+my*my);
+        if(md<150&&md>1){d.vx+=mx/md*.11*k;d.vy+=my/md*.11*k}}
+      var z=zone(d.r),ddx=d.x-z.x,ddy=d.y-z.y;
+      if(Math.abs(ddx)<z.w&&Math.abs(ddy)<z.h){if(z.h-Math.abs(ddy)<z.w-Math.abs(ddx)){d.vy+=(ddy>=0?1:-1)*.25*k;d.y+=(ddy>=0?1:-1)*2*k}else{d.vx+=(ddx>=0?1:-1)*.25*k;d.x+=(ddx>=0?1:-1)*2*k}}
+      d.vx*=.994;d.vy*=.994;var sp=Math.hypot(d.vx,d.vy);if(sp<.22){d.vx+=(Math.random()-.5)*.05;d.vy+=(Math.random()-.5)*.05}if(sp>1.6){d.vx*=.95;d.vy*=.95}
+      d.x+=d.vx*k;d.y+=d.vy*k;d.sq*=.9;d.walk+=Math.hypot(d.vx,d.vy)*.32*k;
+      if(d.x<d.r){d.x=d.r;d.vx=Math.abs(d.vx);d.sq=.06}if(d.x>W-d.r){d.x=W-d.r;d.vx=-Math.abs(d.vx);d.sq=.06}
+      if(d.y<d.top){d.y=d.top;d.vy=Math.abs(d.vy);d.sq=.06}if(d.y>H-d.r-14){d.y=H-d.r-14;d.vy=-Math.abs(d.vy);d.sq=.06}
+    });
+    bubbles.forEach(function(b){b.life-=dt});bubbles=bubbles.filter(function(b){return b.life>0});
+  }
+  function rr(x,y,w,h,r){ctx.beginPath();ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);ctx.closePath()}
+  function draw(){
+    if(tick%40===0){colors.fg=css("--fg");colors.bg=css("--bg");colors.line=css("--line")}
+    tick++;ctx.clearRect(0,0,W,H);
+    var talking=bubbles.map(function(b){return b.d});
+    dots.slice().sort(function(p,q){return (p.big-q.big)||(p.y-q.y)}).forEach(function(d){
+      if(!d.comp)return;
+      var spd=Math.min(1,Math.hypot(d.vx,d.vy)/1.0),feet=d.y+d.r*1.05,F=d.F/2;
+      var sh=ctx.createRadialGradient(d.x,feet,0,d.x,feet,d.r*1.05);sh.addColorStop(0,"rgba(0,0,0,.22)");sh.addColorStop(1,"rgba(0,0,0,0)");
+      ctx.save();ctx.translate(d.x,feet);ctx.scale(1,.2);ctx.translate(-d.x,-feet);ctx.fillStyle=sh;ctx.beginPath();ctx.arc(d.x,feet,d.r*1.05,0,7);ctx.fill();ctx.restore();
+      var sp=talking.indexOf(d.i)>-1,pulse=sp?Math.sin(tick/3)*.04:0,hop=Math.abs(Math.sin(d.walk))*d.r*.16*spd;
+      ctx.save();ctx.translate(d.x,feet-hop);ctx.rotate(Math.sin(d.walk)*.07*spd+d.vx*.03);
+      ctx.scale(1+d.sq+pulse,1-d.sq-pulse);
+      ctx.drawImage(d.comp,-F/2,-F*.95,F,F);ctx.restore();
+      if(d.big){
+        ctx.font="500 10px "+getComputedStyle(document.body).getPropertyValue("--mono");ctx.textAlign="center";ctx.fillStyle=colors.fg;ctx.globalAlpha=.6;
+        ctx.fillText(d.a.n.toUpperCase().split("").join(String.fromCharCode(8202)),d.x,feet+16);ctx.globalAlpha=1}
+    });
+    ctx.font="500 13px "+getComputedStyle(document.body).fontFamily;ctx.textAlign="left";
+    bubbles.forEach(function(b){
+      var d=dots[b.d],words=b.t.split(" "),lines=[],ln="";
+      words.forEach(function(w){var t=ln?ln+" "+w:w;if(ctx.measureText(t).width>150&&ln){lines.push(ln);ln=w}else ln=t});lines.push(ln);
+      var bw=Math.min(180,Math.max.apply(null,lines.map(function(l){return ctx.measureText(l).width}))+24),bh=lines.length*17+16,
+          bx=Math.min(Math.max(d.x-bw/2,8),W-bw-8),by=d.y-d.r*2.7-bh;if(by<6)by=6;
+      var fade=Math.min(1,b.life/300),grow=Math.min(1,(2900-b.life)/180+.4);ctx.globalAlpha=fade;
+      ctx.save();ctx.translate(bx+bw/2,by+bh);ctx.scale(grow,grow);ctx.translate(-(bx+bw/2),-(by+bh));
+      ctx.fillStyle=colors.fg;rr(bx,by,bw,bh,15);ctx.fill();
+      ctx.fillStyle=colors.bg;lines.forEach(function(l,i){ctx.fillText(l,bx+12,by+20+i*17)});ctx.restore();ctx.globalAlpha=1;
+    });
+  }
+  function frame(t){
+    var dt=Math.min(t-last,50);last=t;
+    nextTalk-=dt;if(nextTalk<=0){talk();nextTalk=4200+Math.random()*1800}
+    step(dt);draw();requestAnimationFrame(frame);
+  }
+  layout();new ResizeObserver(layout).observe(stage);
+  function pos(e){var r=stage.getBoundingClientRect();mouse.x=e.clientX-r.left;mouse.y=e.clientY-r.top}
+  hero.addEventListener("pointermove",function(e){pos(e);mouse.in=true});
+  hero.addEventListener("pointerleave",function(){mouse.in=false});
+  hero.addEventListener("pointerdown",function(e){pos(e);
+    var hit=dots.filter(function(d){return d.big&&Math.hypot(d.x-mouse.x,d.y-mouse.y)<d.r*1.6})[0];
+    if(hit){say(hit.i,pick(SOLO),2400);hit.vx+=(Math.random()-.5)*3;hit.vy-=2.5;hit.sq=.16}});
+  stage.addEventListener("keydown",function(e){if(e.key==="Enter"||e.key===" "){e.preventDefault();talk()}});
+  if(reduce){setTimeout(function(){talk();draw()},600)}else requestAnimationFrame(frame);
+
+  /* ---------- Vídeo ---------- */
+  var showReel=function(){if(!reel.hidden)return;reel.hidden=false};
+  hv.addEventListener("loadeddata",showReel);hv.addEventListener("loadedmetadata",showReel);if(hv.readyState>=1)showReel();
+  new IntersectionObserver(function(es){es.forEach(function(en){if(en.isIntersecting){var p=hv.play();if(p&&p.catch)p.catch(function(){})}else hv.pause()})},{threshold:.4}).observe(hv);
+
+  /* ---------- Builder ---------- */
+  var LBL={body:{blob:"Gota",arch:"Arc",cube:"Cub"},tone:{pink:"Rosa",orange:"Taronja",yellow:"Groc",green:"Verd",teal:"Verd atzur",blue:"Blau",violet:"Violeta",slate:"Pissarra"},hat:{none:"Cap",cap:"Gorra",beanie:"Gorro",tophat:"Barret de copa",crown:"Corona",party:"Festa",cowboy:"Vaquer",wizard:"Mag",chef:"Cuiner",graduation:"Birret",hardhat:"Casc",antenna:"Antena",flower:"Flor"},glasses:{none:"Cap",round:"Rodones",square:"Quadrades",shades:"De sol",monocle:"Monocle",visor:"Visera"},accessory:{none:"Cap",bowtie:"Pajarita",tie:"Corbata",scarf:"Bufanda",stethoscope:"Fonendoscopi",headphones:"Auriculars",mustache:"Bigoti",badge:"Insígnia",cape:"Capa"}};
+  var ROLES={"Recepcionista":{body:"arch",tone:"pink",hat:"cap",accessory:"bowtie"},"Cuiner":{body:"cube",tone:"teal",hat:"chef",accessory:"mustache"},"Traductor":{body:"blob",tone:"blue",glasses:"round",hat:"beanie"},"Comptable":{body:"cube",tone:"slate",accessory:"tie",glasses:"square"},"Tutor":{body:"arch",tone:"yellow",hat:"graduation",glasses:"round"},"Suport tècnic":{body:"blob",tone:"violet",accessory:"headphones",glasses:"square"}};
+  var bs={name:"Aina",role:"Recepcionista",tone:70,model:"gpt-5-mini"},look=normalizeSpriteLook(ROLES["Recepcionista"]);
+  var bname=$("b-name"),broles=$("b-roles"),bcolors=$("b-colors"),btone=$("b-tone"),bmodel=$("b-model"),bcode=$("b-code"),bsay=$("b-say"),bav=$("b-avatar");
   var sels={};
-  ["shape","eyes","mouth","hat","glasses","accessory"].forEach(function(k){
-    var el=document.getElementById("o-"+k);sels[k]=el;
-    OPTIONS[k].forEach(function(v){var o=document.createElement("option");o.value=v;o.textContent=LBL[k][v];el.appendChild(o)});
+  ["body","hat","glasses","accessory"].forEach(function(k){
+    var el=$("o-"+k);sels[k]=el;var list=k==="body"?BODIES:SPRITE_ITEMS[k];
+    list.forEach(function(v){var o=document.createElement("option");o.value=v;o.textContent=LBL[k][v];el.appendChild(o)});
     el.onchange=function(){look[k]=el.value;upd()}});
-  function swatches(host,list,key){list.forEach(function(c){var b=document.createElement("button");b.type="button";b.className="sw";b.style.background=c;b.setAttribute("aria-label","Color "+c);
-    b.onclick=function(){look[key]=c;upd()};b.dataset.c=c;host.appendChild(b)})}
-  swatches(bcolors,PALETTE,"color");swatches(baccents,["#0a0a0a","#ffffff","#ff4d7d","#ff8a3d","#ffc21a","#19c3a6","#2f7bff","#7a4cf0"],"accent");
+  TONES.forEach(function(t){var b=document.createElement("button");b.type="button";b.className="sw";b.style.background=TONE_COLORS[t];b.setAttribute("aria-label",LBL.tone[t]);b.title=LBL.tone[t];b.dataset.c=t;
+    b.onclick=function(){look.tone=t;upd()};bcolors.appendChild(b)});
   Object.keys(ROLES).forEach(function(r){var b=document.createElement("button");b.type="button";b.className="role";b.textContent=r;b.setAttribute("aria-pressed",r===bs.role);
-    b.onclick=function(){bs.role=r;look=normalizeLook(ROLES[r]);[].forEach.call(broles.children,function(x){x.setAttribute("aria-pressed",x===b)});upd()};broles.appendChild(b)});
-  document.getElementById("b-dice").onclick=function(){look=randomLook();upd()};
+    b.onclick=function(){bs.role=r;look=normalizeSpriteLook(ROLES[r]);[].forEach.call(broles.children,function(x){x.setAttribute("aria-pressed",x===b)});upd()};broles.appendChild(b)});
+  $("b-dice").onclick=function(){look=normalizeSpriteLook(randomSpriteLook());upd()};
   function escH(s){return s.replace(/[&<>]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;"}[c]})}
   function upd(){
     var name=(bs.name||"Dot").trim()||"Dot",t=bs.tone,tone=t<35?"de manera formal i respectuosa, tractant de vostè":t>65?"de manera propera i informal, tractant de tu":"amb un to amable i clar";
     var prompt="Ets "+name+", "+bs.role.toLowerCase()+". Parles català "+tone+". Respostes curtes, en text pla, pensades per WhatsApp.";
-    look=normalizeLook(look);bav.innerHTML=dotSvg(look,250,name);
+    look=normalizeSpriteLook(look);bav.innerHTML=av(look,300,name);
     Object.keys(sels).forEach(function(k){sels[k].value=look[k]});
-    [].forEach.call(bcolors.children,function(x){x.setAttribute("aria-pressed",x.dataset.c===look.color)});
-    [].forEach.call(baccents.children,function(x){x.setAttribute("aria-pressed",x.dataset.c===look.accent)});
+    [].forEach.call(bcolors.children,function(x){x.setAttribute("aria-pressed",x.dataset.c===look.tone)});
     var lk=JSON.stringify(look);
     bcode.innerHTML='<span class="k">POST</span> /api/v1/bots\n{\n  <span class="s">"name"</span>: <span class="s">"'+escH(name.replace(/"/g,""))+'"</span>,\n  <span class="s">"role"</span>: <span class="s">"'+bs.role+'"</span>,\n  <span class="s">"model"</span>: <span class="s">"'+escH((bs.model||"").replace(/"/g,""))+'"</span>,\n  <span class="s">"look"</span>: '+escH(lk)+',\n  <span class="s">"system_prompt"</span>: <span class="s">"'+escH(prompt.replace(/"/g,"'"))+'"</span>\n}';
     bcode.dataset.raw="POST /api/v1/bots\n"+JSON.stringify({name:name,role:bs.role,model:bs.model,look:look,system_prompt:prompt},null,2);
     bsay.textContent=t<35?"Bon dia. Sóc "+name+". En què el puc ajudar?":t>65?"Ei! Sóc "+name+". Què necessites?":"Hola, sóc "+name+". En què t'ajudo?";
   }
   bname.oninput=function(){bs.name=bname.value;upd()};btone.oninput=function(){bs.tone=+btone.value;upd()};bmodel.oninput=function(){bs.model=bmodel.value;upd()};
-  var cb=document.getElementById("b-copy");
+  var cb=$("b-copy");
   cb.onclick=function(){var txt=bcode.dataset.raw;
     var ok=function(){cb.textContent="Copiat";setTimeout(function(){cb.textContent="Copia"},1600)};
     var fb=function(){var r=document.createRange();r.selectNodeContents(bcode);var s=getSelection();s.removeAllRanges();s.addRange(r);cb.textContent="Selecciona i copia"};
     if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(txt).then(ok,fb);else fb()};
-  upd();
-  attachLife(bav);
+  upd();attachLife(bav);
 
   /* ---------- Demo de mòbil ---------- */
-  var tabs=document.getElementById("tabs"),msgs=document.getElementById("msgs"),chips=document.getElementById("chips"),
-      pname=document.getElementById("pname"),cur=0,busy=false,timer=null,pm=mini(document.getElementById("pcv"),38,function(){return AG[cur].c},{phase:1});
+  var tabs=$("tabs"),msgs=$("msgs"),chips=$("chips"),pav=$("pav"),pname=$("pname"),cur=0,busy=false,timer=null;
   AG.forEach(function(a,i){
     var b=document.createElement("button");b.className="tab";b.type="button";b.setAttribute("role","tab");
-    b.innerHTML='<canvas></canvas><span><b>'+a.n+'</b><span class="r">'+a.r+'</span></span>';
-    tabs.appendChild(b);mini(b.firstChild,52,a.c,{phase:i});b.onclick=function(){select(i)};
+    b.innerHTML='<span class="av">'+av(a.look,62,a.n)+'</span><span><b>'+a.n+'</b><span class="r">'+a.r+'</span></span>';
+    tabs.appendChild(b);attachLife(b.firstChild);b.onclick=function(){select(i)};
   });
+  var pavLife=attachLife(pav);
   function hm(){var d=new Date();return ("0"+d.getHours()).slice(-2)+":"+("0"+d.getMinutes()).slice(-2)}
   function add(t,cls){var d=document.createElement("div");d.className="m "+(cls||"");d.appendChild(document.createTextNode(t));
     if(cls!=="typing"){var tm=document.createElement("time");tm.textContent=hm();d.appendChild(tm)}
     msgs.appendChild(d);msgs.scrollTop=msgs.scrollHeight;return d}
   function select(i){
-    clearTimeout(timer);busy=false;cur=i;var a=AG[i];pm.sq=.12;
+    clearTimeout(timer);busy=false;cur=i;var a=AG[i];
     [].forEach.call(tabs.children,function(t,j){t.setAttribute("aria-selected",j===i)});
+    pav.innerHTML=av(a.look,46,a.n);pav.dataset.state="happy";setTimeout(function(){pav.dataset.state="idle"},600);
     pname.textContent=a.n;msgs.innerHTML="";
     add("Hola! Sóc "+a.n+", el teu agent de "+a.r.toLowerCase()+". En què et puc ajudar?");
     chips.innerHTML="";
@@ -903,20 +806,20 @@ var attachLife = __life.attachLife, setMood = __life.setMood;
   }
   function ask(k,chip){
     if(busy)return;busy=true;chip.disabled=true;var p=AG[cur].p[k];
-    add(p[0],"out");var t=add("···","typing");
-    timer=setTimeout(function(){t.remove();add(p[1]);busy=false},reduce?0:1000);
+    add(p[0],"out");var t=add("···","typing");pav.dataset.state="thinking";
+    timer=setTimeout(function(){t.remove();pav.dataset.state="talking";add(p[1]);busy=false;setTimeout(function(){pav.dataset.state="idle"},1400)},reduce?0:1000);
   }
   select(0);
 
   /* ---------- Flux ---------- */
-  var nodes=[].slice.call(document.querySelectorAll("#flow .node"));
-  nodes.forEach(function(n,i){mini(n.querySelector("canvas"),84,n.dataset.c,{phase:i*.9})});
-  var flow=document.getElementById("flow"),pks=[1,2,3].map(function(n){return document.getElementById("pk"+n)});
+  var FLOW=[{body:"arch",tone:"green",accessory:"headphones"},{body:"blob",tone:"blue",hat:"cap"},{body:"cube",tone:"yellow",hat:"hardhat"},{body:"arch",tone:"pink",hat:"crown"},{body:"blob",tone:"violet",hat:"wizard"}];
+  [].slice.call(document.querySelectorAll("#flow .node")).forEach(function(n,i){var h=n.querySelector(".nv");h.innerHTML=av(FLOW[i],110,"");attachLife(h)});
+  var flow=$("flow"),pks=[1,2,3].map(function(n){return $("pk"+n)});
   function packets(t){
     if(flow.offsetParent&&getComputedStyle(pks[0]).display!=="none"){
       var w=flow.clientWidth,x0=w*.1,x1=w*.9;
-      pks.forEach(function(p,i){var ph=((t/3600)+i/3)%1,fwd=ph<.5,q=fwd?ph*2:(1-ph)*2;
-        p.style.opacity=1;p.style.left=(x0+(x1-x0)*q-6)+"px";p.style.background=fwd?css("--c-amber"):css("--c-green");p.style.boxShadow="0 0 16px "+(fwd?css("--c-amber"):css("--c-green"))});
+      pks.forEach(function(p,i){var ph=((t/3600)+i/3)%1,fwd=ph<.5,q=fwd?ph*2:(1-ph)*2,c=fwd?css("--c-amber"):css("--c-green");
+        p.style.opacity=1;p.style.left=(x0+(x1-x0)*q-6)+"px";p.style.background=c;p.style.boxShadow="0 0 16px "+c});
     }
     if(!reduce)requestAnimationFrame(packets);
   }
@@ -924,19 +827,22 @@ var attachLife = __life.attachLife, setMood = __life.setMood;
   /* ---------- Scroll ---------- */
   var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add("in");io.unobserve(e.target)}})},{threshold:.08});
   [].forEach.call(document.querySelectorAll(".rv"),function(el){io.observe(el)});
-  var nb=document.getElementById("navbar");
+  var nb=$("navbar");
   window.addEventListener("scroll",function(){nb.classList.toggle("stuck",scrollY>10)},{passive:true});
-
 
   /* ---------- Final: el Dot salta, aterra i fa l'ullet ---------- */
   (function(){
-    var fc=document.getElementById("fcv"),c=null,FW=0,FH=0,dot=null,parts=[],running=false,started=false,tk=0,last=0,cols={};
-    function fl(){var r=fc.getBoundingClientRect();FW=r.width;FH=r.height;c=hiDPI(fc,FW,FH);if(dot){dot.r=Math.min(78,FH*.2);dot.gy=FH-dot.r*1.5}}
-    function init(){dot={x:0,y:-200,vy:0,sq:0,wink:0,winkT:-1,hop:0,r:70,gy:0,settled:false,at:0};fl();dot.y=-dot.r*2.5}
-    function burst(){
-      for(var i=0;i<30;i++){var a=Math.random()*Math.PI*2,sp=3+Math.random()*7;
-        parts.push({x:dot.x,y:dot.y-dot.r*.1,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp-5,r:5+Math.random()*7,rot:Math.random()*6,vr:(Math.random()-.5)*.3,life:1,k:CK[i%6],c:COLS[i%6]})}
-    }
+    var fc=$("fcv"),c=null,FW=0,FH=0,dot=null,parts=[],running=false,started=false,tk=0,last=0,comp=null,skin="#ffc21a",bits=[];
+    var FL={body:"arch",tone:"pink",hat:"crown"},FS=360;
+    compose(FL,FS*2).then(function(cc){comp=cc;
+      var g=spriteLayout(FL),x=cc.getContext("2d"),ex=g.fx(g.B.eyeL)*cc.width,ey=g.eyeY*cc.height,s;
+      try{s=x.getImageData(Math.round(ex-cc.width*.03),Math.round(ey),1,1).data;skin="rgb("+s[0]+","+s[1]+","+s[2]+")"}catch(e){skin=TONE_COLORS.pink}
+      comp.ex=ex;comp.ey=ey});
+    for(var i=0;i<10;i++)(function(){var lk={body:pick(BODIES),tone:pick(TONES)};compose(lk,90).then(function(cc){bits.push(cc)})})();
+    function fl(){var r=fc.getBoundingClientRect();FW=r.width;FH=r.height;c=hiDPI(fc,FW,FH);if(dot){dot.r=Math.min(72,FH*.16);dot.gy=FH-dot.r*.6}}
+    function init(){dot={x:0,y:-300,vy:0,sq:0,wink:0,winkT:-1,hop:0,r:90,gy:0,settled:false,at:0};fl();dot.y=-dot.r*4}
+    function burst(){for(var i=0;i<26;i++){var a=Math.random()*Math.PI*2,sp=3+Math.random()*7;
+      parts.push({x:dot.x,y:dot.y-dot.r,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp-6,rot:Math.random()*6,vr:(Math.random()-.5)*.3,life:1,i:i%10,s:30+Math.random()*26})}}
     function doWink(){dot.winkT=0}
     function jump(v){dot.vy=-(v||16);dot.settled=false;dot.hop=1}
     function step(dt){
@@ -948,46 +854,42 @@ var attachLife = __life.attachLife, setMood = __life.setMood;
       if(dot.winkT>=0){dot.winkT+=k/38;if(dot.winkT>=1){dot.winkT=-1;dot.wink=0}else dot.wink=Math.sin(Math.PI*dot.winkT)}
       else if(dot.winkT<-1){dot.winkT+=k;if(dot.winkT>=-1)dot.winkT=0}
       else if(dot.settled&&tk-dot.at>260&&tk%260===0)doWink();
-      parts.forEach(function(p){p.vy+=.35*k;p.x+=p.vx*k;p.y+=p.vy*k;p.rot+=p.vr*k;p.life-=.012*k});parts=parts.filter(function(p){return p.life>0&&p.y<FH+30});
+      parts.forEach(function(p){p.vy+=.35*k;p.x+=p.vx*k;p.y+=p.vy*k;p.rot+=p.vr*k;p.life-=.012*k});parts=parts.filter(function(p){return p.life>0&&p.y<FH+60});
     }
-    function star(x,y,r,a){c.save();c.translate(x,y);c.rotate(Math.PI/4*a);c.fillStyle=cols.amber;c.beginPath();
-      for(var i=0;i<8;i++){var rr=i%2?r*.28:r,t=i*Math.PI/4;c.lineTo(Math.cos(t)*rr,Math.sin(t)*rr)}c.closePath();c.fill();c.restore()}
     function draw(){
-      if(tk%40===0){["--c-coral","--c-amber","--c-blue","--c-green","--c-violet","--c-teal"].forEach(function(v){cols[v]=css(v)});cols.amber=cols["--c-amber"];cols.fg=css("--fg")}
       c.clearRect(0,0,FW,FH);
-      var sh=Math.max(.25,1-(dot.gy-dot.y)/(FH*.9));
-      c.fillStyle="rgba(0,0,0,"+(.16*sh)+")";c.beginPath();c.ellipse(dot.x,dot.gy+dot.r*1.04,dot.r*1.05*sh,dot.r*.17*sh,0,0,7);c.fill();
-      parts.forEach(function(p){c.save();c.globalAlpha=Math.max(0,p.life);c.translate(p.x,p.y);c.rotate(p.rot);c.fillStyle=cols[p.c]||"#888";shape(c,p.k,p.r);c.fill();c.restore()});
-      var mx=gmx===null?0:gmx-(fc.getBoundingClientRect().left+dot.x),my=gmy===null?0:gmy-(fc.getBoundingClientRect().top+dot.y),l=Math.hypot(mx,my)||1,e=Math.min(1,l/300);
-      orb(c,dot.x,dot.y,dot.r,cols["--c-coral"]||"#ff4d7d",{kind:"circle",t:tk*16.7,seed:1.3,squash:dot.sq,lx:mx/l*e,ly:my/l*e,wink:dot.wink,level:dot.wink*.5});
-      if(dot.wink>.35){var sx=dot.x-dot.r*.62,sy=dot.y-dot.r*.55,sc=dot.wink;star(sx,sy,dot.r*.3*sc,tk*.02);star(sx-dot.r*.28,sy+dot.r*.14,dot.r*.14*sc,-tk*.03)}
+      if(!comp)return;
+      var F=dot.r*5.2,feet=dot.y+dot.r*.2,sh=Math.max(.25,1-(dot.gy-dot.y)/(FH*.9));
+      c.fillStyle="rgba(0,0,0,"+(.18*sh)+")";c.beginPath();c.ellipse(dot.x,dot.gy+dot.r*.22,dot.r*1.05*sh,dot.r*.17*sh,0,0,7);c.fill();
+      parts.forEach(function(p){var b=bits[p.i%Math.max(1,bits.length)];if(!b)return;c.save();c.globalAlpha=Math.max(0,p.life);c.translate(p.x,p.y);c.rotate(p.rot);c.drawImage(b,-p.s/2,-p.s/2,p.s,p.s);c.restore()});
+      c.save();c.translate(dot.x,feet);c.scale(1+dot.sq,1-dot.sq);
+      c.drawImage(comp,-F/2,-F*.95,F,F);
+      if(dot.wink>.35){var k=F/comp.width,x=-F/2+comp.ex*k,y=-F*.95+comp.ey*k;
+        c.fillStyle=skin;c.beginPath();c.ellipse(x,y,F*.026,F*.04,0,0,7);c.fill();
+        c.strokeStyle="#14171c";c.lineWidth=Math.max(2.5,F*.012);c.lineCap="round";c.beginPath();c.arc(x,y+F*.012,F*.024,Math.PI*1.12,Math.PI*1.88);c.stroke()}
+      c.restore();
     }
-    function frame(t){
-      if(!running)return;var dt=Math.min(t-last,50);last=t;tk++;step(dt);draw();requestAnimationFrame(frame)}
+    function frame(t){if(!running)return;var dt=Math.min(t-last,50);last=t;tk++;step(dt);draw();requestAnimationFrame(frame)}
     function run(){if(!running){running=true;last=performance.now();requestAnimationFrame(frame)}}
     fc.addEventListener("pointerdown",function(e){
-      if(!dot||!dot.settled&&dot.y<0)return;
+      if(!dot||(!dot.settled&&dot.y<0))return;
       var r=fc.getBoundingClientRect(),x=e.clientX-r.left,y=e.clientY-r.top;
-      if(Math.hypot(x-dot.x,y-dot.y)<dot.r*1.5){doWink();burst();if(dot.settled)jump(14)}});
-    fc.addEventListener("pointermove",function(e){fc.style.cursor=dot&&Math.hypot(e.clientX-fc.getBoundingClientRect().left-dot.x,e.clientY-fc.getBoundingClientRect().top-dot.y)<dot.r*1.5?"pointer":"default"});
+      if(Math.hypot(x-dot.x,y-(dot.y-dot.r*.8))<dot.r*1.7){doWink();burst();if(dot.settled)jump(14)}});
+    fc.addEventListener("pointermove",function(e){var r=fc.getBoundingClientRect();fc.style.cursor=dot&&Math.hypot(e.clientX-r.left-dot.x,e.clientY-r.top-(dot.y-dot.r*.8))<dot.r*1.7?"pointer":"default"});
     new IntersectionObserver(function(es){es.forEach(function(en){
-      if(en.isIntersecting){if(!started){started=true;init();
-        if(reduce){dot.y=dot.gy;dot.settled=true;dot.wink=1;draw()}else{run();}}
-        else if(!reduce)run()}else running=false})},{threshold:.35}).observe(fc);
+      if(en.isIntersecting){if(!started){started=true;init();if(reduce){dot.y=dot.gy;dot.settled=true;dot.wink=1;setTimeout(draw,800)}else run()}else if(!reduce)run()}else running=false})},{threshold:.35}).observe(fc);
     new ResizeObserver(function(){if(started){fl();if(reduce)draw()}}).observe(fc);
   })();
 
-
   /* ---------- Catàleg ---------- */
   (function(){
-    var raw=document.getElementById("catalog-data");if(!raw)return;
+    var raw=$("catalog-data");if(!raw)return;
     var data;try{data=JSON.parse(raw.textContent)}catch(e){return}
-    if(!data.agents.length){document.getElementById("cataleg").hidden=true;return}
-    var grid=document.getElementById("cat-grid"),chips=document.getElementById("cat-chips"),qi=document.getElementById("cat-q"),
-        more=document.getElementById("cat-more"),cnt=document.getElementById("cat-count"),sec="",limit=12;
-    function norm(t){return t.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"")}
+    if(!data.agents.length){$("cataleg").hidden=true;return}
+    var grid=$("cat-grid"),chipsEl=$("cat-chips"),qi=$("cat-q"),more=$("cat-more"),cnt=$("cat-count"),sec="",limit=12;
+    function norm(t){return t.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"")}
     function chip(id,label,n){var b=document.createElement("button");b.type="button";b.className="role";b.setAttribute("aria-pressed",id===sec);
-      b.textContent=label+(n?" "+n:"");b.onclick=function(){sec=id;limit=12;render();[].forEach.call(chips.children,function(c){c.setAttribute("aria-pressed",c===b)})};chips.appendChild(b)}
+      b.textContent=label+(n?" "+n:"");b.onclick=function(){sec=id;limit=12;render();[].forEach.call(chipsEl.children,function(c){c.setAttribute("aria-pressed",c===b)})};chipsEl.appendChild(b)}
     chip("","Tots",data.agents.length);data.sectors.forEach(function(s){chip(s.id,s.name,s.count)});
     function render(){
       var q=norm(qi.value.trim()),list=data.agents.filter(function(a){return (!sec||a.sector===sec)&&(!q||norm(a.name+" "+a.role).indexOf(q)>-1)});
@@ -995,7 +897,7 @@ var attachLife = __life.attachLife, setMood = __life.setMood;
       list.slice(0,limit).forEach(function(a){
         var d=document.createElement("div");d.className="cat-card";d.style.setProperty("--cc",a.color);
         var h=document.createElement("div");h.className="cat-head";
-        var ic=document.createElement("span");ic.className="cat-ico";ic.textContent=a.icon;
+        var ic=document.createElement("span");ic.className="cat-ico";ic.innerHTML=av(a.look||{},64,a.name);
         var t=document.createElement("div"),b=document.createElement("b"),sm=document.createElement("small");b.textContent=a.name;sm.textContent=(data.sectors.filter(function(s){return s.id===a.sector})[0]||{}).name||"";t.appendChild(b);t.appendChild(sm);
         h.appendChild(ic);h.appendChild(t);
         var p=document.createElement("p");p.textContent=a.role;
@@ -1006,12 +908,11 @@ var attachLife = __life.attachLife, setMood = __life.setMood;
     more.onclick=function(){limit+=12;render()};qi.oninput=function(){limit=12;render()};render();
   })();
 
-
   /* ---------- Company: un Dot que viu a la pàgina ---------- */
   (function(){
-    var host=document.getElementById("cdot"),bub=document.getElementById("cbubble");if(!host||!bub)return;
-    var looks=[{shape:"drop",color:"#2f7bff",hat:"cap",accent:"#ff4d7d",eyes:"pill",mouth:"smile"},{shape:"arch",color:"#ffc21a",hat:"hardhat",eyes:"happy",mouth:"smile",accessory:"badge"},{shape:"circle",color:"#7a4cf0",hat:"wizard",accent:"#ffc21a",glasses:"round",eyes:"round"},{shape:"hex",color:"#19c3a6",hat:"chef",eyes:"wink",mouth:"tongue"}];
-    var look=looks[Math.floor(Math.random()*looks.length)];host.innerHTML=dotSvg(look,84,"Dot company");
+    var host=$("cdot"),bub=$("cbubble");if(!host||!bub)return;
+    var looks=[{body:"blob",tone:"blue",hat:"cap"},{body:"arch",tone:"yellow",hat:"hardhat",accessory:"badge"},{body:"cube",tone:"violet",hat:"wizard",glasses:"round"},{body:"blob",tone:"teal",hat:"chef",accessory:"mustache"},{body:"arch",tone:"pink",hat:"crown",accessory:"cape"}];
+    host.innerHTML=av(pick(looks),96,"Dot company");
     var talk=["Hola! Sóc un superDOTat.","Vols crear-ne un de teu?","Tinc un Dot per a cada ofici.","Fes-me un toc, que m'agrada.","Sempre al teu WhatsApp.","Mira el catàleg: en tenim 87."],hide=null,ti=0;
     function say(t){bub.textContent=t;bub.classList.add("on");clearTimeout(hide);hide=setTimeout(function(){bub.classList.remove("on")},3400)}
     attachLife(host,{onPoke:function(){say(talk[ti++%talk.length])}});
@@ -1020,6 +921,7 @@ var attachLife = __life.attachLife, setMood = __life.setMood;
     setInterval(function(){if(host.dataset.state==="sleepy"){if(!bub.classList.contains("on"))say("zzz…")}},5000);
   })();
 
-  if(reduce){drawMinis(0);packets(0)}else{requestAnimationFrame(drawMinis);requestAnimationFrame(packets)}
+  if(reduce)packets(0);else requestAnimationFrame(packets);
 })();
+
 </script>

@@ -53,79 +53,71 @@ export function spriteLayout(look) {
   return { l, B, bw, bh, left, top, fx, fy, eyeCx: fx((B.eyeL + B.eyeR) / 2), eyeY: fy(B.eyeY), eyeGap: (B.eyeR - B.eyeL) * bw, headW: B.headW * bw };
 }
 
-function item(cat, name, x, y, w, extra = '') {
+function itemBox(cat, name, w) {
   const meta = MANIFEST.items[`${FOLDER[cat]}-${name}`];
-  if (!meta) return '';
-  const h = (w * meta.h) / meta.w;
-  return { w, h, x, y, meta, extra };
+  if (!meta) return null;
+  return { w, h: (w * meta.h) / meta.w, x: 0, y: 0 };
 }
 
-function img(base, cat, name, box, z, cls) {
-  if (!box) return '';
-  return `<img class="dsp-${cls}" src="${base}items/${FOLDER[cat]}-${name}.webp" alt="" draggable="false" style="left:${pct(box.x)};top:${pct(box.y)};width:${pct(box.w)};height:${pct(box.h)};z-index:${z}">`;
+/** Every layer of a Dot as {src, x, y, w, h, z, cls}; positions are shares of the square frame. */
+export function spriteParts(look) {
+  const g = spriteLayout(look);
+  const { l } = g;
+  const out = [];
+  const add = (cat, name, box, z, cls) => {
+    if (box) out.push({ src: cat === 'body' ? `bodies/${name}.webp` : `items/${FOLDER[cat]}-${name}.webp`, x: box.x, y: box.y, w: box.w, h: box.h, z, cls });
+  };
+  const cx = g.eyeCx;
+  const ey = g.eyeY;
+  const hw = g.headW;
+  const place = (cat, name, w, anchorY, dy, dx = 0) => {
+    const b = itemBox(cat, name, w);
+    if (!b) return null;
+    b.x = cx + dx - w / 2;
+    b.y = ey + dy - b.h * anchorY;
+    return b;
+  };
+  if (l.accessory === 'cape') add('accessory', 'cape', place('accessory', 'cape', hw * 1.5, 0, -0.03), 1, 'cape');
+  add('body', `${l.body}-${l.tone}`, { x: g.left, y: g.top, w: g.bw, h: g.bh }, 2, 'body');
+  const A = {
+    bowtie: () => place('accessory', 'bowtie', hw * 0.44, 0.5, g.bh * 0.3),
+    tie: () => place('accessory', 'tie', hw * 0.22, 0, g.bh * 0.22),
+    scarf: () => place('accessory', 'scarf', hw * 0.8, 0.28, g.bh * 0.36),
+    stethoscope: () => place('accessory', 'stethoscope', hw * 0.4, 0, g.bh * 0.12),
+    headphones: () => place('accessory', 'headphones', hw * 1.2, 0.66, 0),
+    mustache: () => place('accessory', 'mustache', hw * 0.36, 0.5, g.bh * 0.13),
+    badge: () => place('accessory', 'badge', hw * 0.21, 0.5, g.bh * 0.32, hw * 0.28),
+  };
+  if (A[l.accessory]) add('accessory', l.accessory, A[l.accessory](), l.accessory === 'headphones' ? 3 : 4, 'acc');
+  if (l.glasses !== 'none') {
+    const gap = g.eyeGap;
+    const mk = (w, anchorY, dx) => place('glasses', l.glasses, w, anchorY, 0, dx);
+    let box;
+    if (l.glasses === 'monocle') box = mk(gap * 0.92, 0.28, gap / 2);
+    else if (l.glasses === 'visor') box = mk(hw * 0.96, 0.5, 0);
+    else box = mk(gap * 2.15, 0.5, 0);
+    add('glasses', l.glasses, box, 5, 'gl');
+  }
+  if (l.hat !== 'none') {
+    const [wf, sink] = HAT[l.hat];
+    const w = hw * wf;
+    const b = itemBox('hat', l.hat, w);
+    if (b) {
+      const flower = l.hat === 'flower';
+      b.x = cx + (flower ? hw * 0.3 : 0) - w / 2;
+      b.y = g.top + sink * g.bh + (flower ? g.bh * 0.1 : 0) - b.h;
+      add('hat', l.hat, b, 6, 'hat');
+    }
+  }
+  return { parts: out, g };
 }
 
 /** HTML for a plush Dot. `size` is the frame size in px; `base` is where /dots/ is served. */
 export function dotSprite(look, size = 96, label = 'Dot', base = '/dots/') {
-  const g = spriteLayout(look);
-  const { l } = g;
-  const parts = [];
-  // cape sits behind the body
-  if (l.accessory === 'cape') {
-    const w = g.headW * 1.5;
-    const box = item('accessory', 'cape', g.eyeCx - w / 2, g.eyeY - 0.03, w);
-    parts.push(img(base, 'accessory', 'cape', box, 1, 'cape'));
-  }
-  parts.push(`<img class="dsp-body" src="${base}bodies/${l.body}-${l.tone}.webp" alt="" draggable="false" style="left:${pct(g.left)};top:${pct(g.top)};width:${pct(g.bw)};height:${pct(g.bh)};z-index:2">`);
-  if (l.accessory !== 'none' && l.accessory !== 'cape') {
-    let box;
-    const cx = g.eyeCx;
-    const ey = g.eyeY;
-    const hw = g.headW;
-    const it = (name, w, anchorY = 0.5, dy = 0, dx = 0) => {
-      const b = item('accessory', name, 0, 0, w);
-      if (!b) return null;
-      b.x = cx + dx - w / 2;
-      b.y = ey + dy - b.h * anchorY;
-      return b;
-    };
-    if (l.accessory === 'bowtie') box = it('bowtie', hw * 0.44, 0.5, g.bh * 0.3);
-    else if (l.accessory === 'tie') box = it('tie', hw * 0.22, 0, g.bh * 0.22);
-    else if (l.accessory === 'scarf') box = it('scarf', hw * 0.8, 0.28, g.bh * 0.36);
-    else if (l.accessory === 'stethoscope') box = it('stethoscope', hw * 0.4, 0, g.bh * 0.12);
-    else if (l.accessory === 'headphones') box = it('headphones', hw * 1.2, 0.66, 0);
-    else if (l.accessory === 'mustache') box = it('mustache', hw * 0.36, 0.5, g.bh * 0.13);
-    else if (l.accessory === 'badge') box = it('badge', hw * 0.21, 0.5, g.bh * 0.32, hw * 0.28);
-    parts.push(img(base, 'accessory', l.accessory, box, l.accessory === 'headphones' ? 3 : 4, 'acc'));
-  }
-  if (l.glasses !== 'none') {
-    const gap = g.eyeGap;
-    let box;
-    const mk = (w, anchorY, dy, dx) => {
-      const b = item('glasses', l.glasses, 0, 0, w);
-      if (!b) return null;
-      b.x = g.eyeCx + dx - w / 2;
-      b.y = g.eyeY + dy - b.h * anchorY;
-      return b;
-    };
-    if (l.glasses === 'monocle') box = mk(gap * 0.92, 0.28, 0, gap / 2);
-    else if (l.glasses === 'visor') box = mk(g.headW * 0.96, 0.5, 0, 0);
-    else box = mk(gap * 2.15, 0.5, 0, 0);
-    parts.push(img(base, 'glasses', l.glasses, box, 5, 'gl'));
-  }
-  if (l.hat !== 'none') {
-    const [wf, sink] = HAT[l.hat];
-    const w = g.headW * wf;
-    const meta = MANIFEST.items[`hats-${l.hat}`];
-    if (meta) {
-      const h = (w * meta.h) / meta.w;
-      const cx = g.eyeCx + (l.hat === 'flower' ? g.headW * 0.3 : 0);
-      const bottom = g.top + sink * g.bh + (l.hat === 'flower' ? g.bh * 0.1 : 0);
-      parts.push(img(base, 'hat', l.hat, { x: cx - w / 2, y: bottom - h, w, h }, 6, 'hat'));
-    }
-  }
+  const { parts, g } = spriteParts(look);
+  const html = parts.map((p) => `<img class="dsp-${p.cls}" src="${base}${p.src}" alt="" draggable="false" style="left:${pct(p.x)};top:${pct(p.y)};width:${pct(p.w)};height:${pct(p.h)};z-index:${p.z}">`).join('');
   const safe = String(label).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-  return `<span class="dsp" role="img" aria-label="${safe}" style="--s:${size}px"><span class="dsp-all">${parts.join('')}</span><span class="dsp-shadow" style="left:${pct(g.left + g.bw * 0.1)};width:${pct(g.bw * 0.8)};top:${pct(g.top + g.bh - 0.012)}"></span></span>`;
+  return `<span class="dsp" role="img" aria-label="${safe}" style="--s:${size}px"><span class="dsp-all">${html}</span><span class="dsp-shadow" style="left:${pct(g.left + g.bw * 0.1)};width:${pct(g.bw * 0.8)};top:${pct(g.top + g.bh - 0.012)}"></span></span>`;
 }
 
 export const SPRITE_CSS = `
