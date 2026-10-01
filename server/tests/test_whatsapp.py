@@ -1,3 +1,4 @@
+import asyncio
 import hashlib
 import hmac
 import json
@@ -113,3 +114,65 @@ class WhatsAppTests(unittest.IsolatedAsyncioTestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class DeliveryTests(WhatsAppTests):
+    """One delivery is answered once, and a failed send is not lost."""
+
+    @staticmethod
+    def _stream(text="Ei!", ok=True):
+        async def stream(**kwargs):
+            yield {"type": "content.delta", "delta": text}
+            yield {"type": "turn.completed", "ok": ok}
+        return stream
+
+    async def test_retry_is_ignored_even_after_a_restart(self):
+        with patch.object(wa_module.provider_service, "stream_chat_completion", self._stream()), \
+                patch.object(self.service, "send_text", new=AsyncMock()) as send:
+            await self.service.handle_payload(self.conn["id"], payload())
+            fresh = WhatsAppService()                    # as if the server had restarted
+            with patch.object(fresh, "send_text", new=AsyncMock()) as send2:
+                await fresh.handle_payload(self.conn["id"], payload())
+            self.assertEqual(send.await_count, 1)
+            self.assertEqual(send2.await_count, 0)
+
+    async def test_a_failed_send_is_retried_and_stores_nothing(self):
+        thread = f"{self.conn['id']}:34600111222"
+        with patch.object(wa_module.provider_service, "stream_chat_completion", self._stream()), \
+                patch.object(self.service, "send_text", new=AsyncMock(side_effect=RuntimeError("xarxa"))):
+            await self.service.handle_payload(self.conn["id"], payload())
+        self.assertEqual(self.storage.get_messages(thread_id=thread), [])
+
+        with patch.object(wa_module.provider_service, "stream_chat_completion", self._stream()), \
+                patch.object(self.service, "send_text", new=AsyncMock()) as send:
+            await self.service.handle_payload(self.conn["id"], payload())   # the provider tries again
+        send.assert_awaited_once()
+        self.assertEqual([m["sender"] for m in self.storage.get_messages(thread_id=thread)], ["user", "bot"])
+
+    async def test_two_messages_at_once_are_answered_in_turn(self):
+        seen = []
+
+        async def slow(**kwargs):
+            seen.append([m["content"] for m in kwargs["messages"]])
+            await asyncio.sleep(0.02)                    # long enough for the second to catch up
+            yield {"type": "content.delta", "delta": "D'acord."}
+            yield {"type": "turn.completed", "ok": True}
+
+        with patch.object(wa_module.provider_service, "stream_chat_completion", slow), \
+                patch.object(self.service, "send_text", new=AsyncMock()):
+            await asyncio.gather(
+                self.service.handle_payload(self.conn["id"], payload(text="Hola", msg_id="wamid.a")),
+                self.service.handle_payload(self.conn["id"], payload(text="Tinc una fuita", msg_id="wamid.b")),
+            )
+        self.assertEqual(len(seen), 2)
+        # The second turn was composed with the first already answered, not in parallel.
+        self.assertEqual(seen[0], ["Hola"])
+        self.assertEqual(seen[1], ["Hola", "D'acord.", "Tinc una fuita"])
+
+    async def test_a_technical_excuse_is_not_remembered(self):
+        thread = f"{self.conn['id']}:34600111222"
+        with patch.object(wa_module.provider_service, "stream_chat_completion", self._stream(ok=False)), \
+                patch.object(self.service, "send_text", new=AsyncMock()) as send:
+            await self.service.handle_payload(self.conn["id"], payload())
+        self.assertIn("no puc respondre", send.await_args.args[2])
+        self.assertEqual(self.storage.get_messages(thread_id=thread), [])

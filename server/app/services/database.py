@@ -132,6 +132,14 @@ SCHEMA_MIGRATIONS = {
             PRIMARY KEY (owner_id, contact)
         );
     """,
+    6: """
+        CREATE TABLE IF NOT EXISTS whatsapp_events (
+            event_id TEXT PRIMARY KEY,
+            connection_id TEXT NOT NULL,
+            created_at TEXT NOT NULL
+        );
+        CREATE INDEX IF NOT EXISTS idx_whatsapp_events_time ON whatsapp_events(created_at);
+    """,
 }
 
 OWNER_TABLES = (

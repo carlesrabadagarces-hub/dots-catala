@@ -33,5 +33,12 @@ Cada persona connecta el **seu propi número** mitjançant l'API oficial *WhatsA
 ## Gestió
 `GET/PUT/DELETE /api/v1/whatsapp/connections[/{id}]` (`enabled`, `allowed_numbers`, canviar d'agent, rotar credencials).
 
+## Fiabilitat de les entregues
+Meta espera un `2xx` en 5 segons i, si no, reenvia el mateix missatge fins a 7 vegades.
+- **Cada entrega s'atén una sola vegada.** El registre del que ja s'ha atès és a la base de dades (taula `whatsapp_events`), no a la memòria del procés: així un reinici no provoca respostes repetides. Es neteja sol al cap de 7 dies.
+- **Si l'enviament falla, el missatge s'allibera** perquè el reintent de Meta sí que s'atengui. Si no, el reintent es descartaria com a duplicat i la persona es quedaria sense resposta per sempre.
+- **Un pany per persona.** És normal escriure «hola» i, mig segon després, la pregunta de debò. Sense el pany, les dues respostes es generarien alhora llegint el mateix historial i es trepitjarien.
+- **Res no s'escriu a la conversa fins que la resposta s'ha enviat de debò**, i els avisos tècnics («ara no puc respondre») no s'hi guarden: no són un torn de conversa i embrutarien el context de tot el que vingui després.
+
 ## Limitacions
 Només missatges de text, sense interfície gràfica per gestionar connexions (per ara només API), i fora de la finestra de 24 h de Meta només es pot respondre amb plantilles.

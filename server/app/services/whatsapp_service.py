@@ -6,13 +6,17 @@ webhook, are checked against the app secret signature and a sender allowlist,
 answered by the agent, and sent back through the Graph API.
 """
 
+import asyncio
 import hashlib
 import hmac
 import json
+import logging
 import secrets
+import sqlite3
+import time
 import uuid
-from datetime import datetime, timezone
-from typing import Any, Dict, List, Optional
+from datetime import datetime, timedelta, timezone
+from typing import Any, Dict, List, Optional, Tuple
 
 import httpx
 
@@ -26,6 +30,10 @@ WHATSAPP_MAX_CHARS = 4000
 HISTORY_LIMIT = 20
 SECRET_FIELDS = ("access_token", "app_secret")
 AUTO = "auto"  # connection mode: the Dot is chosen per message
+EVENT_TTL_DAYS = 7      # how long a handled delivery is remembered
+SWEEP_EVERY = 3600      # seconds between clean-ups of that record
+
+logger = logging.getLogger(__name__)
 
 
 class WhatsAppError(RuntimeError):
@@ -55,7 +63,8 @@ def split_text(text: str, limit: int = WHATSAPP_MAX_CHARS) -> List[str]:
 
 class WhatsAppService:
     def __init__(self) -> None:
-        self._seen: List[str] = []
+        self._locks: Dict[str, asyncio.Lock] = {}
+        self._swept = 0.0
 
     # ---- storage -------------------------------------------------------
     @property
@@ -189,14 +198,59 @@ class WhatsAppService:
                         })
         return found
 
-    def _is_duplicate(self, message_id: str) -> bool:
-        if not message_id:
-            return False
-        if message_id in self._seen:
+    # ---- one delivery, once ---------------------------------------------
+    # Meta expects a 2xx within five seconds and retries the same event up to
+    # seven times, so the same message does arrive more than once. The record of
+    # what we have handled lives in the database: in memory it would be lost on
+    # every restart, and the person would get the same answer twice.
+    def claim_event(self, event_id: str, connection_id: str) -> bool:
+        """Take charge of this delivery. False when someone already did."""
+        if not event_id:
             return True
-        self._seen.append(message_id)
-        del self._seen[:-500]
-        return False
+        self._sweep_events()
+        try:
+            with storage_service.database.connect() as c:
+                c.execute("INSERT INTO whatsapp_events(event_id, connection_id, created_at) VALUES (?, ?, ?)",
+                          (event_id, connection_id, datetime.now(timezone.utc).isoformat()))
+        except sqlite3.IntegrityError:
+            return False
+        return True
+
+    def release_event(self, event_id: str) -> None:
+        """Give the delivery back so the provider's retry is answered.
+
+        Used when we claimed a message but could not deliver the reply: without
+        this the retry looks like a duplicate and the person is never answered.
+        """
+        if not event_id:
+            return
+        with storage_service.database.connect() as c:
+            c.execute("DELETE FROM whatsapp_events WHERE event_id = ?", (event_id,))
+
+    def _sweep_events(self) -> None:
+        now = time.monotonic()
+        if now - self._swept < SWEEP_EVERY:
+            return
+        self._swept = now
+        cutoff = (datetime.now(timezone.utc) - timedelta(days=EVENT_TTL_DAYS)).isoformat()
+        with storage_service.database.connect() as c:
+            c.execute("DELETE FROM whatsapp_events WHERE created_at < ?", (cutoff,))
+
+    def _lock(self, connection_id: str, sender: str) -> asyncio.Lock:
+        """One lock per person.
+
+        People send "hi" and then the real question a moment later. Answering both
+        at once means two turns read the same history and reply over each other.
+        """
+        key = f"{connection_id}:{sender}"
+        lock = self._locks.get(key)
+        if lock is None:
+            lock = self._locks[key] = asyncio.Lock()
+        if len(self._locks) > 500:
+            for k, held in list(self._locks.items()):
+                if k != key and not held.locked():
+                    del self._locks[k]
+        return lock
 
     async def handle_payload(self, connection_id: str, payload: Dict[str, Any]) -> None:
         connection = self.get(connection_id)
@@ -208,14 +262,13 @@ class WhatsAppService:
         bot_token = current_bot.set(connection["bot_id"])
         try:
             for incoming in self.extract_texts(payload, connection["phone_number_id"]):
-                if self._is_duplicate(incoming["id"]):
-                    continue
                 # Deny by default: only numbers explicitly allowed can talk to the agent.
                 if incoming["from"] not in connection["allowed_numbers"]:
                     continue
-                reply = await self.generate_reply(connection, incoming["from"], incoming["text"])
-                if reply:
-                    await self.send_text(connection_id, incoming["from"], reply)
+                if not self.claim_event(incoming["id"], connection_id):
+                    continue
+                async with self._lock(connection_id, incoming["from"]):
+                    await self._answer(connection, incoming)
         finally:
             current_bot.reset(bot_token)
             current_channel.reset(ch_token)
@@ -297,35 +350,57 @@ class WhatsAppService:
         current_bot.set(bot["id"])  # usage accounting sees the Dot that really answers
         return bot, {"changed": spec["id"] != current, "icon": spec["icon"], "name": spec["name"]}
 
-    async def generate_reply(self, connection: Dict[str, Any], sender: str, text: str) -> str:
+    async def _answer(self, connection: Dict[str, Any], incoming: Dict[str, str]) -> None:
+        """Answer one message. Nothing is stored until the person has it."""
+        try:
+            reply, turn = await self.prepare_reply(connection, incoming["from"], incoming["text"])
+            if not reply:
+                return
+            await self.send_text(connection["id"], incoming["from"], reply)
+        except Exception:
+            self.release_event(incoming["id"])   # let the provider's retry try again
+            logger.exception("WhatsApp: could not answer %s", incoming["from"])
+            return
+        if turn:
+            self.remember_turn(turn)
+
+    @staticmethod
+    def remember_turn(turn: Dict[str, Any]) -> None:
+        """Write the exchange down, now that it really happened."""
+        for who, text, kind in (("user", turn["text"], "user_text"), ("bot", turn["reply"], "assistant_text")):
+            storage_service.add_message({
+                "id": f"msg-{uuid.uuid4().hex[:8]}", "thread_id": turn["thread_id"], "bot_id": turn["bot_id"],
+                "sender": who, "text": text, "created_at": datetime.now(timezone.utc).isoformat(),
+                "model": turn["model"], "item_type": kind,
+            })
+
+    async def prepare_reply(self, connection: Dict[str, Any], sender: str,
+                            text: str) -> Tuple[str, Optional[Dict[str, Any]]]:
+        """Work out the answer, and the turn to store once it has been sent."""
         reply = self._command(sender, text)
         if reply is not None:
-            return reply
+            return reply, None
         first_time = not memory_service.list_facts(sender) and memory_service.get_dot(sender) is None
         explicit = memory_service.EXPLICIT.match(text.strip())
         facts = memory_service.extract_facts(text)
         if facts:
             memory_service.remember(sender, facts, "explicit" if explicit else "auto")
         if explicit:
-            return "Anotat ✅ " + (facts[0] if facts else "") + " (/memoria per veure-ho, /oblida per esborrar-ho)"
+            return "Anotat ✅ " + (facts[0] if facts else "") + " (/memoria per veure-ho, /oblida per esborrar-ho)", None
         bot, info = self._resolve_bot(connection, sender, text)
         if not bot:
             if connection.get("auto_route"):
                 return (self.WELCOME if first_time else
-                        "Explica'm una mica més què necessites, per exemple: «tinc una fuita a la cisterna» o «com faig la declaració de la renda».")
-            return ""
+                        "Explica'm una mica més què necessites, per exemple: «tinc una fuita a la cisterna» o «com faig la declaració de la renda».",
+                        None)
+            return "", None
         thread_id = f"{connection['id']}:{sender}"
-        now = datetime.now(timezone.utc).isoformat()
-        storage_service.add_message({
-            "id": f"msg-{uuid.uuid4().hex[:8]}", "thread_id": thread_id, "bot_id": bot["id"],
-            "sender": "user", "text": text, "created_at": now, "model": bot["model"],
-            "item_type": "user_text",
-        })
         history = [
             {"role": "user" if m["sender"] == "user" else "assistant", "content": m.get("text", "")}
             for m in storage_service.get_messages(thread_id=thread_id)
             if m["sender"] in ("user", "bot")
-        ][-HISTORY_LIMIT:]
+        ][-(HISTORY_LIMIT - 1):]
+        history.append({"role": "user", "content": text})
         memory = memory_service.prompt_block(sender)
         system_prompt = (
             f"Current Date & Time: {datetime.now().strftime('%A, %B %d, %Y at %I:%M %p')}.\n\n"
@@ -343,17 +418,15 @@ class WhatsAppService:
             elif event["type"] == "turn.completed":
                 ok = event.get("ok", True)
         if not ok or not reply.strip():
-            return "Ho sento, ara no puc respondre. Torna-ho a provar més tard."
-        storage_service.add_message({
-            "id": f"msg-{uuid.uuid4().hex[:8]}", "thread_id": thread_id, "bot_id": bot["id"],
-            "sender": "bot", "text": reply, "created_at": datetime.now(timezone.utc).isoformat(),
-            "model": bot["model"], "item_type": "assistant_text",
-        })
+            # A technical excuse is not a turn of the conversation: storing it would
+            # leave it polluting the context of everything that comes after.
+            return "Ho sento, ara no puc respondre. Torna-ho a provar més tard.", None
+        turn = {"thread_id": thread_id, "bot_id": bot["id"], "model": bot["model"], "text": text, "reply": reply}
         if info and info["changed"]:
             reply = f"{info['icon']} {info['name']}:\n{reply}"
         if first_time and connection.get("auto_route"):
             reply = f"{self.WELCOME}\n\n{reply}"
-        return reply
+        return reply, turn
 
     async def send_text(self, connection_id: str, to: str, text: str) -> None:
         connection = self.get(connection_id)
