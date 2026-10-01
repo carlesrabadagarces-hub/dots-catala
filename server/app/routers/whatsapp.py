@@ -55,6 +55,23 @@ async def update_connection(connection_id: str, body: ConnectionUpdate):
     return updated
 
 
+class TestMessage(BaseModel):
+    to: str = Field(min_length=6)
+
+
+@router.post("/connections/{connection_id}/test")
+async def send_test(connection_id: str, body: TestMessage):
+    if not whatsapp_service.get(connection_id):
+        raise HTTPException(status_code=404, detail="Connection not found")
+    try:
+        await whatsapp_service.send_test(connection_id, body.to)
+    except WhatsAppError as exc:
+        raise HTTPException(status_code=422, detail=str(exc)) from exc
+    except Exception as exc:                       # noqa: BLE001 - surfaced to the person
+        raise HTTPException(status_code=502, detail=f"No s'ha pogut enviar: {exc}") from exc
+    return {"status": "ok"}
+
+
 @router.delete("/connections/{connection_id}")
 async def delete_connection(connection_id: str):
     if not whatsapp_service.delete(connection_id):

@@ -20,6 +20,7 @@ from typing import Any, Dict, List, Optional, Tuple
 
 import httpx
 
+from app.config import settings
 from app.services import memory_service, routing_service
 from app.services.context import DEFAULT_OWNER_ID, current_bot, current_channel, current_owner
 from app.services.provider_service import provider_service
@@ -92,7 +93,12 @@ class WhatsAppService:
 
     @staticmethod
     def public(connection: Dict[str, Any]) -> Dict[str, Any]:
-        return {k: v for k, v in connection.items() if k not in SECRET_FIELDS}
+        out = {k: v for k, v in connection.items() if k not in SECRET_FIELDS}
+        # The address to paste into Meta. Without PUBLIC_BASE_URL we cannot know the
+        # server's address from here, so the interface explains what to do instead.
+        base = settings.PUBLIC_BASE_URL
+        out["webhook_url"] = f"{base}/api/v1/whatsapp/webhook/{connection['id']}" if base else ""
+        return out
 
     @staticmethod
     def _mine(connection: Dict[str, Any]) -> bool:
@@ -427,6 +433,17 @@ class WhatsAppService:
         if first_time and connection.get("auto_route"):
             reply = f"{self.WELCOME}\n\n{reply}"
         return reply, turn
+
+    async def send_test(self, connection_id: str, to: str) -> None:
+        """Send one message so the person can see the connection really works."""
+        number = normalize_number(to)
+        if not number:
+            raise WhatsAppError("Falta el número de destinació.")
+        connection = self.get(connection_id)
+        if connection and number not in connection["allowed_numbers"]:
+            raise WhatsAppError("Aquest número no és a la llista de números permesos.")
+        await self.send_text(connection_id, number,
+                             "Prova de superDOTats ✅ La connexió funciona. Escriu-me quan vulguis.")
 
     async def send_text(self, connection_id: str, to: str, text: str) -> None:
         connection = self.get(connection_id)

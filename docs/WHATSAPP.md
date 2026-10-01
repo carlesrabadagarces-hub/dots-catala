@@ -8,20 +8,29 @@ Cada persona connecta el **seu propi número** mitjançant l'API oficial *WhatsA
 3. Una URL pública HTTPS cap al servidor (p. ex. `cloudflared tunnel --url http://127.0.0.1:8000` o `ngrok http 8000`).
 
 ## Passos
-1. Arrenca Open Dots i crea un agent (nom, instruccions, model).
-2. Registra la connexió (API autenticada; obre `/docs` al servidor):
-   ```
-   POST /api/v1/whatsapp/connections
-   {"bot_id": "bot-xxxxxx", "label": "El meu WhatsApp",
-    "phone_number_id": "...", "access_token": "...", "app_secret": "...",
-    "allowed_numbers": ["+34600111222"]}
-   ```
-   La resposta inclou `id` i `verify_token`.
-3. A Meta → WhatsApp → Configuration → Webhook:
-   - Callback URL: `https://LA-TEVA-URL/api/v1/whatsapp/webhook/<id>`
-   - Verify token: el `verify_token` rebut
-   - Subscriu el camp **messages**.
-4. Envia un missatge des d'un número de `allowed_numbers`: l'agent respon.
+1. Arrenca superDOTats i entra-hi.
+2. A la barra lateral, obre **WhatsApp**. La pantalla et guia:
+   - Hi poses el **Phone number ID**, l'**access token** i l'**app secret** que et dona Meta.
+   - Tries qui respon: un Dot concret o **automàtic** (el tria segons la pregunta).
+   - Hi escrius els números que poden parlar amb el Dot. Ningú més rebrà resposta.
+3. En connectar-lo, la mateixa pantalla et dona la **Callback URL** i el **Verify token** per copiar.
+   A Meta → WhatsApp → Configuration → Webhook, enganxa'ls i subscriu el camp **messages**.
+4. Prem **Envia una prova** per comprovar que el número respon abans de fer res més.
+
+Perquè la Callback URL surti sencera, el servidor ha de saber la seva adreça pública:
+posa `PUBLIC_BASE_URL=https://la-teva-url` a les variables d'entorn. Sense això, la pantalla
+t'ho avisa i et diu com construir-la.
+
+També es pot fer tot per API, si ho prefereixes:
+
+```
+POST /api/v1/whatsapp/connections
+{"label": "El meu WhatsApp", "auto_route": true,
+ "phone_number_id": "...", "access_token": "...", "app_secret": "...",
+ "allowed_numbers": ["+34600111222"]}
+```
+La resposta inclou `id`, `verify_token` i `webhook_url`.
+`POST /api/v1/whatsapp/connections/{id}/test` amb `{"to": "+34..."}` envia el missatge de prova.
 
 ## Seguretat
 - `access_token` i `app_secret` es guarden xifrats i mai es tornen a mostrar.
@@ -41,4 +50,4 @@ Meta espera un `2xx` en 5 segons i, si no, reenvia el mateix missatge fins a 7 v
 - **Res no s'escriu a la conversa fins que la resposta s'ha enviat de debò**, i els avisos tècnics («ara no puc respondre») no s'hi guarden: no són un torn de conversa i embrutarien el context de tot el que vingui després.
 
 ## Limitacions
-Només missatges de text, sense interfície gràfica per gestionar connexions (per ara només API), i fora de la finestra de 24 h de Meta només es pot respondre amb plantilles.
+Només missatges de text (ni àudio ni imatges, encara) i, fora de la finestra de 24 h de Meta, només es pot respondre amb plantilles aprovades.

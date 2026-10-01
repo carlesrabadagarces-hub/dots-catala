@@ -6,6 +6,7 @@ import ChatWindow from './ChatWindow';
 import ComputerPanel from './ComputerPanel';
 import Marketplace from './Marketplace';
 import AuditPanel from './AuditPanel';
+import WhatsAppPanel from './WhatsAppPanel';
 import AppSettingsDrawer from './AppSettingsDrawer';
 import CatalogModal from './CatalogModal';
 import DotStudio from './DotStudio';
@@ -22,7 +23,7 @@ export default function Dashboard() {
   const [bots, setBots] = useState([]);
   const [models, setModels] = useState([]);
   const [activeBotId, setActiveBotId] = useState('');
-  const [activeTab, setActiveTab] = useState('chat'); // 'chat' | 'computer' | 'marketplace' | 'audit'
+  const [activeTab, setActiveTab] = useState('chat'); // 'chat' | 'computer' | 'marketplace' | 'audit' | 'whatsapp'
   const [messages, setMessages] = useState([]);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [isCatalogOpen, setIsCatalogOpen] = useState(false);
@@ -127,6 +128,8 @@ export default function Dashboard() {
         {activeTab === 'marketplace' && (
           <Marketplace onOpenSettings={() => setIsSettingsOpen(true)} />
         )}
+
+        {activeTab === 'whatsapp' && <WhatsAppPanel />}
 
         {activeTab === 'audit' && <AuditPanel />}
       </main>

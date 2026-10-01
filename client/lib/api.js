@@ -401,3 +401,49 @@ export async function updateAdminUser(userId, body) {
   if (!res.ok) throw new Error(payload.detail || 'No s\'ha pogut actualitzar.');
   return payload;
 }
+
+// ---- WhatsApp -------------------------------------------------------------
+export async function fetchWhatsAppConnections() {
+  const res = await apiFetch(`${API_BASE_URL}/whatsapp/connections`);
+  if (!res.ok) return [];
+  return res.json();
+}
+
+export async function createWhatsAppConnection(body) {
+  const res = await apiFetch(`${API_BASE_URL}/whatsapp/connections`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+  });
+  const payload = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(payload.detail || 'No s\'ha pogut connectar el número.');
+  return payload;
+}
+
+export async function updateWhatsAppConnection(id, updates) {
+  const res = await apiFetch(`${API_BASE_URL}/whatsapp/connections/${encodeURIComponent(id)}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(updates),
+  });
+  const payload = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(payload.detail || 'No s\'ha pogut desar.');
+  return payload;
+}
+
+export async function deleteWhatsAppConnection(id) {
+  const res = await apiFetch(`${API_BASE_URL}/whatsapp/connections/${encodeURIComponent(id)}`, { method: 'DELETE' });
+  if (!res.ok) throw new Error('No s\'ha pogut esborrar la connexió.');
+  return res.json();
+}
+
+export async function testWhatsAppConnection(id, to) {
+  const res = await apiFetch(`${API_BASE_URL}/whatsapp/connections/${encodeURIComponent(id)}/test`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ to }),
+  });
+  const payload = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(payload.detail || 'No s\'ha pogut enviar la prova.');
+  return payload;
+}

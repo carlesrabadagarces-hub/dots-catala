@@ -176,6 +176,19 @@ export default function Sidebar({
 
       {/* Bottom Sidebar Footer */}
       <div className="p-3 space-y-2 border-t border-line1">
+        <button
+          suppressHydrationWarning={true}
+          onClick={() => onSelectTab && onSelectTab('whatsapp')}
+          className={`w-full flex items-center gap-2 px-2 py-1 rounded-lg text-xs font-medium transition ${
+            activeTab === 'whatsapp'
+              ? 'text-fg bg-surf2'
+              : 'text-zinc-300 hover:text-fg hover:bg-surf2'
+          }`}
+        >
+          <span className="text-sm">💬</span>
+          <span>WhatsApp</span>
+        </button>
+
         {/* Plugins Section */}
         <button
           suppressHydrationWarning={true}
