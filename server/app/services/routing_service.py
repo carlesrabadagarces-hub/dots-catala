@@ -39,7 +39,20 @@ ALIASES = {
     "sticker": "creador stickers", "stickers": "creador stickers",
     "viatge": "guia viatges", "viaje": "guia viatges", "vacances": "guia viatges", "hotel": "guia viatges",
     "web": "desenvolupador", "programar": "desenvolupador", "codi": "desenvolupador", "excel": "consultor",
+    # informàtica de casa: sense aquestes paraules, «espatllat» s'assemblava a «espatlla» (fisioterapeuta)
+    "wifi": "suport informatic", "internet": "suport informatic", "router": "suport informatic", "ordinador": "suport informatic",
+    "ordenador": "suport informatic", "portatil": "suport informatic", "impressora": "suport informatic", "impresora": "suport informatic",
+    "mobil": "suport informatic", "movil": "suport informatic", "virus": "suport informatic", "contrasenya": "suport informatic",
+    # castellà
+    "fracciones": "professor matematiques", "ecuacion": "professor matematiques", "hijo": "mestra", "hija": "mestra",
+    "cabeza": "metge", "estomago": "metge", "dolor": "metge salut", "rodilla": "fisioterapeuta", "genoll": "fisioterapeuta",
+    "espalda": "fisioterapeuta", "esquena": "fisioterapeuta", "nen": "pediatre", "nena": "pediatre", "bebe": "pediatre",
+    "oida": "pediatre metge", "multa": "jurista",
 }
+
+# Verbs that state the job outright. «Tradueix aquest contracte» és una feina de traductor, encara que parli d'un contracte.
+INTENT = {"traduir": "traductor", "traducir": "traductor", "traduce": "traductor", "tradueix": "traductor", "translate": "traductor"}
+INTENT_BONUS = 14.0
 
 
 def _strip(text: str) -> str:
@@ -98,6 +111,7 @@ def rank(text: str, limit: int = 3) -> List[Dict[str, Any]]:
     q = tokens(text)
     if not q:
         return []
+    plain = set(re.findall(r"[a-z]+", _strip(text.lower())))
     scored = []
     for d in idx.docs:
         s = 0.0
@@ -105,6 +119,9 @@ def rank(text: str, limit: int = 3) -> List[Dict[str, Any]]:
             best = max((WEIGHTS[f] for f, toks in d["fields"].items() if w in toks), default=0.0)
             if best:
                 s += best * idx.idf.get(w, 0.5)
+        for w, spec_id in INTENT.items():
+            if w in plain and d["spec"]["id"] == spec_id:
+                s += INTENT_BONUS
         scored.append((s, d["spec"]))
     scored.sort(key=lambda x: -x[0])
     top = scored[0][0]

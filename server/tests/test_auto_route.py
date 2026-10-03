@@ -128,3 +128,38 @@ class AutoRouteWhatsAppTests(unittest.IsolatedAsyncioTestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class RoutingQualityTests(unittest.TestCase):
+    """A fixed set of real questions that must reach a sensible Dot.
+
+    This is the safety net for the automatic router: every time the catalogue or the
+    router changes, these questions must still land with the right Dot. Add a case
+    here whenever someone reports a question that went to the wrong one.
+    """
+
+    CASES = __import__("json").loads((Path(__file__).parent / "data" / "routing_cases.json").read_text(encoding="utf-8"))
+
+    def test_every_expected_dot_exists(self):
+        from app.services.catalog_data import CATALOG
+        known = {s["id"] for s in CATALOG}
+        for case in self.CASES:
+            for dot in case["ok"]:
+                self.assertIn(dot, known, f"{case['q']!r} expects an unknown Dot {dot!r}")
+
+    def test_questions_reach_a_sensible_dot(self):
+        wrong = []
+        for case in self.CASES:
+            picked = routing_service.route(case["q"])
+            got = picked["id"] if picked else None
+            if got not in case["ok"]:
+                wrong.append(f"{case['q']!r} -> {got} (esperat {case['ok']})")
+        self.assertEqual(wrong, [], "Preguntes que han anat al Dot equivocat:\n  " + "\n  ".join(wrong))
+
+    def test_a_translation_request_beats_the_topic_it_mentions(self):
+        # «contrato» pulls towards a lawyer; «traducir» says what the job actually is
+        self.assertEqual(routing_service.route("Necesito traducir un contrato al inglés")["id"], "traductor")
+
+    def test_everyday_it_words_do_not_collide_with_body_parts(self):
+        # «espatllat» used to match «espatlla» (shoulder) and sent the wifi to the physio
+        self.assertEqual(routing_service.route("Se m'ha espatllat el wifi")["id"], "suport-informatic")

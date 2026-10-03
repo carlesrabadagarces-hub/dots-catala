@@ -14,6 +14,19 @@ dades, i Vercel no en guarda. Allà hi tindràs l'aparador, no el producte funci
    - `SITE_USER` (opcional): l'usuari; si no el poses, és `dots`.
 6. Desplega. En obrir la web, el navegador demanarà usuari i contrasenya.
 
+## Si la contrasenya no funciona (pla B)
+`middleware.js` demana la contrasenya amb la lògica provada en local, però **no he pogut provar-lo
+dins de Vercel**: no vaig poder llegir-ne la documentació des d'aquí, i no sé del cert com tracta un
+projecte estàtic (sense Next.js) la resposta buida que dona quan la contrasenya és bona. Si en obrir la
+web veus una pàgina en blanc o un error després d'escriure la contrasenya:
+
+1. Esborra `middleware.js` i torna a desplegar. La web queda oberta, però amb `noindex`, així que només
+   la veu qui tingui l'enllaç. Per ensenyar una maqueta, és prou.
+2. O fes servir la protecció que porta Vercel al panell (Settings → Deployment Protection). Les opcions
+   que et deixa depenen del teu pla.
+
+Si no poses `SITE_PASSWORD`, la web **no s'obre** (error 503): preferim que falli tancada.
+
 ## Com queda protegida
 - `middleware.js` demana contrasenya abans de servir res. Funciona amb qualsevol pla.
 - Les pàgines porten `noindex` i el `robots.txt` diu a tothom que no la indexi.
