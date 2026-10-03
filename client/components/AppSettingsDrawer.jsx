@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { FiX, FiEye, FiEyeOff, FiPlus, FiTrash2, FiChevronDown } from "react-icons/fi";
-import { fetchSettings, saveSettings } from "../lib/api";
+import { fetchProviderModels, fetchSettings, saveSettings } from "../lib/api";
 
 const inputClass = "w-full bg-surf3 border border-line2 rounded-lg px-3 py-2.5 text-xs text-zinc-100 placeholder-zinc-500 focus:outline-none focus:border-violet-400";
 const cardClass = "bg-surf2 border border-line1 rounded-2xl p-4 space-y-4";
@@ -11,7 +11,7 @@ const buttonClass = "rounded-lg px-3 py-2 text-xs font-medium bg-violet-500 text
 // Providers that speak the common Chat Completions protocol. Free tiers change often:
 // the model names are only a starting point and can be edited.
 const PRESETS = [
-  { id: 'groq', name: 'Groq · gratuït, molt ràpid', url: 'https://api.groq.com/openai/v1', model: 'llama-3.3-70b-versatile', link: 'https://console.groq.com/keys' },
+  { id: 'groq', name: 'Groq · gratuït, molt ràpid', url: 'https://api.groq.com/openai/v1', model: 'openai/gpt-oss-20b', link: 'https://console.groq.com/keys' },
   { id: 'gemini', name: 'Google Gemini · gratuït', url: 'https://generativelanguage.googleapis.com/v1beta/openai', model: 'gemini-2.5-flash', link: 'https://aistudio.google.com/apikey' },
   { id: 'openrouter', name: 'OpenRouter · models :free', url: 'https://openrouter.ai/api/v1', model: 'meta-llama/llama-3.3-70b-instruct:free', link: 'https://openrouter.ai/keys' },
   { id: 'mistral', name: 'Mistral (UE) · pla gratuït', url: 'https://api.mistral.ai/v1', model: 'mistral-small-latest', link: 'https://console.mistral.ai/api-keys' },
@@ -36,6 +36,7 @@ export default function AppSettingsDrawer({ models, isOpen, onClose, currentMode
   const [composioKey, setComposioKey] = useState("");
   const [composioConfigured, setComposioConfigured] = useState(false);
   const [preset, setPreset] = useState("");
+  const [found, setFound] = useState([]);
   const [loaded, setLoaded] = useState(false);
   const [saving, setSaving] = useState(false);
   const [notice, setNotice] = useState(null);
@@ -211,7 +212,15 @@ export default function AppSettingsDrawer({ models, isOpen, onClose, currentMode
             <div className="space-y-1.5">
               <label htmlFor="provider-default-model" className="block text-xs font-medium">Default model ID</label>
               <input id="provider-default-model" required value={defaultModel} onChange={(e) => setDefaultModel(e.target.value)} list="provider-model-options" className={inputClass} />
-              <datalist id="provider-model-options">{[...new Set([...modelIds.split(/[\n,]+/).map((id) => id.trim()).filter(Boolean), ...(models || []).map((model) => model.id)])].map((id) => <option key={id} value={id} />)}</datalist>
+              <datalist id="provider-model-options">{[...new Set([...modelIds.split(/[\n,]+/).map((id) => id.trim()).filter(Boolean), ...found, ...(models || []).map((model) => model.id)])].map((id) => <option key={id} value={id} />)}</datalist>
+              <button type="button" className="text-xs text-violet-300 underline" onClick={async () => {
+                setNotice(null);
+                try {
+                  const list = await fetchProviderModels();
+                  setFound(list);
+                  setNotice({ text: list.length ? `${list.length} models disponibles: tria’n un a la llista del camp «Default model ID».` : "El proveïdor no ha tornat cap model." });
+                } catch (e) { setNotice({ error: true, text: e.message }); }
+              }}>Veure els models que ofereix el proveïdor (desa abans la clau)</button>
               <p className="text-[11px] text-zinc-500">Used for new assistants. Existing assistants keep their selected model.</p>
             </div>
             <details className="border border-line2 rounded-lg p-3">

@@ -70,3 +70,22 @@ class RetargetTests(unittest.TestCase):
             n = st.retarget_bot_models(["llama-3.3-70b-versatile"], "llama-3.3-70b-versatile")
             self.assertEqual(n, max(len(bots) - 1, 0))
             self.assertTrue(all(b["model"] == "llama-3.3-70b-versatile" for b in st.get_bots()))
+
+
+class ProviderModelsTests(unittest.IsolatedAsyncioTestCase):
+    async def test_lists_models_from_the_saved_provider(self):
+        from app.routers import settings as settings_router
+        seen = {}
+
+        def handler(request):
+            seen["url"], seen["auth"] = str(request.url), request.headers["authorization"]
+            return httpx.Response(200, json={"data": [{"id": "b-model"}, {"id": "a-model"}]})
+
+        real = httpx.AsyncClient
+        fake = type("S", (), {"get_settings": lambda self: {"model_api_key": "k", "model_api_base_url": "https://x.test/v1/"}})()
+        with patch.object(settings_router, "storage_service", fake), \
+             patch.object(settings_router.httpx, "AsyncClient", lambda **kw: real(transport=httpx.MockTransport(handler), **kw)):
+            out = await settings_router.provider_models()
+        self.assertEqual(out["models"], ["a-model", "b-model"])
+        self.assertEqual(seen["url"], "https://x.test/v1/models")
+        self.assertEqual(seen["auth"], "Bearer k")

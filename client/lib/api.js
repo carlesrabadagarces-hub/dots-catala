@@ -459,3 +459,10 @@ export async function testWhatsAppConnection(id, to) {
   if (!res.ok) throw new Error(payload.detail || 'No s\'ha pogut enviar la prova.');
   return payload;
 }
+
+export async function fetchProviderModels() {
+  const res = await fetch(`${API_BASE_URL}/settings/provider-models`, { credentials: 'include' });
+  const payload = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(payload.detail || 'No s\'han pogut carregar els models.');
+  return payload.models || [];
+}

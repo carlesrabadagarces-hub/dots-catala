@@ -24,7 +24,7 @@ Exemple gratuït amb Groq:
 MODEL_WIRE_API=chat
 MODEL_API_BASE_URL=https://api.groq.com/openai/v1
 MODEL_API_KEY=gsk_...
-DEFAULT_MODEL=llama-3.3-70b-versatile
+DEFAULT_MODEL=openai/gpt-oss-20b
 ```
 Passar a pro: canvia aquestes quatre línies pel proveïdor de pagament (OpenAI, Mistral de pagament, etc.).
 
