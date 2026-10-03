@@ -4,15 +4,20 @@ Això publica **només la web pública** (`site/`), que és HTML estàtic. L'app
 crear Dots, panell d'admin, WhatsApp) no hi va: necessita un servidor amb base de
 dades, i Vercel no en guarda. Allà hi tindràs l'aparador, no el producte funcionant.
 
-## Passos (uns 10 minuts)
-1. Entra a vercel.com amb el compte de GitHub i fes **Add New → Project**.
-2. Tria el repositori `dots-catala` i la branca `claude/open-dots-whatsapp-integration-hn623w`.
-3. Posa-li de nom **superdots** (així la URL serà `superdots.vercel.app`).
-4. No cal tocar res més: `vercel.json` ja diu que serveixi la carpeta `site/`.
-5. A **Settings → Environment Variables** afegeix:
-   - `SITE_PASSWORD`: la contrasenya que vulguis (només lletres i números).
-   - `SITE_USER` (opcional): l'usuari; si no el poses, és `dots`.
-6. Desplega. En obrir la web, el navegador demanarà usuari i contrasenya.
+## Passos (uns 5 minuts)
+1. A vercel.com → **Add New → Project** i tria el repositori `dots-catala`.
+2. Vercel detectarà tres aplicacions (`client`, `server`, `runtime`) i et proposarà el preset **Services**.
+   **No les importis**: l'app necessita un servidor amb disc i Vercel no en té.
+3. Canvia aquests tres camps:
+   - **Project Name**: `superdots` (la URL serà `superdots.vercel.app`).
+   - **Root Directory**: `site`.
+   - **Application Preset**: `Other`.
+4. Desplega **Environment Variables** i afegeix `SITE_PASSWORD` amb la contrasenya que vulguis
+   (només lletres i números). L'usuari és `dots`, o el que posis a `SITE_USER`.
+5. **Deploy**.
+
+La configuració (`vercel.json`) i la contrasenya (`middleware.js`) són dins de `site/`, perquè Vercel
+les llegeix de la carpeta arrel del projecte.
 
 ## Si la contrasenya no funciona (pla B)
 `middleware.js` demana la contrasenya amb la lògica provada en local, però **no he pogut provar-lo
@@ -20,7 +25,7 @@ dins de Vercel**: no vaig poder llegir-ne la documentació des d'aquí, i no sé
 projecte estàtic (sense Next.js) la resposta buida que dona quan la contrasenya és bona. Si en obrir la
 web veus una pàgina en blanc o un error després d'escriure la contrasenya:
 
-1. Esborra `middleware.js` i torna a desplegar. La web queda oberta, però amb `noindex`, així que només
+1. Esborra `site/middleware.js` i torna a desplegar. La web queda oberta, però amb `noindex`, així que només
    la veu qui tingui l'enllaç. Per ensenyar una maqueta, és prou.
 2. O fes servir la protecció que porta Vercel al panell (Settings → Deployment Protection). Les opcions
    que et deixa depenen del teu pla.
