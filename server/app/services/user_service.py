@@ -1,5 +1,9 @@
 """Members created by social sign-in (Google, Apple)."""
 
+import hashlib
+import hmac
+import re
+import secrets
 import uuid
 from datetime import datetime, timezone
 from typing import Any, Dict, Optional
@@ -15,7 +19,58 @@ def _public(row) -> Dict[str, Any]:
     return data
 
 
+EMAIL_RE = re.compile(r"^[^@\s]{1,64}@[^@\s]{1,255}\.[^@\s.]{2,}$")
+MIN_PASSWORD = 8
+
+
+class SignupError(ValueError):
+    pass
+
+
+def hash_password(password: str) -> str:
+    salt = secrets.token_bytes(16)
+    digest = hashlib.scrypt(password.encode(), salt=salt, n=2 ** 14, r=8, p=1, dklen=32)
+    return f"scrypt${salt.hex()}${digest.hex()}"
+
+
+def check_password(password: str, stored: str) -> bool:
+    try:
+        _, salt, digest = stored.split("$")
+        got = hashlib.scrypt(password.encode(), salt=bytes.fromhex(salt), n=2 ** 14, r=8, p=1, dklen=32)
+        return hmac.compare_digest(got.hex(), digest)
+    except (ValueError, AttributeError):
+        return False
+
+
 class UserService:
+    def register_password(self, email: str, password: str, name: str = "") -> Dict[str, Any]:
+        """Create a member with their own email + password (never linked to Google/Apple)."""
+        email = email.strip().lower()
+        if not EMAIL_RE.match(email):
+            raise SignupError("Aquest correu no sembla vàlid.")
+        if len(password) < MIN_PASSWORD:
+            raise SignupError(f"La contrasenya ha de tenir almenys {MIN_PASSWORD} caràcters.")
+        with storage_service.database.connect() as c:
+            if c.execute("SELECT 1 FROM users WHERE lower(email) = ?", (email,)).fetchone():
+                raise SignupError("Ja hi ha un compte amb aquest correu. Entra-hi o fes servir Google/Apple.")
+            user_id = f"usr-{uuid.uuid4().hex[:12]}"
+            c.execute(
+                "INSERT INTO users(id, username, role, created_at, provider, provider_sub, email, name, password_hash) "
+                "VALUES (?, ?, 'member', ?, 'password', ?, ?, ?, ?)",
+                (user_id, f"password:{email}", datetime.now(timezone.utc).isoformat(), email, email,
+                 name.strip()[:80] or email.split("@")[0], hash_password(password)))
+            row = c.execute("SELECT * FROM users WHERE id = ?", (user_id,)).fetchone()
+        return _public(row)
+
+    def verify_password(self, email: str, password: str) -> Optional[Dict[str, Any]]:
+        with storage_service.database.connect() as c:
+            row = c.execute("SELECT * FROM users WHERE provider = 'password' AND provider_sub = ?",
+                            (email.strip().lower(),)).fetchone()
+        # Always do the hashing work so timing doesn't reveal which emails exist.
+        stored = row["password_hash"] if row and row["password_hash"] else hash_password("x")
+        ok = check_password(password, stored)
+        return _public(row) if row and ok else None
+
     def get(self, user_id: str) -> Optional[Dict[str, Any]]:
         with storage_service.database.connect() as c:
             row = c.execute("SELECT * FROM users WHERE id = ?", (user_id,)).fetchone()
@@ -47,7 +102,8 @@ class UserService:
                             (provider, sub)).fetchone()
             if row is None and email and email_verified:
                 # Same person signing in with a second provider.
-                row = c.execute("SELECT * FROM users WHERE lower(email) = lower(?) AND provider IS NOT NULL",
+                row = c.execute("SELECT * FROM users WHERE lower(email) = lower(?) AND provider IS NOT NULL "
+                    "AND provider != 'password'",
                                 (email,)).fetchone()
             if row is not None:
                 c.execute("UPDATE users SET email = COALESCE(NULLIF(?, ''), email), "

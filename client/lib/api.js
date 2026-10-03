@@ -384,6 +384,18 @@ export async function loginWithPassword(username, password) {
   return payload;
 }
 
+export async function registerAccount(email, password, name) {
+  const res = await fetch(`${API_BASE_URL}/auth/register`, {
+    method: 'POST',
+    credentials: 'include',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email, password, name }),
+  });
+  const payload = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(payload.detail || 'No s\'ha pogut crear el compte.');
+  return payload;
+}
+
 export async function fetchAdminStats(days = 30) {
   const res = await fetch(`${API_BASE_URL}/admin/stats?days=${days}`, { credentials: 'include' });
   if (!res.ok) throw new Error(res.status === 403 ? 'forbidden' : 'No s\'han pogut carregar les estadístiques.');

@@ -140,6 +140,9 @@ SCHEMA_MIGRATIONS = {
         );
         CREATE INDEX IF NOT EXISTS idx_whatsapp_events_time ON whatsapp_events(created_at);
     """,
+    7: """
+        ALTER TABLE users ADD COLUMN password_hash TEXT;
+    """,
 }
 
 OWNER_TABLES = (

@@ -78,6 +78,8 @@ class Settings:
     TEST_MEMBER_PASSWORD: str = os.getenv("TEST_MEMBER_PASSWORD", "")
     ADMIN_PASSWORD: str = os.getenv("ADMIN_PASSWORD", "")
     ALLOW_WEAK_TEST_LOGINS: str = os.getenv("ALLOW_WEAK_TEST_LOGINS", "").strip().lower()
+    # Self-service sign-up with email + password. Set SIGNUP_OPEN=0 to close it.
+    SIGNUP_OPEN: str = os.getenv("SIGNUP_OPEN", "1").strip().lower()
     ADMIN_EMAILS: str = os.getenv("ADMIN_EMAILS", "")
     TOKEN_PRICE_IN_PER_M: float = float(os.getenv("TOKEN_PRICE_IN_PER_M", "0.25"))
     TOKEN_PRICE_OUT_PER_M: float = float(os.getenv("TOKEN_PRICE_OUT_PER_M", "2.0"))

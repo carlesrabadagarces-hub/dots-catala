@@ -4,7 +4,7 @@ import ThemeToggle from './ThemeToggle';
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 import DotAvatar from './DotAvatar';
-import { getAuthStatus, oauthStartUrl, loginWithToken, loginWithPassword, logout } from '../lib/api';
+import { getAuthStatus, oauthStartUrl, loginWithToken, loginWithPassword, registerAccount, logout } from '../lib/api';
 
 const CAST = [
   { look: { body: 'arch', tone: 'pink', hat: 'tophat', accessory: 'bowtie' }, size: 150, style: { left: '6%', top: '12%' } },
@@ -51,13 +51,16 @@ function Login({ providers, error }) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [busy, setBusy] = useState(false);
+  const [creating, setCreating] = useState(false);
+  const [name, setName] = useState('');
 
   async function submitPassword(e) {
     e.preventDefault();
     setLocalError('');
     setBusy(true);
     try {
-      await loginWithPassword(username.trim(), password);
+      if (creating) await registerAccount(username.trim(), password, name.trim());
+      else await loginWithPassword(username.trim(), password);
       window.location.reload();
     } catch (err) {
       setLocalError(err.message);
@@ -107,20 +110,31 @@ function Login({ providers, error }) {
         </div>
 
         {(error || localError) && <p role="alert" className="mt-4 text-sm text-red-600">{error || localError}</p>}
-        {none && !providers.local && (
+        {none && !providers.local && !providers.signup && (
           <p className="mt-4 max-w-xs text-sm text-neutral-500">L&apos;inici de sessió no està configurat en aquest servidor.</p>
         )}
 
-        {(providers.password || providers.admin) && (
+        {(providers.password || providers.admin || providers.signup) && (
           <form onSubmit={submitPassword} className="mt-8 flex w-full max-w-xs flex-col gap-2">
-            <label htmlFor="sd-user" className="font-mono text-[11px] uppercase tracking-widest text-neutral-500">Entra amb contrasenya</label>
+            <label htmlFor="sd-user" className="font-mono text-[11px] uppercase tracking-widest text-neutral-500">{creating ? 'Crea el teu compte' : 'Entra amb correu i contrasenya'}</label>
+            {creating && (
+              <input
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder="Com et diem?"
+                autoComplete="name"
+                aria-label="Nom"
+                className="rounded-full border border-neutral-300 bg-white px-4 py-2.5 text-sm outline-none focus:border-black"
+              />
+            )}
             <input
               id="sd-user"
               type="text"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              placeholder="Nom (o admin)"
-              autoComplete="username"
+              placeholder={creating ? 'Correu electrònic' : 'Correu (o admin)'}
+              autoComplete={creating ? 'email' : 'username'}
               className="rounded-full border border-neutral-300 bg-white px-4 py-2.5 text-sm outline-none focus:border-black"
             />
             <div className="flex gap-2">
@@ -129,15 +143,22 @@ function Login({ providers, error }) {
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder="Contrasenya"
-                autoComplete="current-password"
+                placeholder={creating ? 'Contrasenya (mín. 8)' : 'Contrasenya'}
+                autoComplete={creating ? 'new-password' : 'current-password'}
+                minLength={creating ? 8 : undefined}
                 aria-label="Contrasenya"
                 className="min-w-0 flex-1 rounded-full border border-neutral-300 bg-white px-4 py-2.5 text-sm outline-none focus:border-black"
               />
-              <button type="submit" disabled={busy || !password} className="rounded-full bg-black px-5 text-sm font-semibold text-white disabled:opacity-40">Entra</button>
+              <button type="submit" disabled={busy || !password} className="rounded-full bg-black px-5 text-sm font-semibold text-white disabled:opacity-40">{creating ? 'Crea' : 'Entra'}</button>
             </div>
+            {providers.signup && (
+              <button type="button" onClick={() => { setCreating((v) => !v); setLocalError(''); }}
+                className="text-center text-xs text-neutral-500 underline-offset-2 hover:underline">
+                {creating ? 'Ja tinc compte' : 'No tens compte? Crea\'n un'}
+              </button>
+            )}
             {providers.dev_hint && (
-              <p className="text-center font-mono text-[11px] text-neutral-400">Mode prova: qualsevol nom + 123456 · admin + admin</p>
+              <p className="text-center font-mono text-[11px] text-neutral-400">Mode prova local: admin + admin</p>
             )}
           </form>
         )}

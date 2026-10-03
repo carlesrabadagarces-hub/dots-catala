@@ -10,7 +10,7 @@ from app.services.context import current_owner
 from app.services import password_login
 from app.services.oauth_service import BINDING_COOKIE, OAuthError, oauth_service
 from app.services.storage_service import storage_service
-from app.services.user_service import user_service
+from app.services.user_service import SignupError, user_service
 
 
 router = APIRouter(prefix="/api/v1/auth", tags=["auth"])
@@ -36,8 +36,12 @@ def _base(request: Request) -> str:
     return str(request.base_url).rstrip("/")
 
 
+def _signup_open() -> bool:
+    return settings.SIGNUP_OPEN not in {"0", "false", "no"}
+
+
 def _providers():
-    return {**oauth_service.enabled(), **password_login.enabled(), "local": oauth_service.local_login_allowed(),
+    return {**oauth_service.enabled(), **password_login.enabled(), "signup": _signup_open(), "local": oauth_service.local_login_allowed(),
             "dev_hint": password_login.dev_mode() and not settings.TEST_MEMBER_PASSWORD and not settings.ADMIN_PASSWORD}
 
 
@@ -80,6 +84,15 @@ async def login_password(body: PasswordLogin, request: Request, response: Respon
     key = request.client.host if request.client else "?"
     if password_login.limiter.blocked(key):
         raise HTTPException(status_code=429, detail="Massa intents. Espera un minut.")
+    if "@" in body.username:
+        account = user_service.verify_password(body.username, body.password)
+        if not account:
+            password_login.limiter.fail(key)
+            raise HTTPException(status_code=401, detail="Correu o contrasenya incorrectes.")
+        if account["disabled"]:
+            raise HTTPException(status_code=403, detail="Compte suspès.")
+        password_login.limiter.clear(key)
+        return _start_session(account, request, response)
     kind = password_login.check(body.username, body.password)
     if not kind:
         password_login.limiter.fail(key)
@@ -92,6 +105,10 @@ async def login_password(body: PasswordLogin, request: Request, response: Respon
         user = user_service.upsert_social("test", who, "", body.username.strip() or "Provador")
     if user["disabled"]:
         raise HTTPException(status_code=403, detail="Compte suspès.")
+    return _start_session(user, request, response)
+
+
+def _start_session(user, request: Request, response: Response):
     token = current_owner.set(user["id"])
     try:
         storage_service.seed_owner()
@@ -99,6 +116,27 @@ async def login_password(body: PasswordLogin, request: Request, response: Respon
         current_owner.reset(token)
     auth_service.set_session_cookie(response, secure=request.url.scheme == "https", user_id=user["id"])
     return _session_payload(user)
+
+
+class Signup(BaseModel):
+    email: str = Field(min_length=3, max_length=320)
+    password: str = Field(min_length=1, max_length=200)
+    name: str = Field(default="", max_length=80)
+
+
+@router.post("/register")
+async def register(body: Signup, request: Request, response: Response):
+    if not _signup_open():
+        raise HTTPException(status_code=403, detail="Ara mateix no s'accepten comptes nous.")
+    key = "signup:" + (request.client.host if request.client else "?")
+    if password_login.limiter.blocked(key):
+        raise HTTPException(status_code=429, detail="Massa intents. Espera un minut.")
+    password_login.limiter.fail(key)  # every attempt counts: this is the throttle for account creation
+    try:
+        user = user_service.register_password(body.email, body.password, body.name)
+    except SignupError as exc:
+        raise HTTPException(status_code=400, detail=str(exc))
+    return _start_session(user, request, response)
 
 
 @router.post("/logout")
