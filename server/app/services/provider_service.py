@@ -74,6 +74,14 @@ class ModelProviderService:
             yield {"type": "turn.completed", "ok": False}
             return
 
+        if app_settings.get("model_api_wire_api") == "chat":
+            async for event in self._stream_chat(
+                base_url, api_key, model, messages, system_prompt,
+                app_settings.get("model_api_headers") or {},
+            ):
+                yield event
+            return
+
         if app_settings.get("model_api_wire_api") == "responses":
             async for event in self._stream_responses(
                 base_url, api_key, model, messages, system_prompt,
@@ -245,6 +253,62 @@ class ModelProviderService:
         error_display = last_error if last_error else "Unable to connect to the inference endpoint."
         yield {"type": "content.delta", "delta": error_display}
         yield {"type": "turn.completed", "ok": False}
+
+    @staticmethod
+    def _chat_error(status: int) -> str:
+        if status in (401, 403):
+            return "La clau del model no és vàlida o no té permís. Revisa-la a Configuració → Model."
+        if status == 404:
+            return "El proveïdor no coneix aquest model. Revisa'n el nom a Configuració → Model."
+        if status == 429:
+            return "S'ha arribat al límit del pla gratuït del model. Espera una mica o canvia de proveïdor."
+        return f"El proveïdor del model ha respost amb l'error {status}."
+
+    async def _stream_chat(self, base_url, api_key, model, messages, system_prompt, extra_headers):
+        """OpenAI-style /chat/completions, which Groq, Gemini, OpenRouter, Mistral, Ollama… all speak."""
+        turns = []
+        if system_prompt and system_prompt.strip():
+            turns.append({"role": "system", "content": system_prompt.strip()})
+        for message in messages:
+            role = message.get("role", "user")
+            content = message.get("content", "")
+            if role == "user" and message.get("image_url"):
+                content = [{"type": "text", "text": content},
+                           {"type": "image_url", "image_url": {"url": message["image_url"]}}]
+            turns.append({"role": role if role in {"user", "assistant", "system"} else "user", "content": content})
+
+        headers = {**extra_headers, "Authorization": f"Bearer {api_key}",
+                   "Content-Type": "application/json", "Accept": "text/event-stream"}
+        body = {"model": (model or "").strip(), "messages": turns, "stream": True}
+        got_text = False
+        try:
+            async with httpx.AsyncClient(timeout=120.0) as client:
+                async with client.stream("POST", f"{base_url}/chat/completions", json=body, headers=headers) as response:
+                    if not response.is_success:
+                        yield {"type": "content.delta", "delta": self._chat_error(response.status_code)}
+                        yield {"type": "turn.completed", "ok": False}
+                        return
+                    async for line in response.aiter_lines():
+                        if not line.startswith("data:"):
+                            continue
+                        payload = line[5:].strip()
+                        if payload == "[DONE]":
+                            break
+                        try:
+                            choices = json.loads(payload).get("choices") or [{}]
+                        except ValueError:
+                            continue
+                        delta = (choices[0].get("delta") or {}).get("content")
+                        if delta:
+                            got_text = True
+                            yield {"type": "content.delta", "delta": delta}
+            if not got_text:
+                yield {"type": "content.delta", "delta": "El model no ha tornat cap resposta. Prova-ho un altre cop."}
+            yield {"type": "turn.completed", "ok": got_text}
+        except httpx.HTTPError as exc:
+            # Never echo upstream bodies or headers: they can contain credentials.
+            yield {"type": "content.delta", "delta": f"No s'ha pogut contactar amb el model ({type(exc).__name__})."}
+            yield {"type": "turn.completed", "ok": False}
 
     async def _stream_responses(self, base_url, api_key, model, messages, system_prompt, extra_headers):
         inputs = []

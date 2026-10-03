@@ -61,7 +61,7 @@ class StorageService:
         return {
             "model_api_key": settings.MODEL_API_KEY,
             "model_api_base_url": settings.MODEL_API_BASE_URL,
-            "model_api_wire_api": "prediction",
+            "model_api_wire_api": settings.MODEL_WIRE_API if settings.MODEL_WIRE_API in {"prediction", "responses", "chat"} else "prediction",
             "model_api_headers": {},
             "model_ids": [],
             "composio_api_key": settings.COMPOSIO_API_KEY,

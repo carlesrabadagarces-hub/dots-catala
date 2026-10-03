@@ -33,6 +33,6 @@ Cada persona entra amb el seu compte de Google o d'Apple i té els seus propis D
 4. Apple només envia el nom la primera vegada que la persona entra.
 
 ## Notes d'un servei compartit
-- Les claus del model (`MODEL_API_KEY`) són les del servidor: tots els membres les fan servir. Vigila el cost o limita l'accés.
+- Les claus del model (`MODEL_API_KEY`) són les del servidor, però cada membre en pot posar la seva (vegeu `docs/MODEL.md`, també amb opcions gratuïtes). Limita els tokens diaris al panell d'admin.
 - Les eines que executen accions (ordinador, connectors) requereixen aprovació a la interfície; revisa-les abans d'obrir el servei al públic.
 - Aquesta configuració no s'ha provat amb comptes reals de Google ni d'Apple; sí amb tests automàtics.

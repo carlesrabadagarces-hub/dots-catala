@@ -4,6 +4,7 @@ from pathlib import Path
 class Settings:
     MODEL_API_KEY: str = os.getenv("MODEL_API_KEY", "")
     MODEL_API_BASE_URL: str = os.getenv("MODEL_API_BASE_URL", "").rstrip("/")
+    MODEL_WIRE_API: str = os.getenv("MODEL_WIRE_API", "prediction").strip().lower()
     COMPOSIO_API_KEY: str = os.getenv("COMPOSIO_API_KEY", "")
     YDC_API_KEY: str = os.getenv("YDC_API_KEY", "").strip()
     DEFAULT_MODEL: str = os.getenv("DEFAULT_MODEL", "gpt-5-mini")

@@ -8,6 +8,18 @@ const inputClass = "w-full bg-surf3 border border-line2 rounded-lg px-3 py-2.5 t
 const cardClass = "bg-surf2 border border-line1 rounded-2xl p-4 space-y-4";
 const buttonClass = "rounded-lg px-3 py-2 text-xs font-medium bg-violet-500 text-white hover:bg-violet-400 disabled:opacity-50 disabled:cursor-not-allowed";
 
+// Providers that speak the common Chat Completions protocol. Free tiers change often:
+// the model names are only a starting point and can be edited.
+const PRESETS = [
+  { id: 'groq', name: 'Groq · gratuït, molt ràpid', url: 'https://api.groq.com/openai/v1', model: 'llama-3.3-70b-versatile', link: 'https://console.groq.com/keys' },
+  { id: 'gemini', name: 'Google Gemini · gratuït', url: 'https://generativelanguage.googleapis.com/v1beta/openai', model: 'gemini-2.5-flash', link: 'https://aistudio.google.com/apikey' },
+  { id: 'openrouter', name: 'OpenRouter · models :free', url: 'https://openrouter.ai/api/v1', model: 'meta-llama/llama-3.3-70b-instruct:free', link: 'https://openrouter.ai/keys' },
+  { id: 'mistral', name: 'Mistral (UE) · pla gratuït', url: 'https://api.mistral.ai/v1', model: 'mistral-small-latest', link: 'https://console.mistral.ai/api-keys' },
+  { id: 'cerebras', name: 'Cerebras · gratuït', url: 'https://api.cerebras.ai/v1', model: 'llama-3.3-70b', link: 'https://cloud.cerebras.ai' },
+  { id: 'ollama', name: 'Ollama al teu ordinador · 100% privat', url: 'http://127.0.0.1:11434/v1', model: 'llama3.2', key: 'ollama', link: 'https://ollama.com/download' },
+  { id: 'openai', name: 'OpenAI · de pagament (pro)', url: 'https://api.openai.com/v1', model: 'gpt-5-mini', link: 'https://platform.openai.com/api-keys' },
+];
+
 export default function AppSettingsDrawer({ models, isOpen, onClose, currentModel, onUpdateDefaultModel, onProfileUpdate }) {
   const [userName, setUserName] = useState("");
   const [userEmail, setUserEmail] = useState("");
@@ -23,6 +35,7 @@ export default function AppSettingsDrawer({ models, isOpen, onClose, currentMode
   const [headers, setHeaders] = useState([{ name: "", value: "" }]);
   const [composioKey, setComposioKey] = useState("");
   const [composioConfigured, setComposioConfigured] = useState(false);
+  const [preset, setPreset] = useState("");
   const [loaded, setLoaded] = useState(false);
   const [saving, setSaving] = useState(false);
   const [notice, setNotice] = useState(null);
@@ -143,7 +156,7 @@ export default function AppSettingsDrawer({ models, isOpen, onClose, currentMode
               <FiChevronDown aria-hidden="true" className="text-zinc-400 transition-transform group-open:rotate-180" />
             </span>
             <span className="block text-xs text-zinc-400 mt-1 break-words">
-              {loaded ? `${wireApi === "responses" ? "Responses API" : "Prediction API"} · ${defaultModel}` : "Configure API endpoint, credentials and models"}
+              {loaded ? `${wireApi === "chat" ? "Chat Completions" : wireApi === "responses" ? "Responses API" : "Prediction API"} · ${defaultModel}` : "Configure API endpoint, credentials and models"}
             </span>
             <span className="block text-[11px] text-violet-300 mt-2">Click to configure</span>
           </summary>
@@ -152,6 +165,24 @@ export default function AppSettingsDrawer({ models, isOpen, onClose, currentMode
           {!loaded && !notice && <p role="status" className="text-xs text-zinc-400">Loading settings…</p>}
           <fieldset disabled={!loaded || saving} className="space-y-4 disabled:opacity-60">
             <div className="space-y-1.5">
+              <label htmlFor="provider-preset" className="block text-xs font-medium">Proveïdor ràpid</label>
+              <select id="provider-preset" value={preset} className={inputClass} onChange={(e) => {
+                const p = PRESETS.find((x) => x.id === e.target.value);
+                setPreset(e.target.value);
+                if (!p) return;
+                setBaseUrl(p.url); setWireApi("chat"); setDefaultModel(p.model); setModelIds(p.model);
+                if (p.key) setApiKey(p.key);
+              }}>
+                <option value="">— tria’n un per omplir-ho tot —</option>
+                {PRESETS.map((p) => <option key={p.id} value={p.id}>{p.name}</option>)}
+              </select>
+              {PRESETS.find((x) => x.id === preset) && (
+                <p className="text-[11px] text-zinc-500">
+                  Treu la clau a <a className="text-violet-300 underline" href={PRESETS.find((x) => x.id === preset).link} target="_blank" rel="noreferrer">{PRESETS.find((x) => x.id === preset).link.replace('https://', '')}</a>, enganxa-la a sota i desa. Pots canviar de proveïdor quan vulguis.
+                </p>
+              )}
+            </div>
+            <div className="space-y-1.5">
               <label htmlFor="provider-url" className="block text-xs font-medium">API Base URL</label>
               <input id="provider-url" type="url" required value={baseUrl} onChange={(e) => setBaseUrl(e.target.value)} placeholder="https://your-provider.example/v1" className={inputClass} />
               <p className="text-[11px] text-zinc-500">Enter the API root, usually ending in /v1. Do not append /responses.</p>
@@ -159,10 +190,11 @@ export default function AppSettingsDrawer({ models, isOpen, onClose, currentMode
             <div className="space-y-1.5">
               <label htmlFor="provider-protocol" className="block text-xs font-medium">API protocol</label>
               <select id="provider-protocol" value={wireApi} onChange={(e) => setWireApi(e.target.value)} className={inputClass}>
+                <option value="chat">Chat Completions (Groq, Gemini, OpenRouter, Mistral, Ollama, OpenAI…)</option>
                 <option value="responses">Responses API</option>
                 <option value="prediction">Prediction API (original adapter)</option>
               </select>
-              <p className="text-[11px] text-zinc-500">{wireApi === "responses" ? "Uses /responses with Bearer authentication. Chat Completions is not supported yet." : "Uses /{model_id} and prediction polling with x-api-key authentication."}</p>
+              <p className="text-[11px] text-zinc-500">{wireApi === "chat" ? "Uses /chat/completions with Bearer authentication, the most widely supported protocol." : wireApi === "responses" ? "Uses /responses with Bearer authentication." : "Uses /{model_id} and prediction polling with x-api-key authentication."}</p>
             </div>
             <div className="space-y-1.5">
               <label htmlFor="provider-key" className="block text-xs font-medium">Inference API Key</label>
