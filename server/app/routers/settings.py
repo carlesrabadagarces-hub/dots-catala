@@ -12,5 +12,9 @@ async def get_settings():
 
 @router.post("", response_model=AppSettingsSchema)
 async def save_settings(new_settings: AppSettingsSchema):
-    storage_service.save_settings(new_settings.model_dump(exclude_unset=True))
+    data = new_settings.model_dump(exclude_unset=True)
+    storage_service.save_settings(data)
+    if data.get("model_api_base_url") and data.get("default_model"):
+        # New provider: Dots still pointing at the old provider's models would fail with "unknown model".
+        storage_service.retarget_bot_models(data.get("model_ids") or [data["default_model"]], data["default_model"])
     return AppSettingsSchema(**storage_service.get_public_settings())

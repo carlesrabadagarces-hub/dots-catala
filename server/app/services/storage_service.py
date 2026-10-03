@@ -272,6 +272,21 @@ class StorageService:
             "created_at": datetime.now().isoformat(),
         }])
 
+    def retarget_bot_models(self, allowed: List[str], default: str) -> int:
+        """Point Dots at the new default when their model isn't offered by the provider just saved."""
+        allowed_set = {m for m in allowed if m}
+        if not default:
+            return 0
+        bots = self.get_bots()
+        changed = 0
+        for bot in bots:
+            if bot.get("model") not in allowed_set:
+                bot["model"] = default
+                changed += 1
+        if changed:
+            self.save_bots(bots)
+        return changed
+
     def get_bots(self) -> List[Dict[str, Any]]:
         with self.database.connect() as connection:
             rows = connection.execute(

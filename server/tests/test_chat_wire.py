@@ -54,3 +54,19 @@ class ChatWireTests(unittest.IsolatedAsyncioTestCase):
     async def test_empty_answer_is_reported_as_failure(self):
         events = await self.run_wire(lambda r: httpx.Response(200, text="data: [DONE]\n\n"))
         self.assertFalse(events[-1]["ok"])
+
+
+class RetargetTests(unittest.TestCase):
+    def test_dots_follow_the_new_provider_models(self):
+        from app.services.storage_service import StorageService
+        with tempfile.TemporaryDirectory() as d:
+            st = StorageService(Path(d))
+            bots = st.get_bots()
+            for b in bots:
+                b["model"] = "gpt-5-mini"
+            if bots:
+                bots[-1]["model"] = "llama-3.3-70b-versatile"
+            st.save_bots(bots)
+            n = st.retarget_bot_models(["llama-3.3-70b-versatile"], "llama-3.3-70b-versatile")
+            self.assertEqual(n, max(len(bots) - 1, 0))
+            self.assertTrue(all(b["model"] == "llama-3.3-70b-versatile" for b in st.get_bots()))

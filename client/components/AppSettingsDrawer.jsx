@@ -118,7 +118,7 @@ export default function AppSettingsDrawer({ models, isOpen, onClose, currentMode
       setModelIds(saved.model_ids.join("\n"));
       setDefaultModel(saved.default_model);
       await onUpdateDefaultModel?.(saved.default_model);
-      setNotice({ text: "Provider settings saved. Model menus updated." });
+      setNotice({ text: "Desat ✓ La clau queda guardada (per seguretat el camp es buida) i els teus Dots ja fan servir aquest model." });
     } catch (error) {
       setNotice({ error: true, text: error.message || "Could not save provider settings." });
     } finally {
