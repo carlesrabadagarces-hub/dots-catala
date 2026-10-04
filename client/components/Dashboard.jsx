@@ -153,6 +153,8 @@ export default function Dashboard() {
         onUpdateDefaultModel={async (newModel) => {
           setDefaultModel(newModel);
           setModels(await fetchModels());
+          // The server repoints the Dots to the new provider's model: pick that up without a reload.
+          setBots(await fetchBots());
         }}
         onProfileUpdate={(name) => setUserName(name || 'You')}
       />
