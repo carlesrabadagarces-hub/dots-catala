@@ -25,3 +25,9 @@ brew install cloudflared python@3.12 node
 - WhatsApp: Meta necessita una adreça fixa. Per al WhatsApp de debò cal un servidor permanent o un túnel amb nom; l'adreça temporal serveix per fer una prova ràpida, però s'ha de tornar a posar a Meta cada cop.
 - No hi ha correu de verificació ni de recuperar contrasenya.
 - Tanca els registres amb `SIGNUP_OPEN=0` si ja no vols gent nova.
+
+## Si va lent
+- El túnel gratuït de Cloudflare és per provar: afegeix retard, i el teu Mac puja les dades amb la velocitat de pujada de casa teva. El servidor en si respon en mil·lisegons.
+- Connecta't per cable o a prop del router, i tanca programes que usin la xarxa.
+- La primera càrrega és la més lenta (baixa tota la web); les següents ja van de la memòria cau del navegador.
+- Per anar ràpid de debò cal un servidor permanent (VPS) amb domini.

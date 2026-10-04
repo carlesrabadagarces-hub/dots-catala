@@ -255,4 +255,4 @@ async def stream_turn(thread_id: str, model: Optional[str] = Query(None)):
         except asyncio.CancelledError:
             raise
 
-    return EventSourceResponse(event_generator())
+    return EventSourceResponse(event_generator(), headers={"Cache-Control": "no-cache, no-transform"})
