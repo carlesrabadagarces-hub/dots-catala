@@ -1,0 +1,36 @@
+# Caddy gets and renews the HTTPS certificates by itself.
+
+# Landing page (superdotats.cat)
+{$SITE_DOMAIN} {
+	root * /srv/site
+	encode zstd gzip
+	file_server
+
+	@assets path /dots/* /scenes/* /media/* /icons/*
+	header @assets Cache-Control "public, max-age=31536000, immutable"
+	header {
+		X-Content-Type-Options nosniff
+		Referrer-Policy strict-origin-when-cross-origin
+	}
+}
+
+# The app (app.superdotats.cat): web + API on the same address
+{$APP_DOMAIN} {
+	header {
+		X-Content-Type-Options nosniff
+		Referrer-Policy strict-origin-when-cross-origin
+		X-Frame-Options DENY
+	}
+
+	# API, WhatsApp webhook and the live chat stream. No compression here so replies arrive word by word.
+	handle /api/* {
+		reverse_proxy api:8000 {
+			flush_interval -1
+		}
+	}
+
+	handle {
+		encode zstd gzip
+		reverse_proxy web:3000
+	}
+}
