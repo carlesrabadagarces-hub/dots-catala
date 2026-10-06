@@ -5,7 +5,7 @@ superDOTats és una colla de 88 assistents intel·ligents, anomenats Dots, que r
 ## Preguntes freqüents
 
 ### Quan estarà disponible?
-Hi estem treballant i serà aviat. Deixa'ns el teu correu a la llista d'espera i t'avisarem el dia que s'obri, sense cap compromís.
+Hi estem treballant i serà aviat. Segueix @carlesrgm a X i t'avisarem el dia que s'obri.
 
 ### Què és un superDOTat?
 És un ajudant intel·ligent que et respon al mòbil, en català. Cada Dot sap d'una cosa: n'hi ha de fontaners, de mestres, de metges, d'assessors fiscals i molts més.

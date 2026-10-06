@@ -4,7 +4,7 @@
 
 ## Fets clau
 - Nom: superDOTats (escrit amb majúscules a DOT).
-- Estat: pròximament. Encara no està obert al públic; hi ha una llista d'espera a https://superdots.vercel.app/#aviat.
+- Estat: pròximament. Encara no està obert al públic; els avisos del llançament són a https://superdots.vercel.app/#aviat.
 - Web: https://superdots.vercel.app/
 - Idioma per defecte: català (respon també en castellà i anglès).
 - Privacitat: cada persona té la seva conversa apart, només responen les persones autoritzades i es pot veure i esborrar el que el Dot recorda.

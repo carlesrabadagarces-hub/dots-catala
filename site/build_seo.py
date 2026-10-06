@@ -9,6 +9,7 @@ Writes (relative to site/):
 Set SITE_URL (default https://superdotats.cat) to the real domain before deploying.
 """
 import html
+from urllib.parse import quote
 import json
 import os
 import re
@@ -27,6 +28,7 @@ SITE = os.environ.get("SITE_URL", "https://superdotats.cat").rstrip("/")
 # COMING_SOON=1: la web diu "pròximament" i els botons porten a la llista d'espera en lloc de l'app.
 COMING_SOON = os.environ.get("COMING_SOON", "") in ("1", "true", "yes")
 WAITLIST_URL = os.environ.get("WAITLIST_URL", "").strip()      # p. ex. https://formspree.io/f/xxxx
+X_HANDLE = os.environ.get("X_HANDLE", "carlesrgm").strip().lstrip("@")   # sense formulari: avisos a X
 CONTACT_EMAIL = os.environ.get("CONTACT_EMAIL", "").strip()    # alternativa: s'obre el correu de la persona
 NAV_CTA = "Avisa'm" if COMING_SOON else "Entra"
 APP_URL = os.environ.get("APP_URL") or ("/#aviat" if COMING_SOON else "http://127.0.0.1:3000")
@@ -123,7 +125,9 @@ def head(title, desc, path, depth, extra="", og_type="website"):
 FAQ = json.loads((here / "faq.json").read_text(encoding="utf-8"))
 if COMING_SOON:
     FAQ.insert(0, {"q": "Quan estarà disponible?",
-                   "a": "Hi estem treballant i serà aviat. Deixa'ns el teu correu a la llista d'espera i t'avisarem el dia que s'obri, sense cap compromís.",
+                   "a": ("Hi estem treballant i serà aviat. Deixa'ns el teu correu a la llista d'espera i t'avisarem el dia que s'obri, sense cap compromís."
+                         if (WAITLIST_URL or CONTACT_EMAIL) else
+                         f"Hi estem treballant i serà aviat. Segueix @{X_HANDLE} a X i t'avisarem el dia que s'obri."),
                    "look": {"body": "blob", "tone": "yellow", "hat": "party"}})
 
 
@@ -192,6 +196,10 @@ def waitlist_html():
             'Me\'n puc oblidar quan vulgui escrivint-vos.</span></label>'
             '<button type="submit">Avisa\'m quan surti</button>'
             '<p class="wl-msg" id="wl-msg" role="status" aria-live="polite"></p></form>')
+    elif X_HANDLE:
+        post = ("https://x.com/intent/post?text=" + quote(f"@{X_HANDLE} Avisa'm quan superDOTats estigui disponible 🙂"))
+        form = (f'<div class="cta rv" style="justify-content:flex-start"><a class="btn" href="https://x.com/intent/follow?screen_name={X_HANDLE}" target="_blank" rel="noopener">Segueix @{X_HANDLE} a X</a>'
+                f'<a class="btn ghost" href="{post}" target="_blank" rel="noopener">Escriu-nos «avisa\'m»</a></div>')
     else:
         form = '<p class="sub rv">Molt aviat podràs apuntar-t\'hi aquí mateix.</p>'
     js = ""
@@ -212,8 +220,9 @@ def waitlist_html():
     return (WAITLIST_CSS + '\n<section id="aviat" aria-labelledby="aviat-t">'
             '<div class="eyebrow rv">Molt aviat</div>'
             '<h2 class="rv" id="aviat-t">Els superDOTats arriben aviat</h2>'
-            '<p class="sub rv">Estem acabant els últims detalls. Apunta\'t a la llista i seràs de les primeres persones a provar-los. '
-            'Només t\'escriurem per avisar-te del llançament.</p>' + form + "</section>\n" + js + "\n")
+            + ('<p class="sub rv">Estem acabant els últims detalls. Apunta\'t a la llista i seràs de les primeres persones a provar-los. '
+               'Només t\'escriurem per avisar-te del llançament.</p>' if (WAITLIST_URL or CONTACT_EMAIL) else
+               f'<p class="sub rv">Estem acabant els últims detalls. Segueix @{X_HANDLE} a X i t\'avisarem el dia que s\'obri.</p>') + form + "</section>\n" + js + "\n")
 
 
 def coming_soon(page):
@@ -310,7 +319,7 @@ def agent_page(s):
         (f"Què pot fer {s['name']}?", " ".join(t.rstrip(".") + "." for t in tasks[:3])),
         (f"Puc fiar-me de {s['name']}?", f"És un assistent d'IA i dona informació general. {safety[0] if safety else ''} Verifica sempre les dades importants."),
         (f"Quan em derivarà {s['name']} a un professional?", escalate),
-        (f"Com començo a parlar amb {s['name']}?", ("Aviat podràs entrar a superDOTats, triar {0} i escriure-li com a un amic. Apunta't a la llista d'espera i t'avisarem." if COMING_SOON else "Entra a superDOTats, tria {0} i escriu-li com a un amic. El pots personalitzar i decidir qui hi pot parlar.").format(s["name"])),
+        (f"Com començo a parlar amb {s['name']}?", ("Aviat podràs entrar a superDOTats, triar {0} i escriure-li com a un amic. Avisa'm quan surti des de la portada i t'ho farem saber." if COMING_SOON else "Entra a superDOTats, tria {0} i escriu-li com a un amic. El pots personalitzar i decidir qui hi pot parlar.").format(s["name"])),
     ]
     rel = [r for r in by_sector()[s["sector"]] if r["id"] != s["id"]][:6]
     ld_graph = {"@context": "https://schema.org", "@graph": [
@@ -399,7 +408,7 @@ llms = [f"# superDOTats", "",
         "> superDOTats és una colla de 88 assistents intel·ligents, anomenats Dots, que responen al mòbil en català: metge, fontaner, assessor fiscal, mestra, cuiner… "
         "Està pensat per ser fàcil, privat i segur. Dona informació general; no substitueix professionals.", "",
         "## Fets clau", "- Nom: superDOTats (escrit amb majúscules a DOT).",
-        *(["- Estat: pròximament. Encara no està obert al públic; hi ha una llista d'espera a " + SITE + "/#aviat."] if COMING_SOON else []), f"- Web: {SITE}/",
+        *(["- Estat: pròximament. Encara no està obert al públic; els avisos del llançament són a " + SITE + "/#aviat."] if COMING_SOON else []), f"- Web: {SITE}/",
         "- Idioma per defecte: català (respon també en castellà i anglès).", "- Privacitat: cada persona té la seva conversa apart, només responen les persones autoritzades i es pot veure i esborrar el que el Dot recorda.", "",
         "## Pàgines principals", f"- [Inici]({SITE}/): què és i com funciona", f"- [Preguntes freqüents]({SITE}/#faq): respostes curtes",
         f"- [Directori de Dots]({SITE}/#directori): tots els Dots per sector", f"- [Text complet per a models]({SITE}/llms-full.txt)", ""]

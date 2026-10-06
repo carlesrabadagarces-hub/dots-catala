@@ -22,7 +22,7 @@ Una web estàtica no pot desar res per ella mateixa. Tens dues opcions:
 1. **`WAITLIST_URL` (recomanat).** Crea un formulari gratuït a [Formspree](https://formspree.io) (o un servei equivalent) i copia'n l'adreça `https://formspree.io/f/…`. Els correus t'arriben a la safata i en pots descarregar la llista. El formulari envia un JSON amb `email`, `idea` i `source`.
 2. **`CONTACT_EMAIL`.** El formulari obre el correu de la persona amb un missatge preparat cap a aquesta adreça. És més pesat per a qui s'apunta i no garanteix que enviï el missatge.
 
-Si no n'hi poses cap, el formulari **no es mostra** i només surt «Molt aviat podràs apuntar-t'hi aquí mateix».
+Si no n'hi poses cap, es mostren dos botons que porten a X: **Segueix @carlesrgm** (`X_HANDLE`, per defecte `carlesrgm`) i **Escriu-nos «avisa'm»**, que obre una publicació preparada que l'esmenta. No es recull cap correu; només tindràs seguidors i mencions.
 
 ## Privacitat
 La casella de consentiment diu que només es farà servir el correu per avisar del llançament. Abans de recollir correus de debò afegeix una pàgina de privacitat (responsable, finalitat, com esborrar-se) i fes servir només per avisar el que hi diu.
