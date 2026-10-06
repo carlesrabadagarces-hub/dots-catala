@@ -1259,6 +1259,48 @@ var dotSprite = __sprite.dotSprite, spriteParts = __sprite.spriteParts, spriteLa
     requestAnimationFrame(step);
   })();
 
+  /* "Molt aviat": tres Dots fent obres, rèpliques i barra de progrés (només si la secció existeix) */
+  (function(){
+    var root=document.getElementById("aviat"),stage=document.getElementById("soon-stage");
+    if(!root||!stage)return;
+    var CAST=[
+      {n:"Jordi",look:{body:"cube",tone:"orange",hat:"hardhat",glasses:"shades"},say:["Estic muntant els Dots. Falten tres cargols.","No ho toquis, que encara està humit!","Això no ho cobreix la garantia.","Jo només poso els barrets. Això és cosa d'ells."]},
+      {n:"Pau",look:{body:"blob",tone:"yellow",hat:"chef",accessory:"mustache"},say:["Estic coent les respostes a foc lent.","Li falta una mica de sal… i de català.","Prova-ho! Ai, no, encara no es pot.","Cada Dot porta el seu toc secret."]},
+      {n:"Núria",look:{body:"arch",tone:"violet",hat:"wizard"},say:["Abracadabra… no, encara no.","Els ensenyo a no dir mai «no t'he entès».","He afegit un conjur contra les respostes llargues.","Tot va bé. Això és màgia, no pressa."]}
+    ];
+    var bub=document.getElementById("soon-bubble"),bar=document.getElementById("soon-fill"),pct=document.getElementById("soon-pct"),pb=document.getElementById("soon-bar");
+    var big=window.innerWidth<520?88:120,btns=[],cur=-1,idx=[0,0,0];
+    CAST.forEach(function(c,i){
+      var b=document.createElement("button");b.type="button";b.className="sd";b.setAttribute("aria-label","Parla amb "+c.n);
+      b.innerHTML='<span class="v">'+av(c.look,big,"")+'</span><span class="nm">'+c.n+'</span>';
+      stage.appendChild(b);attachLife(b.firstChild);btns.push(b);
+      b.onclick=function(){say(i,true)};
+    });
+    function say(i,jump){
+      cur=i;var c=CAST[i];var line=c.say[idx[i]++%c.say.length];
+      bub.classList.remove("on");
+      setTimeout(function(){bub.innerHTML="<b>"+c.n+":</b> "+line;bub.classList.add("on")},reduce?0:140);
+      btns.forEach(function(b,k){b.classList.toggle("act",k===i)});
+      if(jump&&!reduce){btns[i].classList.remove("jump");void btns[i].offsetWidth;btns[i].classList.add("jump")}
+    }
+    var STEPS=[[0,"Muntant els Dots…"],[30,"Posant els barrets…"],[60,"Afinant el català…"],[85,"Quasi a punt…"],[97,"97% · l'últim 3% és el que més costa"]];
+    function setP(v){
+      bar.style.width=v+"%";pb.setAttribute("aria-valuenow",Math.round(v));
+      var t=STEPS[0][1];STEPS.forEach(function(s){if(v>=s[0])t=s[1]});pct.textContent=t;
+    }
+    var started=false,timer=null;
+    function start(){
+      if(started)return;started=true;say(0,false);
+      if(reduce){setP(97);return}
+      var t0=performance.now(),D=4200;
+      (function f(now){var k=Math.min(1,(now-t0)/D),e=1-Math.pow(1-k,3);setP(8+89*e);if(k<1)requestAnimationFrame(f)})(t0);
+      timer=setInterval(function(){if(document.hidden)return;say((cur+1)%CAST.length,true)},5200);
+    }
+    if("IntersectionObserver" in window){
+      new IntersectionObserver(function(es,io){es.forEach(function(en){if(en.isIntersecting){start();io.disconnect()}})},{threshold:.3}).observe(root);
+    }else start();
+  })();
+
   if(reduce)packets(0);else requestAnimationFrame(packets);
 })();
 

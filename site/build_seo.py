@@ -171,17 +171,37 @@ body = fill(body, "DIR", dir_html())
 
 
 WAITLIST_CSS = """<style>
-#aviat .wl{max-width:560px;display:grid;gap:12px}
+#aviat.soon{padding-block:72px}
+#aviat .soon-card{max-width:780px;margin:0 auto;text-align:center;padding:44px 26px 48px;border-radius:34px;border:1px solid var(--line);
+  background:radial-gradient(120% 80% at 50% -10%,color-mix(in srgb,#ffc94d 22%,var(--panel)),var(--panel) 62%);box-shadow:0 30px 80px -50px rgba(0,0,0,.45)}
+#aviat h2{margin:10px 0 12px}
+#aviat .sub{margin:0 auto 26px;max-width:34em}
+#aviat .soon-stage{display:flex;justify-content:center;align-items:flex-end;gap:clamp(4px,3vw,26px);margin:16px 0 0;min-height:150px}
+#aviat .sd{background:none;border:0;padding:0;cursor:pointer;display:grid;justify-items:center;gap:4px;color:var(--fg);-webkit-tap-highlight-color:transparent}
+#aviat .sd .nm{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+#aviat .sd.act .nm{color:var(--fg)}
+#aviat .sd:focus-visible{outline:2px solid var(--fg);outline-offset:6px;border-radius:18px}
+#aviat .sd.jump .v{animation:soon-hop .7s cubic-bezier(.3,.7,.3,1)}
+@keyframes soon-hop{0%{transform:none}30%{transform:translateY(-26px) rotate(-5deg)}55%{transform:translateY(0) scale(1.06,.92)}75%{transform:translateY(-8px) rotate(3deg)}100%{transform:none}}
+#aviat .soon-bubble{position:relative;display:inline-block;min-height:2.6em;max-width:min(92%,460px);margin:18px auto 6px;padding:11px 18px;border-radius:18px;background:var(--fg);color:var(--bg);font-size:15px;line-height:1.4;opacity:0;transform:translateY(6px);transition:opacity .25s,transform .25s}
+#aviat .soon-bubble.on{opacity:1;transform:none}
+#aviat .soon-bubble:before{content:"";position:absolute;left:50%;top:-7px;margin-left:-7px;border:7px solid transparent;border-top:0;border-bottom-color:var(--fg)}
+#aviat .soon-bar{height:10px;max-width:420px;margin:6px auto 0;border-radius:999px;background:var(--line);overflow:hidden}
+#aviat .soon-bar i{display:block;height:100%;width:8%;border-radius:999px;background:linear-gradient(90deg,#3b82f6,#14b8a6,#fbbf24)}
+#aviat .soon-pct{margin:10px 0 28px;font-family:var(--mono);font-size:12px;letter-spacing:.04em;color:var(--muted)}
+#aviat .cta{justify-content:center}
+#aviat .wl{max-width:460px;margin:0 auto;display:grid;gap:12px;text-align:left}
 #aviat .wl label{display:grid;gap:6px;font-size:14px;color:var(--muted)}
-#aviat .wl input[type=email],#aviat .wl input[type=text]{font:inherit;font-size:16px;color:var(--fg);background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:13px 16px;width:100%}
+#aviat .wl input[type=email],#aviat .wl input[type=text]{font:inherit;font-size:16px;color:var(--fg);background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:13px 16px;width:100%}
 #aviat .wl input:focus-visible{outline:2px solid var(--fg);outline-offset:2px}
 #aviat .wl .ck{display:flex;gap:10px;align-items:flex-start;font-size:13px;line-height:1.45}
 #aviat .wl .ck input{margin-top:3px}
 #aviat .wl .hp{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}
-#aviat .wl button{justify-self:start;border:0;cursor:pointer;font:inherit;font-weight:600;background:var(--btn-bg);color:var(--btn-fg);padding:13px 26px;border-radius:999px}
+#aviat .wl button{justify-self:center;border:0;cursor:pointer;font:inherit;font-weight:600;background:var(--btn-bg);color:var(--btn-fg);padding:13px 28px;border-radius:999px}
 #aviat .wl button:disabled{opacity:.5;cursor:default}
-#aviat .wl-msg{min-height:1.4em;font-size:14px}
+#aviat .wl-msg{min-height:1.4em;font-size:14px;text-align:center;margin:0}
 #aviat .wl-msg.ok{color:#188a4a}#aviat .wl-msg.err{color:#c0392b}
+@media (prefers-reduced-motion:reduce){#aviat .sd.jump .v{animation:none}#aviat .soon-bubble{transition:none}}
 </style>"""
 
 
@@ -217,12 +237,17 @@ def waitlist_html():
               "m.className='wl-msg err';m.textContent='Ara no ho hem pogut desar. Torna-ho a provar d\\'aquí una estona.'}).then(function(){b.disabled=false})}"
               "else{location.href='mailto:'+MAIL+'?subject='+encodeURIComponent('Avisa\\'m quan superDOTats estigui disponible')+'&body='+encodeURIComponent('El meu correu: '+em+(idea?'\\nM\\'agradaria un Dot per: '+idea:''));"
               "m.className='wl-msg ok';m.textContent='S\\'ha obert el teu correu: envia\\'ns el missatge i ja estàs apuntat.'}});})();</script>")
-    return (WAITLIST_CSS + '\n<section id="aviat" aria-labelledby="aviat-t">'
-            '<div class="eyebrow rv">Molt aviat</div>'
-            '<h2 class="rv" id="aviat-t">Els superDOTats arriben aviat</h2>'
-            + ('<p class="sub rv">Estem acabant els últims detalls. Apunta\'t a la llista i seràs de les primeres persones a provar-los. '
-               'Només t\'escriurem per avisar-te del llançament.</p>' if (WAITLIST_URL or CONTACT_EMAIL) else
-               f'<p class="sub rv">Estem acabant els últims detalls. Segueix @{X_HANDLE} a X i t\'avisarem el dia que s\'obri.</p>') + form + "</section>\n" + js + "\n")
+    lead = ('<p class="sub rv">Estem acabant els últims detalls. Apunta\'t a la llista i seràs de les primeres persones a provar-los. '
+            'Només t\'escriurem per avisar-te del llançament.</p>' if (WAITLIST_URL or CONTACT_EMAIL) else
+            f'<p class="sub rv">Estem acabant els últims detalls. Segueix @{X_HANDLE} a X i t\'avisarem el dia que s\'obri.</p>')
+    return (WAITLIST_CSS + '\n<section id="aviat" class="soon" aria-labelledby="aviat-t"><div class="soon-card rv">'
+            '<div class="eyebrow">Molt aviat</div>'
+            '<div class="soon-stage" id="soon-stage"></div>'
+            '<div class="soon-bubble" id="soon-bubble" role="status" aria-live="polite"></div>'
+            '<h2 id="aviat-t">Els superDOTats arriben aviat</h2>' + lead +
+            '<div class="soon-bar" id="soon-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="97" aria-label="Preparant els superDOTats">'
+            '<i id="soon-fill"></i></div><p class="soon-pct" id="soon-pct">97% · l\'últim 3% és el que més costa</p>'
+            + form + "</div></section>\n" + js + "\n")
 
 
 def coming_soon(page):

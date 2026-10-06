@@ -447,19 +447,39 @@ section[id]{scroll-margin-top:84px}
 </section>
 
 <style>
-#aviat .wl{max-width:560px;display:grid;gap:12px}
+#aviat.soon{padding-block:72px}
+#aviat .soon-card{max-width:780px;margin:0 auto;text-align:center;padding:44px 26px 48px;border-radius:34px;border:1px solid var(--line);
+  background:radial-gradient(120% 80% at 50% -10%,color-mix(in srgb,#ffc94d 22%,var(--panel)),var(--panel) 62%);box-shadow:0 30px 80px -50px rgba(0,0,0,.45)}
+#aviat h2{margin:10px 0 12px}
+#aviat .sub{margin:0 auto 26px;max-width:34em}
+#aviat .soon-stage{display:flex;justify-content:center;align-items:flex-end;gap:clamp(4px,3vw,26px);margin:16px 0 0;min-height:150px}
+#aviat .sd{background:none;border:0;padding:0;cursor:pointer;display:grid;justify-items:center;gap:4px;color:var(--fg);-webkit-tap-highlight-color:transparent}
+#aviat .sd .nm{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+#aviat .sd.act .nm{color:var(--fg)}
+#aviat .sd:focus-visible{outline:2px solid var(--fg);outline-offset:6px;border-radius:18px}
+#aviat .sd.jump .v{animation:soon-hop .7s cubic-bezier(.3,.7,.3,1)}
+@keyframes soon-hop{0%{transform:none}30%{transform:translateY(-26px) rotate(-5deg)}55%{transform:translateY(0) scale(1.06,.92)}75%{transform:translateY(-8px) rotate(3deg)}100%{transform:none}}
+#aviat .soon-bubble{position:relative;display:inline-block;min-height:2.6em;max-width:min(92%,460px);margin:18px auto 6px;padding:11px 18px;border-radius:18px;background:var(--fg);color:var(--bg);font-size:15px;line-height:1.4;opacity:0;transform:translateY(6px);transition:opacity .25s,transform .25s}
+#aviat .soon-bubble.on{opacity:1;transform:none}
+#aviat .soon-bubble:before{content:"";position:absolute;left:50%;top:-7px;margin-left:-7px;border:7px solid transparent;border-top:0;border-bottom-color:var(--fg)}
+#aviat .soon-bar{height:10px;max-width:420px;margin:6px auto 0;border-radius:999px;background:var(--line);overflow:hidden}
+#aviat .soon-bar i{display:block;height:100%;width:8%;border-radius:999px;background:linear-gradient(90deg,#3b82f6,#14b8a6,#fbbf24)}
+#aviat .soon-pct{margin:10px 0 28px;font-family:var(--mono);font-size:12px;letter-spacing:.04em;color:var(--muted)}
+#aviat .cta{justify-content:center}
+#aviat .wl{max-width:460px;margin:0 auto;display:grid;gap:12px;text-align:left}
 #aviat .wl label{display:grid;gap:6px;font-size:14px;color:var(--muted)}
-#aviat .wl input[type=email],#aviat .wl input[type=text]{font:inherit;font-size:16px;color:var(--fg);background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:13px 16px;width:100%}
+#aviat .wl input[type=email],#aviat .wl input[type=text]{font:inherit;font-size:16px;color:var(--fg);background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:13px 16px;width:100%}
 #aviat .wl input:focus-visible{outline:2px solid var(--fg);outline-offset:2px}
 #aviat .wl .ck{display:flex;gap:10px;align-items:flex-start;font-size:13px;line-height:1.45}
 #aviat .wl .ck input{margin-top:3px}
 #aviat .wl .hp{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}
-#aviat .wl button{justify-self:start;border:0;cursor:pointer;font:inherit;font-weight:600;background:var(--btn-bg);color:var(--btn-fg);padding:13px 26px;border-radius:999px}
+#aviat .wl button{justify-self:center;border:0;cursor:pointer;font:inherit;font-weight:600;background:var(--btn-bg);color:var(--btn-fg);padding:13px 28px;border-radius:999px}
 #aviat .wl button:disabled{opacity:.5;cursor:default}
-#aviat .wl-msg{min-height:1.4em;font-size:14px}
+#aviat .wl-msg{min-height:1.4em;font-size:14px;text-align:center;margin:0}
 #aviat .wl-msg.ok{color:#188a4a}#aviat .wl-msg.err{color:#c0392b}
+@media (prefers-reduced-motion:reduce){#aviat .sd.jump .v{animation:none}#aviat .soon-bubble{transition:none}}
 </style>
-<section id="aviat" aria-labelledby="aviat-t"><div class="eyebrow rv">Molt aviat</div><h2 class="rv" id="aviat-t">Els superDOTats arriben aviat</h2><p class="sub rv">Estem acabant els últims detalls. Segueix @carlesrgm a X i t'avisarem el dia que s'obri.</p><div class="cta rv" style="justify-content:flex-start"><a class="btn" href="https://x.com/intent/follow?screen_name=carlesrgm" target="_blank" rel="noopener">Segueix @carlesrgm a X</a><a class="btn ghost" href="https://x.com/intent/post?text=%40carlesrgm%20Avisa%27m%20quan%20superDOTats%20estigui%20disponible%20%F0%9F%99%82" target="_blank" rel="noopener">Escriu-nos «avisa'm»</a></div></section>
+<section id="aviat" class="soon" aria-labelledby="aviat-t"><div class="soon-card rv"><div class="eyebrow">Molt aviat</div><div class="soon-stage" id="soon-stage"></div><div class="soon-bubble" id="soon-bubble" role="status" aria-live="polite"></div><h2 id="aviat-t">Els superDOTats arriben aviat</h2><p class="sub rv">Estem acabant els últims detalls. Segueix @carlesrgm a X i t'avisarem el dia que s'obri.</p><div class="soon-bar" id="soon-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="97" aria-label="Preparant els superDOTats"><i id="soon-fill"></i></div><p class="soon-pct" id="soon-pct">97% · l'últim 3% és el que més costa</p><div class="cta rv" style="justify-content:flex-start"><a class="btn" href="https://x.com/intent/follow?screen_name=carlesrgm" target="_blank" rel="noopener">Segueix @carlesrgm a X</a><a class="btn ghost" href="https://x.com/intent/post?text=%40carlesrgm%20Avisa%27m%20quan%20superDOTats%20estigui%20disponible%20%F0%9F%99%82" target="_blank" rel="noopener">Escriu-nos «avisa'm»</a></div></div></section>
 
 <section id="directori" aria-labelledby="dir-t" class="dirsec">
   <details class="dirbox rv">
@@ -1303,6 +1323,48 @@ var dotSprite = __sprite.dotSprite, spriteParts = __sprite.spriteParts, spriteLa
       requestAnimationFrame(step);
     }
     requestAnimationFrame(step);
+  })();
+
+  /* "Molt aviat": tres Dots fent obres, rèpliques i barra de progrés (només si la secció existeix) */
+  (function(){
+    var root=document.getElementById("aviat"),stage=document.getElementById("soon-stage");
+    if(!root||!stage)return;
+    var CAST=[
+      {n:"Jordi",look:{body:"cube",tone:"orange",hat:"hardhat",glasses:"shades"},say:["Estic muntant els Dots. Falten tres cargols.","No ho toquis, que encara està humit!","Això no ho cobreix la garantia.","Jo només poso els barrets. Això és cosa d'ells."]},
+      {n:"Pau",look:{body:"blob",tone:"yellow",hat:"chef",accessory:"mustache"},say:["Estic coent les respostes a foc lent.","Li falta una mica de sal… i de català.","Prova-ho! Ai, no, encara no es pot.","Cada Dot porta el seu toc secret."]},
+      {n:"Núria",look:{body:"arch",tone:"violet",hat:"wizard"},say:["Abracadabra… no, encara no.","Els ensenyo a no dir mai «no t'he entès».","He afegit un conjur contra les respostes llargues.","Tot va bé. Això és màgia, no pressa."]}
+    ];
+    var bub=document.getElementById("soon-bubble"),bar=document.getElementById("soon-fill"),pct=document.getElementById("soon-pct"),pb=document.getElementById("soon-bar");
+    var big=window.innerWidth<520?88:120,btns=[],cur=-1,idx=[0,0,0];
+    CAST.forEach(function(c,i){
+      var b=document.createElement("button");b.type="button";b.className="sd";b.setAttribute("aria-label","Parla amb "+c.n);
+      b.innerHTML='<span class="v">'+av(c.look,big,"")+'</span><span class="nm">'+c.n+'</span>';
+      stage.appendChild(b);attachLife(b.firstChild);btns.push(b);
+      b.onclick=function(){say(i,true)};
+    });
+    function say(i,jump){
+      cur=i;var c=CAST[i];var line=c.say[idx[i]++%c.say.length];
+      bub.classList.remove("on");
+      setTimeout(function(){bub.innerHTML="<b>"+c.n+":</b> "+line;bub.classList.add("on")},reduce?0:140);
+      btns.forEach(function(b,k){b.classList.toggle("act",k===i)});
+      if(jump&&!reduce){btns[i].classList.remove("jump");void btns[i].offsetWidth;btns[i].classList.add("jump")}
+    }
+    var STEPS=[[0,"Muntant els Dots…"],[30,"Posant els barrets…"],[60,"Afinant el català…"],[85,"Quasi a punt…"],[97,"97% · l'últim 3% és el que més costa"]];
+    function setP(v){
+      bar.style.width=v+"%";pb.setAttribute("aria-valuenow",Math.round(v));
+      var t=STEPS[0][1];STEPS.forEach(function(s){if(v>=s[0])t=s[1]});pct.textContent=t;
+    }
+    var started=false,timer=null;
+    function start(){
+      if(started)return;started=true;say(0,false);
+      if(reduce){setP(97);return}
+      var t0=performance.now(),D=4200;
+      (function f(now){var k=Math.min(1,(now-t0)/D),e=1-Math.pow(1-k,3);setP(8+89*e);if(k<1)requestAnimationFrame(f)})(t0);
+      timer=setInterval(function(){if(document.hidden)return;say((cur+1)%CAST.length,true)},5200);
+    }
+    if("IntersectionObserver" in window){
+      new IntersectionObserver(function(es,io){es.forEach(function(en){if(en.isIntersecting){start();io.disconnect()}})},{threshold:.3}).observe(root);
+    }else start();
   })();
 
   if(reduce)packets(0);else requestAnimationFrame(packets);
