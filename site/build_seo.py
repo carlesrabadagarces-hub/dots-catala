@@ -24,13 +24,22 @@ from app.services.catalog_data import CATALOG, META, SECTORS  # noqa: E402
 from app.services.look import look_for_agent  # noqa: E402
 
 SITE = os.environ.get("SITE_URL", "https://superdotats.cat").rstrip("/")
-APP_URL = os.environ.get("APP_URL", "http://127.0.0.1:3000")
+# COMING_SOON=1: la web diu "pròximament" i els botons porten a la llista d'espera en lloc de l'app.
+COMING_SOON = os.environ.get("COMING_SOON", "") in ("1", "true", "yes")
+WAITLIST_URL = os.environ.get("WAITLIST_URL", "").strip()      # p. ex. https://formspree.io/f/xxxx
+CONTACT_EMAIL = os.environ.get("CONTACT_EMAIL", "").strip()    # alternativa: s'obre el correu de la persona
+NAV_CTA = "Avisa'm" if COMING_SOON else "Entra"
+APP_URL = os.environ.get("APP_URL") or ("/#aviat" if COMING_SOON else "http://127.0.0.1:3000")
 PRIVATE = os.environ.get("PRIVATE", "") in ("1", "true", "yes")   # no indexis res
 GITHUB = "https://github.com/carlesrabadagarces-hub/dots-catala"
 TODAY = os.environ.get("BUILD_DATE", date.today().isoformat())
 SPECS = CATALOG + META
 e = lambda s: html.escape(str(s), quote=True)
 lower1 = lambda s: s[:1].lower() + s[1:] if s else s
+
+
+def agent_cta(spec):
+    return "Avisa'm quan surti" if COMING_SOON else "Prova " + html.escape(spec["name"], quote=True)
 
 
 def clip(text, n):
@@ -112,6 +121,10 @@ def head(title, desc, path, depth, extra="", og_type="website"):
 
 # ---------------------------------------------------------------- FAQ + directory blocks for the home page
 FAQ = json.loads((here / "faq.json").read_text(encoding="utf-8"))
+if COMING_SOON:
+    FAQ.insert(0, {"q": "Quan estarà disponible?",
+                   "a": "Hi estem treballant i serà aviat. Deixa'ns el teu correu a la llista d'espera i t'avisarem el dia que s'obri, sense cap compromís.",
+                   "look": {"body": "blob", "tone": "yellow", "hat": "party"}})
 
 
 def faq_html():
@@ -152,6 +165,65 @@ body = fill(body, "FAQ", faq_html())
 body = fill(body, "DIR", dir_html())
 (here / "body.html").write_text(body, encoding="utf-8")
 
+
+WAITLIST_CSS = """<style>
+#aviat .wl{max-width:560px;display:grid;gap:12px}
+#aviat .wl label{display:grid;gap:6px;font-size:14px;color:var(--muted)}
+#aviat .wl input[type=email],#aviat .wl input[type=text]{font:inherit;font-size:16px;color:var(--fg);background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:13px 16px;width:100%}
+#aviat .wl input:focus-visible{outline:2px solid var(--fg);outline-offset:2px}
+#aviat .wl .ck{display:flex;gap:10px;align-items:flex-start;font-size:13px;line-height:1.45}
+#aviat .wl .ck input{margin-top:3px}
+#aviat .wl .hp{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}
+#aviat .wl button{justify-self:start;border:0;cursor:pointer;font:inherit;font-weight:600;background:var(--btn-bg);color:var(--btn-fg);padding:13px 26px;border-radius:999px}
+#aviat .wl button:disabled{opacity:.5;cursor:default}
+#aviat .wl-msg{min-height:1.4em;font-size:14px}
+#aviat .wl-msg.ok{color:#188a4a}#aviat .wl-msg.err{color:#c0392b}
+</style>"""
+
+
+def waitlist_html():
+    if WAITLIST_URL or CONTACT_EMAIL:
+        form = (
+            '<form class="wl rv" id="wl" novalidate>'
+            '<label>El teu correu<input type="email" name="email" required autocomplete="email" placeholder="nom@exemple.cat"></label>'
+            '<label><span>Quin Dot t\'agradaria tenir? (opcional)</span><input type="text" name="idea" maxlength="200" placeholder="Un fontaner, algú que m\'ajudi amb la renda…"></label>'
+            '<input class="hp" type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">'
+            '<label class="ck"><input type="checkbox" name="ok" required><span>Accepto que em guardeu el correu només per avisar-me quan superDOTats obri. '
+            'Me\'n puc oblidar quan vulgui escrivint-vos.</span></label>'
+            '<button type="submit">Avisa\'m quan surti</button>'
+            '<p class="wl-msg" id="wl-msg" role="status" aria-live="polite"></p></form>')
+    else:
+        form = '<p class="sub rv">Molt aviat podràs apuntar-t\'hi aquí mateix.</p>'
+    js = ""
+    if WAITLIST_URL or CONTACT_EMAIL:
+        js = ("<script>(function(){var f=document.getElementById('wl');if(!f)return;var m=document.getElementById('wl-msg');"
+              "var URL_=" + json.dumps(WAITLIST_URL) + ",MAIL=" + json.dumps(CONTACT_EMAIL) + ";"
+              "f.addEventListener('submit',function(ev){ev.preventDefault();m.className='wl-msg';m.textContent='';"
+              "var d=new FormData(f);if(d.get('website'))return;"
+              "var em=String(d.get('email')||'').trim();if(!/^[^@\\s]+@[^@\\s]+\\.[^@\\s]{2,}$/.test(em)){m.className='wl-msg err';m.textContent='Aquest correu no sembla vàlid.';return}"
+              "if(!f.ok.checked){m.className='wl-msg err';m.textContent='Cal que acceptis que et guardem el correu.';return}"
+              "var idea=String(d.get('idea')||'').trim(),b=f.querySelector('button');"
+              "if(URL_){b.disabled=true;fetch(URL_,{method:'POST',headers:{'Accept':'application/json','Content-Type':'application/json'},"
+              "body:JSON.stringify({email:em,idea:idea,source:'superdotats-waitlist'})}).then(function(r){if(!r.ok)throw 0;"
+              "f.reset();m.className='wl-msg ok';m.textContent='Fet! Te n\\'avisarem quan estigui a punt.'}).catch(function(){"
+              "m.className='wl-msg err';m.textContent='Ara no ho hem pogut desar. Torna-ho a provar d\\'aquí una estona.'}).then(function(){b.disabled=false})}"
+              "else{location.href='mailto:'+MAIL+'?subject='+encodeURIComponent('Avisa\\'m quan superDOTats estigui disponible')+'&body='+encodeURIComponent('El meu correu: '+em+(idea?'\\nM\\'agradaria un Dot per: '+idea:''));"
+              "m.className='wl-msg ok';m.textContent='S\\'ha obert el teu correu: envia\\'ns el missatge i ja estàs apuntat.'}});})();</script>")
+    return (WAITLIST_CSS + '\n<section id="aviat" aria-labelledby="aviat-t">'
+            '<div class="eyebrow rv">Molt aviat</div>'
+            '<h2 class="rv" id="aviat-t">Els superDOTats arriben aviat</h2>'
+            '<p class="sub rv">Estem acabant els últims detalls. Apunta\'t a la llista i seràs de les primeres persones a provar-los. '
+            'Només t\'escriurem per avisar-te del llançament.</p>' + form + "</section>\n" + js + "\n")
+
+
+def coming_soon(page):
+    page = page.replace('<a class="btn sm app-link" id="enter"', '<a class="btn sm app-link" id="enter"')
+    page = re.sub(r'(<a class="btn sm app-link" id="enter" href="[^"]*">)Entra(</a>)', r"\1Avisa'm\2", page)
+    page = page.replace("Entra i comença →", "Avisa'm quan surti →").replace("Entra i crea el teu →", "Avisa'm quan surti →")
+    page = page.replace('<div class="eyebrow">Privat · Segur · Fàcil</div>', '<div class="eyebrow">Molt aviat · Privat · Segur · Fàcil</div>', 1)
+    page = page.replace('<section id="directori"', waitlist_html() + '<section id="directori"', 1)
+    return page
+
 # ---------------------------------------------------------------- home
 HOME_TITLE = "superDOTats: un Dot per a cada dubte, en català"
 HOME_DESC = ("88 ajudants intel·ligents que et responen al mòbil, en català: fontaner, metge, assessor fiscal, mestra i molts més. "
@@ -173,7 +245,9 @@ home_ld = {"@context": "https://schema.org", "@graph": [
 ]}
 fonts = ('<link rel="preconnect" href="https://fonts.googleapis.com">\n<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n'
          '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap">\n')
-home_body = body.replace("http://127.0.0.1:3000", APP_URL)   # els botons "Entra", també sense JS
+home_body = body.replace("http://127.0.0.1:3000", "#aviat" if APP_URL == "/#aviat" else APP_URL)   # els botons "Entra", també sense JS
+if COMING_SOON:
+    home_body = coming_soon(home_body)
 home_body = re.sub(r"<title>.*?</title>\n?", "", home_body, count=1, flags=re.S)
 home_body = re.sub(r'<link rel="icon"[^>]*>\n?', "", home_body, count=1)
 home_body = re.sub(r'<link rel="preconnect"[^>]*>\n?', "", home_body)
@@ -214,7 +288,7 @@ def nav(depth):
     p = "../" * depth
     return (f'<a class="skip" href="#c" style="position:absolute;left:-999px">Salta al contingut</a><div class="w"><nav class="top" aria-label="Principal">'
             f'<a class="logo" href="{p}">{LOGO_SVG.format(p=p)}<span>superDOTats</span></a>'
-            f'<div class="r"><a href="{p}#directori">Tots els Dots</a><a href="{p}#faq">Preguntes</a><a class="btn" href="{APP_URL}">Entra</a></div></nav>')
+            f'<div class="r"><a href="{p}#directori">Tots els Dots</a><a href="{p}#faq">Preguntes</a><a class="btn" href="{APP_URL}">{NAV_CTA}</a></div></nav>')
 
 
 def foot(depth):
@@ -236,7 +310,7 @@ def agent_page(s):
         (f"Què pot fer {s['name']}?", " ".join(t.rstrip(".") + "." for t in tasks[:3])),
         (f"Puc fiar-me de {s['name']}?", f"És un assistent d'IA i dona informació general. {safety[0] if safety else ''} Verifica sempre les dades importants."),
         (f"Quan em derivarà {s['name']} a un professional?", escalate),
-        (f"Com començo a parlar amb {s['name']}?", "Entra a superDOTats, tria {0} i escriu-li com a un amic. El pots personalitzar i decidir qui hi pot parlar.".format(s["name"])),
+        (f"Com començo a parlar amb {s['name']}?", ("Aviat podràs entrar a superDOTats, triar {0} i escriure-li com a un amic. Apunta't a la llista d'espera i t'avisarem." if COMING_SOON else "Entra a superDOTats, tria {0} i escriu-li com a un amic. El pots personalitzar i decidir qui hi pot parlar.").format(s["name"])),
     ]
     rel = [r for r in by_sector()[s["sector"]] if r["id"] != s["id"]][:6]
     ld_graph = {"@context": "https://schema.org", "@graph": [
@@ -257,7 +331,7 @@ def agent_page(s):
             + "</head>\n<body>\n" + nav(2)
             + f'<p class="crumbs"><a href="../../">superDOTats</a> › <a href="../../sectors/{s["sector"]}/">{e(sec["name"])}</a> › {e(s["name"])}</p>'
             + f'<main id="c"><section class="hero"><div aria-hidden="true">{SPR[s["id"]]}</div><div><h1>{e(s["name"])}, al teu costat</h1>'
-            + f'<p class="lead">{e(role)}. {e(s["persona"])}</p><a class="btn" href="{APP_URL}">Prova {e(s["name"])}</a> <a class="btn g" href="../../#directori">Tots els Dots</a></div></section>'
+            + f'<p class="lead">{e(role)}. {e(s["persona"])}</p><a class="btn" href="{APP_URL}">{agent_cta(s)}</a> <a class="btn g" href="../../#directori">Tots els Dots</a></div></section>'
             + f"<h2>Com et pot ajudar</h2><ul class=\"chk\">{li(tasks)}</ul>"
             + f"<h2>De què en sap</h2><ul class=\"chk\">{li(s['expertise'])}</ul>"
             + f"<h2>Coses que li pots preguntar</h2><div class=\"bub\">" + "".join(f"<span>{e(x)}</span>" for x in s["starters"]) + "</div>"
@@ -324,7 +398,8 @@ sm.append("</urlset>")
 llms = [f"# superDOTats", "",
         "> superDOTats és una colla de 88 assistents intel·ligents, anomenats Dots, que responen al mòbil en català: metge, fontaner, assessor fiscal, mestra, cuiner… "
         "Està pensat per ser fàcil, privat i segur. Dona informació general; no substitueix professionals.", "",
-        "## Fets clau", "- Nom: superDOTats (escrit amb majúscules a DOT).", f"- Web: {SITE}/",
+        "## Fets clau", "- Nom: superDOTats (escrit amb majúscules a DOT).",
+        *(["- Estat: pròximament. Encara no està obert al públic; hi ha una llista d'espera a " + SITE + "/#aviat."] if COMING_SOON else []), f"- Web: {SITE}/",
         "- Idioma per defecte: català (respon també en castellà i anglès).", "- Privacitat: cada persona té la seva conversa apart, només responen les persones autoritzades i es pot veure i esborrar el que el Dot recorda.", "",
         "## Pàgines principals", f"- [Inici]({SITE}/): què és i com funciona", f"- [Preguntes freqüents]({SITE}/#faq): respostes curtes",
         f"- [Directori de Dots]({SITE}/#directori): tots els Dots per sector", f"- [Text complet per a models]({SITE}/llms-full.txt)", ""]
